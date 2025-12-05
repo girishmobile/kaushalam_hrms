@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:neeknots_admin/core/constants/string_constant.dart';
@@ -650,14 +651,13 @@ Widget employeeCard(CustomerModel customer) {
 }
 
 Widget leaveCard({
-  required RecentLeave item,
+  required MyLeave item,
   required VoidCallback onReject,
   required VoidCallback onAccept,
-  required VoidCallback onInfo,
 }) {
   final leaveDate = comrateStartEndate(
-    item.detail.leaveDate.toString(),
-    item.detail.leaveEndDate.toString(),
+    item.leaveDate?.date.toString(),
+    item.leaveEndDate?.date.toString(),
   );
 
   return appViewEffect(
@@ -668,7 +668,7 @@ Widget leaveCard({
         Row(
           children: [
             appCircleImage(
-              imageUrl: setImagePath(item.profileImage),
+              imageUrl: setImagePath(item.userId?.profileImage),
               radius: 24,
               icon: Icons.person_outline,
               iconColor: color3,
@@ -685,7 +685,7 @@ Widget leaveCard({
                     children: [
                       Expanded(
                         child: Text(
-                          "${item.firstname} ${item.lastname}",
+                          "${item.userId?.firstname} ${item.userId?.lastname}",
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
@@ -693,7 +693,7 @@ Widget leaveCard({
                         ),
                       ),
                       Text(
-                        "Days: ${item.detail.leaveCount}",
+                        "Days: ${item.leaveCount}",
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.black54,
@@ -724,11 +724,30 @@ Widget leaveCard({
                       ),
                       Expanded(
                         child: Text(
-                          item.detail.reason,
+                          item.reason ?? '-',
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.black54,
                           ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    spacing: 8,
+                    children: [
+                      Text(
+                        "Status:",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          item.status ?? '-',
+                          style: const TextStyle(fontSize: 12, color: color3),
                         ),
                       ),
                     ],
@@ -740,32 +759,27 @@ Widget leaveCard({
         ),
 
         SizedBox(height: 8),
-
-        Row(
-          spacing: 8,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            acceptOrRejectBtn(
-              bgColor: Colors.green,
-              title: "Accept",
-              icon: Icons.check,
-              onTap: onAccept,
-            ),
-            acceptOrRejectBtn(
-              bgColor: Colors.red,
-              title: "Decline",
-              icon: Icons.close,
-              onTap: onReject,
-            ),
-            acceptOrRejectBtn(
-              title: "Info",
-              bgColor: Colors.grey,
-
-              icon: Icons.info,
-              onTap: onInfo,
-            ),
-          ],
-        ),
+        if (item.status?.toString().toLowerCase() == "pending") ...[
+          Row(
+            spacing: 32,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              acceptOrRejectBtn(
+                bgColor: Colors.green,
+                title: "Accept",
+                icon: Icons.check,
+                onTap: onAccept,
+              ),
+              acceptOrRejectBtn(
+                bgColor: Colors.red,
+                title: "Reject",
+                icon: Icons.close,
+                onTap: onReject,
+              ),
+            ],
+          ),
+        ],
       ],
     ),
   );
@@ -875,9 +889,16 @@ Widget notificationCard(EmpNotificationModel notification) {
                   fontSize: 14,
                 ),
               ),
-              Text(
-                removeHtmlTags(notification.details ?? ''),
-                style: const TextStyle(fontSize: 12, color: Colors.black54),
+
+              Html(
+                data: notification.details ?? '',
+                style: {
+                  "body": Style(
+                    fontSize: FontSize(12),
+                    margin: Margins.zero,
+                    padding: HtmlPaddings.zero,
+                  ),
+                },
               ),
               Text(
                 convertDate(
@@ -1599,86 +1620,20 @@ void showCommonBottomSheet({
     backgroundColor: Colors.white,
     isDismissible: isDismissible,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
     ),
     builder: (context) {
       return Padding(
-        padding:padding?? EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          left: 16,
-          right: 16,
-          top: 24,
-        ),
+        padding:
+            padding ??
+            EdgeInsets.only(
+              bottom: appBottomPadding(context),
+              left: 16,
+              right: 16,
+              top: 16,
+            ),
         child: content,
       );
     },
-  );
-}
-Widget commonBoxView({
-  required Widget contentView,
-  required String title,
-  double? fontSize,
-}) {
-  return appViewEffect(
-
-    margin: const EdgeInsets.all(0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Title
-        commonHeadingView(title: title, fontSize: fontSize),
-
-
-        // Content
-        Padding(padding: const EdgeInsets.all(12.0), child: contentView),
-      ],
-    ),
-  );
-}
-
-Widget commonHeadingView({String? title, double? fontSize}) {
-  return Padding(
-    padding: EdgeInsets.all(12.0),
-    child: Row(
-      children: [
-        Expanded(
-          child: loadTitleText(
-
-            title: title ?? "Product Information",
-            fontSize: fontSize ?? 16,
-            fontWight: FontWeight.w600,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-Widget commonRowLeftRightView({
-  required String title,
-  String? value,
-  Widget? customView,
-}) {
-  return Row(
-    children: [
-      Expanded(
-        child: loadSubText(
-          title: title,
-          fontWight: FontWeight.w500,
-          fontSize: 12,
-        ),
-      ),
-      Expanded(
-        child:
-        customView ??
-            loadSubText(
-              title: value ?? '',
-              maxLines: 1,
-              textOverflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.right,
-              fontWight: FontWeight.w400,
-              fontSize: 12,
-            ),
-      ),
-    ],
   );
 }

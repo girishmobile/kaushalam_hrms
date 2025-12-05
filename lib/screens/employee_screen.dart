@@ -29,7 +29,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         provider.getCurrentAttendance(),
         provider.getLeaveSummary(),
         provider.getLeaveBalance(body: {"emp_id": widget.employeeId}),
-        provider.getUpcomingBirthHodliday(),
+        // provider.getUpcomingBirthHodliday(),
       ]);
     });
   }
@@ -80,19 +80,19 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                     onTap: () => Navigator.pushNamed(
                       context,
                       RouteName.leaveSummaryPage,
-                      arguments: "PENDING LEAVES",
+                      arguments: "Pending",
                     ),
                   ),
                   const SizedBox(height: 12),
 
                   _buildRowItem(
                     title:
-                        "Approval leave (${provider.leaveSummary?.accept ?? "0"})",
+                        "Accepted leave (${provider.leaveSummary?.accept ?? "0"})",
                     icon: Icons.approval_outlined,
                     onTap: () => Navigator.pushNamed(
                       context,
                       RouteName.leaveSummaryPage,
-                      arguments: "APROVAL LEAVES",
+                      arguments: "Accept",
                     ),
                   ),
 
@@ -105,7 +105,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                     onTap: () => Navigator.pushNamed(
                       context,
                       RouteName.leaveSummaryPage,
-                      arguments: "CANCEL LEAVES",
+                      arguments: "Cancel",
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -117,7 +117,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                     onTap: () => Navigator.pushNamed(
                       context,
                       RouteName.leaveSummaryPage,
-                      arguments: "REJECT LEAVES",
+                      arguments: "Reject",
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -125,7 +125,12 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                     title: "All leave (${provider.leaveSummary?.all ?? "0"})",
                     icon: Icons.calendar_month_outlined,
                     onTap: () =>
-                        Navigator.pushNamed(context, RouteName.allLeavePage),
+                        // Navigator.pushNamed(context, RouteName.allLeavePage),
+                        Navigator.pushNamed(
+                          context,
+                          RouteName.leaveSummaryPage,
+                          arguments: "All",
+                        ),
                   ),
 
                   const SizedBox(height: 16),
