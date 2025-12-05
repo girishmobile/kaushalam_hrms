@@ -26,7 +26,6 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
   }
 
   Future<void> initLeave() async {
-    print("pageTitle:- ${widget.pageTitle}");
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<LeaveProvider>().getAllLeaveByEmployee(
         title: widget.pageTitle,
@@ -69,7 +68,7 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
                         itemCount: provider.listOfLeave.length,
                       ),
                 appNavigationBar(
-                  title: widget.pageTitle,
+                  title: "${widget.pageTitle.toUpperCase()} LEAVES",
                   onTap: () {
                     Navigator.pop(context);
                   },
@@ -159,6 +158,7 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
             height: 36,
             decoration: BoxDecoration(
               border: BoxBorder.all(color: color2, width: 1),
+              // border: getStatusBorder(item.status),
             ),
             child: Center(
               child: appGradientText(
@@ -169,13 +169,59 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
                   fontSize: 14,
                   color: Colors.black54,
                 ),
-                gradient: appGradient(),
+                gradient: appGradient(), // getStatusGradient(item.status),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  BoxBorder getStatusBorder(String? status) {
+    final value = status?.toLowerCase() ?? "";
+    print("status:- $status");
+    switch (value) {
+      case "pending":
+        return BoxBorder.all(color: Colors.orange, width: 1);
+
+      case "accept":
+        return BoxBorder.all(color: Colors.green, width: 1);
+
+      case "reject":
+        return BoxBorder.all(color: Colors.red, width: 1);
+
+      case "cancel":
+        return BoxBorder.all(color: Colors.grey, width: 1);
+
+      default:
+        return BoxBorder.all(color: color2, width: 0);
+    }
+  }
+
+  LinearGradient getStatusGradient(String? status) {
+    final value = status?.toLowerCase() ?? "";
+
+    switch (value) {
+      case "pending":
+        //return BoxBorder.all(color: Colors.orange, width: 1);
+        return LinearGradient(colors: [btnColor1, btnColor2]);
+
+      case "accept":
+        //return BoxBorder.all(color: Colors.green, width: 1);
+        return LinearGradient(colors: [Colors.green, Colors.lightGreen]);
+
+      case "reject":
+        //return BoxBorder.all(color: Colors.red, width: 1);
+        return LinearGradient(colors: [Colors.red, Colors.redAccent.shade400]);
+
+      case "cancel":
+        //return BoxBorder.all(color: Colors.grey, width: 1);
+        return LinearGradient(colors: [Colors.blueGrey, Colors.grey]);
+
+      default:
+        return appGradient();
+    }
   }
 
   Widget rowItem({

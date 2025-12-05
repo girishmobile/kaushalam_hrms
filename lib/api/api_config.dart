@@ -43,6 +43,9 @@ class ApiConfig {
   static String approvedLeaveUrl =
       "$BaseUrl/leave_application/update_accept_status";
 
+  static String getAttendanceUrl =
+      "$BaseUrl/hikattendance/getUserAttendanceByDate";
+
   //API header
   static Future<Map<String, String>> getApiHeaders() async {
     final token = await SecureStorage.getToken();

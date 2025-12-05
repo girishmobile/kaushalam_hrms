@@ -116,11 +116,13 @@ class LoginPage extends StatelessWidget {
                                             message: "Login Sccussful",
                                             bgColor: Colors.green,
                                           );
+
                                           Navigator.pushNamedAndRemoveUntil(
                                             context,
                                             RouteName.dashboardScreen,
                                             (route) => false,
                                           );
+                                          provider.resetState();
                                         } else {
                                           showSnackBar(
                                             context,

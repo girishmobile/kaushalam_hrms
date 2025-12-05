@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
+import 'package:neeknots_admin/models/birth_holiday_model.dart';
+import 'package:neeknots_admin/provider/emp_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
+import 'package:provider/provider.dart';
 
 class ManagerScreen extends StatelessWidget {
   const ManagerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // final holidays = provider.birthholidayModel?.holidays ?? <Holiday>[];
+    final holidays =
+        context.read<EmpProvider>().birthholidayModel?.holidays ?? <Holiday>[];
     return Stack(
       children: [
         ListView(
@@ -80,16 +86,19 @@ class ManagerScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 8),
-            // SizedBox(
-            //   height: 110,
-            //   child: ListView.separated(
-            //     scrollDirection: Axis.horizontal,
-            //     itemBuilder: (context, index) => holidayCard(),
-            //     separatorBuilder: (_, _) => SizedBox(width: 12),
-            //     itemCount: 4,
-            //   ),
-            // ),
+            SizedBox(height: 4),
+            SizedBox(
+              height: 110,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final holiday = holidays[index];
+                  return holidayCard(item: holiday);
+                },
+                separatorBuilder: (_, _) => SizedBox(width: 12),
+                itemCount: holidays.length,
+              ),
+            ),
           ],
         ),
       ],

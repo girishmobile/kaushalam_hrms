@@ -121,6 +121,7 @@ class LeaveProvider extends ChangeNotifier {
   }
 
   Future<void> getAllLeaveByEmployee({required String title}) async {
+    listOfLeave.clear();
     _setLoading(true);
     final Map<String, dynamic> body = {
       "draw": 1,

@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/components/components.dart';
+import 'package:neeknots_admin/provider/attendance_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
+import 'package:provider/provider.dart';
 
 class AttendanceScreen extends StatelessWidget {
   const AttendanceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [_kpiGridView(context), topBar(context)]);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AttendanceProvider>().initializeTodayAttendance();
+    });
+    return Consumer<AttendanceProvider>(
+      builder: (context, provider, child) {
+        return Stack(
+          children: [
+            _kpiGridView(context, provider),
+            topBar(context),
+            provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
+          ],
+        );
+      },
+    );
   }
 
   Widget topBar(BuildContext context) {
@@ -51,7 +66,7 @@ class AttendanceScreen extends StatelessWidget {
     );
   }
 
-  Widget _kpiGridView(BuildContext context) {
+  Widget _kpiGridView(BuildContext context, AttendanceProvider provider) {
     return GridView.builder(
       padding: EdgeInsets.only(
         left: 24,
@@ -66,13 +81,17 @@ class AttendanceScreen extends StatelessWidget {
         childAspectRatio: 1,
       ),
       itemBuilder: (context, index) {
-        return GestureDetector(onTap: () {}, child: _buildGridItem());
+        final item = provider.attendanceGridItems[index];
+        return GestureDetector(
+          onTap: () {},
+          child: _buildGridItem(item: item),
+        );
       },
-      itemCount: 12,
+      itemCount: provider.attendanceGridItems.length,
     );
   }
 
-  Widget _buildGridItem() {
+  Widget _buildGridItem({required Map<String, dynamic> item}) {
     return appViewEffect(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,24 +99,19 @@ class AttendanceScreen extends StatelessWidget {
         spacing: 8,
         children: [
           // Flexible details section
-          appCircleIcon(
-            icon: Icons.workspaces_outlined,
-            gradient: appGradient(),
-            iconSize: 36,
-          ),
           Text(
-            "January",
+            "${item["title"]}",
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 14,
+              fontSize: 16,
               color: Colors.black87,
             ),
           ),
 
           Text(
-            "50%",
+            "${item["value"]}",
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
