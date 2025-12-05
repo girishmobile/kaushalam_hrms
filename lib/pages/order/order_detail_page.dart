@@ -15,7 +15,7 @@ class OrderDetailPage extends StatelessWidget {
           ],
         ),
           appNavigationBar(
-            title: "ORDER DETAILS",
+            title: "ORDER DETAILS BY USER",
             onTap: () {
               Navigator.pop(context);
             },
