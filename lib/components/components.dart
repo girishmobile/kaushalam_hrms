@@ -1637,3 +1637,74 @@ void showCommonBottomSheet({
     },
   );
 }
+Widget commonBoxView({
+  required Widget contentView,
+  required String title,
+  double? fontSize,
+}) {
+  return Container(
+    decoration: commonBoxDecoration(
+      color: color3.withValues(alpha: 0.01),
+      borderColor: color3,
+      borderRadius: 8,
+    ),
+    margin: const EdgeInsets.all(0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Title
+        commonHeadingView(title: title, fontSize: fontSize),
+
+
+        // Content
+        Padding(padding: const EdgeInsets.all(12.0), child: contentView),
+      ],
+    ),
+  );
+}
+Widget commonHeadingView({String? title, double? fontSize}) {
+  return Padding(
+    padding: EdgeInsets.all(12.0),
+    child: Row(
+      children: [
+        Expanded(
+          child: loadTitleText(
+            fontColor: color3,
+            title: title ?? "Product Information",
+            fontSize: fontSize ?? 16,
+            fontWight: FontWeight.w600,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+Widget commonRowLeftRightView({
+  required String title,
+  String? value,
+  Widget? customView,
+}) {
+  return Row(
+    children: [
+      Expanded(
+        child: loadSubText(
+          title: title,
+          fontWight: FontWeight.w500,
+          fontSize: 12,
+        ),
+      ),
+      Expanded(
+        child:
+        customView ??
+            loadSubText(
+              title: value ?? '',
+              maxLines: 1,
+              textOverflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.right,
+              fontWight: FontWeight.w400,
+              fontSize: 12,
+            ),
+      ),
+    ],
+  );
+}

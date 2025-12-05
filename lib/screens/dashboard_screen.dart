@@ -104,7 +104,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Navigator.pushNamed(
                         context,
                         RouteName.profileScreen,
-                        arguments: provider.employeeId,
+                        arguments: {
+                          "employeeId": provider.employeeId,
+                          "isCurrentUser": true,
+                        },
+                        //arguments: provider.employeeId,
                       );
                     },
                   );
@@ -242,23 +246,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final provider = context.watch<AppProvider>();
     final isSelected = provider.pageIndex == index;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        appCircleIcon(
-          icon: icon,
-          iconSize: size, // ✅ selected = gradient, unselected = grey
-          gradient: isSelected ? appGradient() : appOrangeOffGradient(),
+    return InkWell(
+      onTap: () => context.read<AppProvider>().setPageIndex(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          appCircleIcon(
+            icon: icon,
+            iconSize: size, // ✅ selected = gradient, unselected = grey
+            gradient: isSelected ? appGradient() : appOrangeOffGradient(),
 
-          onTap: () => context.read<AppProvider>().setPageIndex(index),
-        ),
-        loadSubText(
-          title: title,
-          fontSize: 10,
-          fontWight: isSelected ? FontWeight.w600 : FontWeight.w400,
-          fontColor: isSelected ? btnColor2 : Colors.black54,
-        ),
-      ],
+
+          ),
+          loadSubText(
+            title: title,
+            fontSize: 10,
+            fontWight: isSelected ? FontWeight.w600 : FontWeight.w400,
+            fontColor: isSelected ? btnColor2 : Colors.black54,
+          ),
+        ],
+      ),
     );
   }
 

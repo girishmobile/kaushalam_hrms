@@ -52,9 +52,15 @@ class ProfileProvider extends ChangeNotifier {
     _isSuccess = val;
     notifyListeners();
   }
-
-  Future<void> getUserProfile({required Map<String, dynamic> body}) async {
+  void clearProfile() {
+    _profileModel = null;
+    notifyListeners();
+  }
+  Future<void> getUserProfile({required Map<String, dynamic> body,required bool isCurrentUser}) async {
     _setLoading(true);
+    _profileModel = null;   // reset the model
+    _imageUrl = null;   // reset the model
+    notifyListeners();
 
     try {
       final response = await callApi(
@@ -104,12 +110,21 @@ class ProfileProvider extends ChangeNotifier {
             },
           },
         };
-        final userModel = UserModel.fromLocalJson1(
-          Map<String, dynamic>.from(formattedJson),
-        );
-        await SecureStorage.saveUser(userModel);
 
-       await loadProfileFromCache();
+        if(isCurrentUser){
+          final userModel = UserModel.fromLocalJson1(
+            Map<String, dynamic>.from(formattedJson),
+          );
+          await SecureStorage.saveUser(userModel);
+
+          await loadProfileFromCache();
+        }
+        else
+          {
+            _imageUrl = _profileModel?.profileImage ?? '';
+            notifyListeners();
+          }
+
         _setLoginSuccess(true);
       } else {
         _setLoginSuccess(false);
@@ -311,7 +326,7 @@ class ProfileProvider extends ChangeNotifier {
         UserModel? user = await SecureStorage.getUser();
         Map<String, dynamic> body = {"employee_id": '${user?.id??0}'};
 
-        getUserProfile(body: body);
+        getUserProfile(body: body,isCurrentUser: true);
 
 
         ScaffoldMessenger.of(context).showSnackBar(

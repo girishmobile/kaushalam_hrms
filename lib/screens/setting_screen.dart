@@ -78,7 +78,11 @@ class _SettingScreenState extends State<SettingScreen> {
                     Navigator.pushNamed(
                       context,
                       RouteName.profileScreen,
-                      arguments: '${provider.userModel?.id??0}',
+                      arguments: {
+                        "employeeId": '${provider.userModel?.id??0}',
+                        "isCurrentUser": true,
+                      },
+                      // arguments: '${provider.userModel?.id??0}',
                     )
                   ),
                   const SizedBox(height: 12),

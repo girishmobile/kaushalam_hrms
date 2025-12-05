@@ -9,8 +9,9 @@ import '../api/api_config.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String employeeId;
+  final bool isCurrentUser;
 
-  const ProfileScreen({super.key, required this.employeeId});
+  const ProfileScreen({super.key, required this.employeeId,required this.isCurrentUser});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -34,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Map<String, dynamic> body = {"employee_id": widget.employeeId};
 
-      context.read<ProfileProvider>().getUserProfile(body: body);
+      context.read<ProfileProvider>().getUserProfile(body: body,isCurrentUser: widget.isCurrentUser);
     });
     return AppScaffold(
       child: Consumer<ProfileProvider>(
@@ -59,8 +60,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       builder: (_, profileProvider, _) {
                         return appProfileImage(
                           context: context,
-                          imageUrl:   "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
-                          radius: 60, isEdit: true,
+                          imageUrl:   widget.isCurrentUser?"${ApiConfig.imageBaseUrl}${profileProvider.profileImage}" :"${ApiConfig.imageBaseUrl}${profileProvider.imageUrl}",
+                          radius: 60, isEdit: widget.isCurrentUser,
                          
                         );
                       }
