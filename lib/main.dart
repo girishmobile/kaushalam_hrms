@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:neeknots_admin/core/router/route_generate.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/provider/app_provider.dart';
+import 'package:neeknots_admin/provider/attendance_provider.dart';
 import 'package:neeknots_admin/provider/emp_notifi_provider.dart';
 import 'package:neeknots_admin/provider/emp_provider.dart';
 import 'package:neeknots_admin/provider/hotline_provider.dart';
@@ -26,6 +27,9 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider<LeaveProvider>(create: (_) => LeaveProvider()),
   ChangeNotifierProvider<SettingProvider>(create: (_) => SettingProvider()),
   ChangeNotifierProvider<EmpNotifiProvider>(create: (_) => EmpNotifiProvider()),
+  ChangeNotifierProvider<AttendanceProvider>(
+    create: (_) => AttendanceProvider(),
+  ),
   ChangeNotifierProvider<LeaveBalanceProvider>(
     create: (_) => LeaveBalanceProvider(),
   ),

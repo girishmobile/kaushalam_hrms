@@ -51,6 +51,9 @@ class ApiConfig {
   static String departmentUrl = "$BaseUrl/department/get_all_department";
   static String getAllDesignationUrl = "$BaseUrl/designation/get_all_designation";
   static String hotlineUrl = "$BaseUrl/attendance/hotline";
+  static String getAttendanceUrl =
+      "$BaseUrl/hikattendance/getUserAttendanceByDate";
+
   //API header
   static Future<Map<String, String>> getApiHeaders() async {
     final token = await SecureStorage.getToken();
