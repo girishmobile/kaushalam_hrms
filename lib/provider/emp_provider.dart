@@ -50,8 +50,6 @@ class EmpProvider extends ChangeNotifier {
     }
   }
 
-  bool _isBirthdaysLoaded = false;
-
   Future<void> getLeaveSummary() async {
     _setLoading(true);
     try {
@@ -113,7 +111,6 @@ class EmpProvider extends ChangeNotifier {
         birthdays = (decoded["birthdays"] as List<dynamic>)
             .map((e) => BirthDay.fromApiJson(e))
             .toList();
-        _isBirthdaysLoaded = true; // <-- Mark data loaded
         _setLoading(false);
       } else {
         errorMessage = "Something went wrong. Try again.";

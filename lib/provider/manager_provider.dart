@@ -7,6 +7,7 @@ import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/api/network_repository.dart';
 import 'package:neeknots_admin/models/all_leave_model.dart';
 import 'package:neeknots_admin/models/manager_leave_model.dart';
+import 'package:neeknots_admin/utility/utils.dart';
 
 class ManagerProvider extends ChangeNotifier {
   bool _isLoading = false;
@@ -158,21 +159,21 @@ class ManagerProvider extends ChangeNotifier {
       );
       if (globalStatusCode == 200) {
         _setApiStatus(true);
-        // if (!context.mounted) return;
-        // showSnackBar(
-        //   context,
-        //   message: "Leave approved successfully!",
-        //   bgColor: Colors.green,
-        // );
-        //getAllListingLeave();
+        if (!context.mounted) return;
+        showSnackBar(
+          context,
+          message: "Leave approved successfully!",
+          bgColor: Colors.green,
+        );
+        getAllLeavesForManager();
       } else {
         _setApiStatus(false);
-        // if (!context.mounted) return;
-        // showSnackBar(
-        //   context,
-        //   message: errorMessage ?? "Unable to approve leave. Please try again.",
-        //   bgColor: Colors.redAccent,
-        // );
+        if (!context.mounted) return;
+        showSnackBar(
+          context,
+          message: errorMessage ?? "Unable to approve leave. Please try again.",
+          bgColor: Colors.redAccent,
+        );
       }
     } catch (e) {
       // Print full error with stacktrace for better debugging
@@ -180,7 +181,10 @@ class ManagerProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> rejectLeave({required Map<String, dynamic> body}) async {
+  Future<void> rejectLeave(
+    BuildContext context, {
+    required Map<String, dynamic> body,
+  }) async {
     _setLoading(true);
     try {
       await callApi(
@@ -191,21 +195,22 @@ class ManagerProvider extends ChangeNotifier {
       );
       if (globalStatusCode == 200) {
         _setApiStatus(true);
-        // if (!context.mounted) return;
-        // showSnackBar(
-        //   context,
-        //   message: "Leave rejected successfully",
-        //   bgColor: Colors.green,
-        // );
+        getAllLeavesForManager();
+        if (!context.mounted) return;
+        showSnackBar(
+          context,
+          message: "Leave rejected successfully",
+          bgColor: Colors.green,
+        );
       } else {
         // Show error dialog
         _setApiStatus(false);
-        // if (!context.mounted) return;
-        // showSnackBar(
-        //   context,
-        //   message: errorMessage ?? "Unable to reject leave. Please try again",
-        //   bgColor: Colors.redAccent,
-        // );
+        if (!context.mounted) return;
+        showSnackBar(
+          context,
+          message: errorMessage ?? "Unable to reject leave. Please try again",
+          bgColor: Colors.redAccent,
+        );
       }
     } catch (e) {
       _setApiStatus(false);

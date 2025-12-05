@@ -184,3 +184,103 @@ String removeHtmlTags(String htmlText) {
   final regex = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: false);
   return htmlText.replaceAll(regex, "").trim();
 }
+
+String getLeaveTypeName(String? code) {
+  const map = {"CL": "Casual Leave", "SL": "Sick Leave", "PL": "Paid Leave"};
+  return map[code] ?? code ?? "Unknown Leave";
+}
+
+void showRejectLeaveDialog(
+  BuildContext context,
+  Function(String reason) onConfirmReject,
+) {
+  final TextEditingController reasonController = TextEditingController();
+  String? errorText; // <-- move here (persistent)
+  showDialog(
+    context: context,
+    builder: (context) {
+      return StatefulBuilder(
+        // for validation update
+        builder: (context, setState) {
+          // String? errorText;
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title
+                  Text(
+                    "Reject Leave",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Subtitle
+                  const Text(
+                    "Reason",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // TextField With Validation
+                  TextField(
+                    controller: reasonController,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      hintText: "Enter reason...",
+                      border: OutlineInputBorder(),
+                      errorText: errorText,
+                    ),
+                    onChanged: (_) {
+                      if (errorText != null) {
+                        setState(() {
+                          errorText = null; // remove error on typing
+                        });
+                      }
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text("Cancel"),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        child: const Text("Confirm"),
+                        onPressed: () {
+                          if (reasonController.text.trim().isEmpty) {
+                            setState(
+                              () => errorText = "Reason cannot be empty",
+                            );
+                            return;
+                          }
+                          Navigator.pop(context);
+                          onConfirmReject(reasonController.text.trim());
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
+}

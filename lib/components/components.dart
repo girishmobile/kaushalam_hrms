@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:neeknots_admin/core/constants/string_constant.dart';
@@ -582,7 +583,6 @@ Widget leaveCard({
   required MyLeave item,
   required VoidCallback onReject,
   required VoidCallback onAccept,
-  required VoidCallback onInfo,
 }) {
   final leaveDate = comrateStartEndate(
     item.leaveDate?.date.toString(),
@@ -662,6 +662,25 @@ Widget leaveCard({
                       ),
                     ],
                   ),
+                  Row(
+                    spacing: 8,
+                    children: [
+                      Text(
+                        "Status:",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          item.status ?? '-',
+                          style: const TextStyle(fontSize: 12, color: color3),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -669,33 +688,27 @@ Widget leaveCard({
         ),
 
         SizedBox(height: 8),
-
-        Row(
-          spacing: 32,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            acceptOrRejectBtn(
-              bgColor: Colors.green,
-              title: "Accept",
-              icon: Icons.check,
-              onTap: onAccept,
-            ),
-            acceptOrRejectBtn(
-              bgColor: Colors.red,
-              title: "Reject",
-              icon: Icons.close,
-              onTap: onReject,
-            ),
-            // acceptOrRejectBtn(
-            //   title: "Info",
-            //   bgColor: Colors.grey,
-
-            //   icon: Icons.info,
-            //   onTap: onInfo,
-            // ),
-          ],
-        ),
+        if (item.status?.toString().toLowerCase() == "pending") ...[
+          Row(
+            spacing: 32,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              acceptOrRejectBtn(
+                bgColor: Colors.green,
+                title: "Accept",
+                icon: Icons.check,
+                onTap: onAccept,
+              ),
+              acceptOrRejectBtn(
+                bgColor: Colors.red,
+                title: "Reject",
+                icon: Icons.close,
+                onTap: onReject,
+              ),
+            ],
+          ),
+        ],
       ],
     ),
   );
@@ -805,9 +818,16 @@ Widget notificationCard(EmpNotificationModel notification) {
                   fontSize: 14,
                 ),
               ),
-              Text(
-                removeHtmlTags(notification.details ?? ''),
-                style: const TextStyle(fontSize: 12, color: Colors.black54),
+
+              Html(
+                data: notification.details ?? '',
+                style: {
+                  "body": Style(
+                    fontSize: FontSize(12),
+                    margin: Margins.zero,
+                    padding: HtmlPaddings.zero,
+                  ),
+                },
               ),
               Text(
                 convertDate(
@@ -1384,5 +1404,36 @@ Widget appRefreshIndicator({
     strokeWidth: 2,
     onRefresh: onRefresh,
     child: child,
+  );
+}
+
+void showCommonBottomSheet({
+  required BuildContext context,
+  required Widget content,
+
+  bool isDismissible = true,
+  EdgeInsetsGeometry? padding,
+}) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.white,
+    isDismissible: isDismissible,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+    ),
+    builder: (context) {
+      return Padding(
+        padding:
+            padding ??
+            EdgeInsets.only(
+              bottom: appBottomPadding(context),
+              left: 16,
+              right: 16,
+              top: 16,
+            ),
+        child: content,
+      );
+    },
   );
 }

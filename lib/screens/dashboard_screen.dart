@@ -28,6 +28,9 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<EmpProvider>().getUpcomingBirthHodliday();
+    });
     super.initState();
   }
 

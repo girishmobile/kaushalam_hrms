@@ -85,11 +85,6 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
     );
   }
 
-  String getLeaveTypeName(String? code) {
-    const map = {"CL": "Casual Leave", "SL": "Sick Leave", "PL": "Paid Leave"};
-    return map[code] ?? code ?? "Unknown Leave";
-  }
-
   String getAppliedDate(MyLeave item) {
     if (item.leaveHistory == null || item.leaveHistory!.isEmpty) return "-";
 
@@ -126,6 +121,7 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
 
             onDelete: () {
               showDialog(
+                barrierColor: Colors.black.withValues(alpha: 0.2),
                 context: context,
                 builder: (_) => AppDialog(
                   title: "Delete",

@@ -29,7 +29,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         provider.getCurrentAttendance(),
         provider.getLeaveSummary(),
         provider.getLeaveBalance(body: {"emp_id": widget.employeeId}),
-        provider.getUpcomingBirthHodliday(),
+        // provider.getUpcomingBirthHodliday(),
       ]);
     });
   }
