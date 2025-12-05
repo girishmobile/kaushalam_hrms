@@ -98,14 +98,20 @@ class AttendanceScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: 8,
         children: [
+          appCircleIcon(
+            icon: item["icon"],
+            gradient: appGradient(),
+            iconSize: 32,
+          ),
           // Flexible details section
           Text(
             "${item["title"]}",
+            textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
               color: Colors.black87,
             ),
           ),
@@ -115,8 +121,8 @@ class AttendanceScreen extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
               color: Colors.black54,
             ),
           ),

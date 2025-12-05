@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/api/network_repository.dart';
 import 'package:neeknots_admin/models/attendace_record_model.dart';
@@ -119,42 +120,49 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
         "value": leave?.presentDays ?? 0,
         "desc": '',
         "color": const Color(0xFF4CAF50), // Green
+        "icon": Icons.calendar_month_outlined,
       },
       {
         "title": "Absent",
         "value": leave?.absentDays ?? 0,
         "desc": '',
         "color": const Color(0xFFF44336), // Red
+        "icon": Icons.remove_circle_outline,
       },
       {
         "title": "Late",
         "value": (leave?.lateDaysRatio ?? 0).toInt(),
         "desc": '% (0 Days)',
         "color": const Color(0xFFFF9800), // Orange
+        "icon": Icons.access_time_outlined,
       },
       {
         "title": "Half Days",
         "value": leave?.halfDays ?? 0,
         "desc": '',
         "color": const Color(0xFF9C27B0), // Purple
+        "icon": Icons.timelapse_outlined,
       },
       {
         "title": "Absent Days Ratio",
         "value": (leave?.absentDaysRatio ?? 0).toInt(),
         "desc": '% (0 Days)',
         "color": const Color(0xFF03A9F4), // Light Blue
+        "icon": Icons.pie_chart_outline,
       },
       {
         "title": "Productivity Ratio",
         "value": int.tryParse('${leave?.productivityRatio ?? 0}') ?? 0,
         "desc": '.00%',
         "color": const Color(0xFF009688), // Teal
+        "icon": Icons.trending_up,
       },
       {
         "title": "Office Staffing",
         "value": leave?.officeStaffing ?? 0,
         "desc": '',
         "color": const Color(0xFF673AB7), // Deep Purple
+        "icon": Icons.groups_outlined,
       },
       if (leave?.requiredStaffing != null)
         {
@@ -164,6 +172,7 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
               (leave?.requiredStaffing!.minutes ?? 0)),
           "desc": '',
           "color": const Color(0xFF2196F3), // Blue
+          "icon": Icons.group_add_outlined,
         },
       if (leave?.empStaffing != null)
         {
@@ -173,6 +182,7 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
               (leave?.empStaffing!.minutes ?? 0)),
           "desc": '',
           "color": const Color(0xFFE91E63), // Pink
+          "icon": Icons.badge_outlined,
         },
     ];
   }
