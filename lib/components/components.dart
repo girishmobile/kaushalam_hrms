@@ -579,14 +579,14 @@ Widget employeeCard(CustomerModel customer) {
 }
 
 Widget leaveCard({
-  required RecentLeave item,
+  required MyLeave item,
   required VoidCallback onReject,
   required VoidCallback onAccept,
   required VoidCallback onInfo,
 }) {
   final leaveDate = comrateStartEndate(
-    item.detail.leaveDate.toString(),
-    item.detail.leaveEndDate.toString(),
+    item.leaveDate?.date.toString(),
+    item.leaveEndDate?.date.toString(),
   );
 
   return appViewEffect(
@@ -597,7 +597,7 @@ Widget leaveCard({
         Row(
           children: [
             appCircleImage(
-              imageUrl: setImagePath(item.profileImage),
+              imageUrl: setImagePath(item.userId?.profileImage),
               radius: 24,
               icon: Icons.person_outline,
               iconColor: color3,
@@ -614,7 +614,7 @@ Widget leaveCard({
                     children: [
                       Expanded(
                         child: Text(
-                          "${item.firstname} ${item.lastname}",
+                          "${item.userId?.firstname} ${item.userId?.lastname}",
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
@@ -622,7 +622,7 @@ Widget leaveCard({
                         ),
                       ),
                       Text(
-                        "Days: ${item.detail.leaveCount}",
+                        "Days: ${item.leaveCount}",
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.black54,
@@ -653,7 +653,7 @@ Widget leaveCard({
                       ),
                       Expanded(
                         child: Text(
-                          item.detail.reason,
+                          item.reason ?? '-',
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.black54,
@@ -671,8 +671,9 @@ Widget leaveCard({
         SizedBox(height: 8),
 
         Row(
-          spacing: 8,
+          spacing: 32,
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             acceptOrRejectBtn(
               bgColor: Colors.green,
@@ -682,17 +683,17 @@ Widget leaveCard({
             ),
             acceptOrRejectBtn(
               bgColor: Colors.red,
-              title: "Decline",
+              title: "Reject",
               icon: Icons.close,
               onTap: onReject,
             ),
-            acceptOrRejectBtn(
-              title: "Info",
-              bgColor: Colors.grey,
+            // acceptOrRejectBtn(
+            //   title: "Info",
+            //   bgColor: Colors.grey,
 
-              icon: Icons.info,
-              onTap: onInfo,
-            ),
+            //   icon: Icons.info,
+            //   onTap: onInfo,
+            // ),
           ],
         ),
       ],

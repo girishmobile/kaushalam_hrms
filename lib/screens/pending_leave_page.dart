@@ -45,7 +45,7 @@ class _PendingLeavePageState extends State<PendingLeavePage> {
         builder: (context, provider, child) {
           return Stack(
             children: [
-              provider.recent_leaves.isEmpty && !provider.isLoading
+              provider.listOfLeave.isEmpty && !provider.isLoading
                   ? Center(child: Text("You don’t have any leave records yet."))
                   : ListView.separated(
                       padding: EdgeInsets.only(
@@ -58,7 +58,7 @@ class _PendingLeavePageState extends State<PendingLeavePage> {
                       addRepaintBoundaries: true,
                       cacheExtent: 500,
                       itemBuilder: (context, index) {
-                        final leave = provider.recent_leaves[index];
+                        final leave = provider.listOfLeave[index];
                         return RepaintBoundary(
                           child: GestureDetector(
                             onTap: () {
@@ -78,7 +78,7 @@ class _PendingLeavePageState extends State<PendingLeavePage> {
                       },
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 8),
-                      itemCount: provider.recent_leaves.length,
+                      itemCount: provider.listOfLeave.length,
                     ),
               appNavigationBar(
                 title: "LEAVES REQUEST",

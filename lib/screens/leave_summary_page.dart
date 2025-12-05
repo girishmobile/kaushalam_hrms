@@ -26,8 +26,11 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
   }
 
   Future<void> initLeave() async {
+    print("pageTitle:- ${widget.pageTitle}");
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<LeaveProvider>().getAllLeaveByEmployee();
+      context.read<LeaveProvider>().getAllLeaveByEmployee(
+        title: widget.pageTitle,
+      );
     });
   }
 

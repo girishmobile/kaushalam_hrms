@@ -120,9 +120,9 @@ class LeaveProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getAllLeaveByEmployee() async {
+  Future<void> getAllLeaveByEmployee({required String title}) async {
     _setLoading(true);
-    Map<String, dynamic> body = {
+    final Map<String, dynamic> body = {
       "draw": 1,
       "columns": [
         {
@@ -134,7 +134,7 @@ class LeaveProvider extends ChangeNotifier {
         },
         {
           "data": 1,
-          "name": "firstname",
+          "name": "leavetype",
           "searchable": true,
           "orderable": true,
           "search": {"value": "", "regex": false},
@@ -144,7 +144,7 @@ class LeaveProvider extends ChangeNotifier {
           "name": "leave_date",
           "searchable": true,
           "orderable": true,
-          "search": {"value": "all", "regex": false},
+          "search": {"value": title == "All" ? "all" : "", "regex": false},
         },
         {
           "data": 3,
@@ -158,27 +158,20 @@ class LeaveProvider extends ChangeNotifier {
           "name": "leave_count",
           "searchable": true,
           "orderable": true,
-          "search": {"value": "Pending", "regex": false},
+          "search": {"value": title == "All" ? "all" : title, "regex": false},
         },
         {
           "data": 5,
-          "name": "reason",
+          "name": "status",
           "searchable": true,
           "orderable": true,
-          "search": {"value": "", "regex": false},
-        },
-        {
-          "data": 6,
-          "name": "status",
-          "searchable": false,
-          "orderable": false,
           "search": {"value": "", "regex": false},
         },
       ],
       "order": [],
       "start": 0,
-      "length": 100,
-      "search": {"value": "", "regex": false},
+      "length": 15,
+      "search": {"value": title == "All" ? "" : "", "regex": false},
     };
     try {
       final response = await callApi(
