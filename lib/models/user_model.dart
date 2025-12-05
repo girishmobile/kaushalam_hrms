@@ -21,6 +21,7 @@ class UserModel {
     required this.role,
   });
 
+
   /// From API JSON
   factory UserModel.fromApiJson(Map<String, dynamic> json) {
     final data = json["data"];
@@ -38,7 +39,23 @@ class UserModel {
       role: user["role"],
     );
   }
+  /// From local storage
+  factory UserModel.fromLocalJson1(Map<String, dynamic> json) {
+    final data = json["data"];
+    final user = data["user"];
 
+    return UserModel(
+      token: data["token"] ?? "",
+      firstname: user["firstname"] ?? "",
+      lastname: user["lastname"] ?? "",
+      email: user["email"] ?? "",
+      id: user["id"] ?? 0,
+      employeeId: user["employee_id"] ?? "",
+      permission: user["permission"] ?? [],
+      profile: user["profile"] ?? "",
+      role: user["role"] ?? {},
+    );
+  }
   /// From local storage
   factory UserModel.fromLocalJson(Map<String, dynamic> json) {
     return UserModel(

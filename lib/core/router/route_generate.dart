@@ -23,6 +23,7 @@ import 'package:neeknots_admin/screens/dashboard_screen.dart';
 import 'package:neeknots_admin/screens/edit_leave_page.dart';
 import 'package:neeknots_admin/screens/employee_leave_balance.dart';
 import 'package:neeknots_admin/screens/holiday_page.dart';
+import 'package:neeknots_admin/screens/hotline/hotline_screen.dart';
 import 'package:neeknots_admin/screens/leave_summary_page.dart';
 import 'package:neeknots_admin/screens/pending_leave_page.dart';
 import 'package:neeknots_admin/screens/profile_screen.dart';
@@ -130,6 +131,9 @@ class RouteGenerate {
       case RouteName.editLeavePage:
         final args = settings.arguments as MyLeave;
         screen = EditLeavePage(item: args);
+        break;
+      case RouteName.hotlineScreen:
+        screen = const HotlineScreen();
         break;
       default:
         screen = AppScaffold(

@@ -5,15 +5,34 @@ import 'package:neeknots_admin/provider/profile_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+import '../api/api_config.dart';
+
+class ProfileScreen extends StatefulWidget {
   final String employeeId;
 
   const ProfileScreen({super.key, required this.employeeId});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      ).loadProfileFromCache();
+    });
+    setState(() {});
+  }
+  @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Map<String, dynamic> body = {"employee_id": employeeId};
+      Map<String, dynamic> body = {"employee_id": widget.employeeId};
 
       context.read<ProfileProvider>().getUserProfile(body: body);
     });
@@ -30,11 +49,21 @@ class ProfileScreen extends StatelessWidget {
                   bottom: appBottomPadding(context),
                 ),
                 children: [
-                  appProfileImage(
-                    imageUrl: setImagePath(
-                      provider.profileModel?.profileImage.toString(),
-                    ),
+                 /* appProfileImage(
+                    context: context,
+                    isEdit: true,
+                    imageUrl:   "${ApiConfig.imageBaseUrl}${provider.profileImage}",
                     radius: 60,
+                  ),*/
+                  Consumer<ProfileProvider>(
+                      builder: (_, profileProvider, _) {
+                        return appProfileImage(
+                          context: context,
+                          imageUrl:   "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
+                          radius: 60, isEdit: true,
+                         
+                        );
+                      }
                   ),
                   SizedBox(height: 16),
                   loadTitleText(
@@ -88,6 +117,7 @@ class ProfileScreen extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
+              provider.isLoading?showProgressIndicator():SizedBox.shrink()
             ],
           );
         },

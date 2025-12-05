@@ -4,6 +4,7 @@ import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/provider/app_provider.dart';
 import 'package:neeknots_admin/provider/emp_notifi_provider.dart';
 import 'package:neeknots_admin/provider/emp_provider.dart';
+import 'package:neeknots_admin/provider/hotline_provider.dart';
 import 'package:neeknots_admin/provider/leave_balance_provider.dart';
 import 'package:neeknots_admin/provider/leave_provider.dart';
 import 'package:neeknots_admin/provider/login_provider.dart';
@@ -28,9 +29,8 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider<LeaveBalanceProvider>(
     create: (_) => LeaveBalanceProvider(),
   ),
-  ChangeNotifierProvider<ProductDetailProvider>(
-    create: (_) => ProductDetailProvider(),
-  ),
+  ChangeNotifierProvider<ProductDetailProvider>(create: (_) => ProductDetailProvider(),),
+  ChangeNotifierProvider<HotlineProvider>(create: (_) => HotlineProvider(),),
 ];
 void main() {
   runApp(const MyApp());

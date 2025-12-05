@@ -10,6 +10,8 @@ import 'package:neeknots_admin/utility/secure_storage.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 
+import '../api/api_config.dart';
+
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
 
@@ -48,9 +50,21 @@ class _SettingScreenState extends State<SettingScreen> {
                   top: appTopPadding(context),
                 ),
                 children: [
-                  appProfileImage(
+                  /*appProfileImage(
+                    isEdit: false,
+                    context: context,
                     imageUrl: setImagePath(provider.userModel?.profile),
                     radius: 60,
+                  ),*/
+                  Consumer<ProfileProvider>(
+                      builder: (_, profileProvider, _) {
+                        return appProfileImage(
+                          context: context,
+                          imageUrl:   "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
+                          radius: 60, isEdit: false,
+
+                        );
+                      }
                   ),
                   SizedBox(height: 16),
                   loadTitleText(title: username, textAlign: TextAlign.center),
@@ -60,7 +74,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     title: "Edit Profile",
                     icon: Icons.edit_outlined,
                     onTap: () =>
-                        Navigator.pushNamed(context, RouteName.editProfilePage),
+                      /*  Navigator.pushNamed(context, RouteName.editProfilePage),*/
+                    Navigator.pushNamed(
+                      context,
+                      RouteName.profileScreen,
+                      arguments: '${provider.userModel?.id??0}',
+                    )
                   ),
                   const SizedBox(height: 12),
 
@@ -87,6 +106,13 @@ class _SettingScreenState extends State<SettingScreen> {
                     icon: Icons.people_outline_outlined,
                     onTap: () =>
                         Navigator.pushNamed(context, RouteName.allEmplyeePage),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildRowItem(
+                    title: "Hotline",
+                    icon: Icons.people_outline_outlined,
+                    onTap: () =>
+                        Navigator.pushNamed(context, RouteName.hotlineScreen),
                   ),
                   const SizedBox(height: 24),
                   gradientButton(

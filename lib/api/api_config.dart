@@ -42,7 +42,15 @@ class ApiConfig {
 
   static String approvedLeaveUrl =
       "$BaseUrl/leave_application/update_accept_status";
+  static String uploadProfileImageUrl = "$BaseUrl/uploadlogo";
 
+  static String updateProfileDataUrl = "$BaseUrl/user/update_employee";
+  static String userUpdatePasswordURL = "$BaseUrl/user/update_user_password";
+  static String getMyHoursURL = "$BaseUrl/project-manage/getSelfProjects";
+  static String hotlineCountUrl = "$BaseUrl/attendance/hotline-count";
+  static String departmentUrl = "$BaseUrl/department/get_all_department";
+  static String getAllDesignationUrl = "$BaseUrl/designation/get_all_designation";
+  static String hotlineUrl = "$BaseUrl/attendance/hotline";
   //API header
   static Future<Map<String, String>> getApiHeaders() async {
     final token = await SecureStorage.getToken();

@@ -7,6 +7,8 @@ import 'package:neeknots_admin/models/attendance_model.dart';
 import 'package:neeknots_admin/models/birth_holiday_model.dart';
 import 'package:neeknots_admin/models/leave_summary.dart';
 
+import '../models/my_work_model.dart';
+
 class EmpProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -149,6 +151,43 @@ class EmpProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
+
+  MyWorkModel? _myWorkModel;
+
+  MyWorkModel? get myWorkModel => _myWorkModel;
+
+  Future<void> getMYHours({required int id}) async {
+    _setLoading(true);
+    try {
+      Map<String, dynamic> body = {"id": id};
+      final response = await callApi(
+        url: ApiConfig.getMyHoursURL,
+        method: HttpMethod.post,
+
+        body: body,
+        headers: null,
+      );
+
+      if (globalStatusCode == 200) {
+        _myWorkModel = MyWorkModel.fromJson(json.decode(response));
+
+        _setLoading(false);
+      } else {}
+      _setLoading(false);
+      notifyListeners();
+    } catch (e) {
+      debugPrint('=====e=$e');
+      _setLoading(false);
+    }
+  }
+  final List<Color> colors = [
+    Colors.orange,
+    Colors.red,
+    Colors.green,
+    Colors.indigo,
+    Colors.blue,
+    Colors.redAccent,
+  ];
 
   Future<void> getBirthdays() async {}
 }

@@ -61,6 +61,7 @@ class LoginPage extends StatelessWidget {
                                   const SizedBox(height: 16),
                                   appOrangeTextField(
                                     hintText: "Password",
+
                                     icon: Icons.lock_outline,
                                     keyboardType: TextInputType.visiblePassword,
                                     textController: provider.passwordController,

@@ -26,9 +26,18 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      ).loadProfileFromCache();
+    });
+    setState(() {});
   }
 
   @override
@@ -82,16 +91,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              appCircleImage(
-                imageUrl: fullImageUrl,
-                radius: 18,
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    RouteName.profileScreen,
-                    arguments: provider.employeeId,
+              Consumer<ProfileProvider>(
+                builder: (_, profileProvider, _) {
+                  return appCircleImage(
+                    borderColor: color3,
+                    imageUrl:   "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
+                    radius: 18,
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        RouteName.profileScreen,
+                        arguments: provider.employeeId,
+                      );
+                    },
                   );
-                },
+                }
               ),
 
               // ✅ Show logo only for Home, otherwise show title

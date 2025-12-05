@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
@@ -14,6 +16,10 @@ import 'package:neeknots_admin/models/notification_model.dart';
 import 'package:neeknots_admin/models/order_model.dart';
 import 'package:neeknots_admin/provider/leave_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
+import 'package:provider/provider.dart';
+
+import '../common/image_pick_and_crop_widget.dart';
+import '../provider/profile_provider.dart';
 
 double leftPadding = 16;
 double rightPadding = 16;
@@ -103,6 +109,69 @@ Widget appCircleImage({
         ),
       ),
     ),
+  );
+}
+
+Widget commonPrefixIcon({
+  required String image,
+  double? width,
+  double? height,
+  Color? colorIcon,
+}) {
+  return SizedBox(
+    width: width ?? 24,
+    height: height ?? 24,
+    child: Center(
+      child: commonAssetImage(
+        image,
+        width: width ?? 24,
+        height: height ?? 24,
+        color: colorIcon ?? Colors.grey,
+      ),
+    ),
+  );
+}
+
+Widget commonAssetImage(
+    String path, {
+      double? width,
+      double? height,
+      BoxFit? fit,
+      BorderRadius? borderRadius,
+      Color? color,
+    }) {
+  Widget image = Image.asset(
+    path,
+    width: width,
+    height: height,
+    fit: fit,
+    color: color,
+  );
+
+  return borderRadius != null
+      ? ClipRRect(borderRadius: borderRadius, child: image)
+      : image;
+}
+BoxDecoration commonBoxDecoration({
+  Color color = Colors.transparent,
+  double borderRadius = 8.0,
+  Color borderColor = Colors.transparent,
+  double borderWidth = 1.0,
+
+  Gradient? gradient,
+  DecorationImage? image,
+  BoxShape shape = BoxShape.rectangle,
+}) {
+  return BoxDecoration(
+    color: color,
+    shape: shape,
+    image: image,
+    borderRadius: shape == BoxShape.rectangle
+        ? BorderRadius.circular(borderRadius)
+        : null,
+    border: Border.all(color: borderColor, width: borderWidth),
+
+    gradient: gradient,
   );
 }
 
@@ -300,6 +369,7 @@ Widget appViewEffect({
   required Widget child,
   double borderRadius = 8,
   EdgeInsetsGeometry? padding,
+  EdgeInsetsGeometry? margin,
   double blurSigma = 10,
   Color? overlayColor, // make nullable so we can override
   double opacity = 0.08, // slightly visible orange shade
@@ -313,6 +383,7 @@ Widget appViewEffect({
   return GestureDetector(
     onTap: onTap,
     child: Container(
+      margin:margin ,
       padding: padding ?? const EdgeInsets.all(12),
       decoration: BoxDecoration(
         gradient: viewBackgroundGradinet(),
@@ -929,13 +1000,18 @@ Widget loadSubText({
   String? title,
   double? fontSize,
   Color? fontColor,
+  int? maxLines,
   FontWeight? fontWight,
   TextAlign? textAlign,
   TextOverflow? textOverflow,
 }) {
   return Text(
     title ?? "",
+
+    maxLines: maxLines,
     style: TextStyle(
+
+
       color: fontColor ?? Colors.black54,
       fontSize: fontSize ?? 14,
       fontWeight: fontWight ?? FontWeight.w500,
@@ -1029,23 +1105,59 @@ Widget gradientButton({
 
 Widget appProfileImage({
   String? imageUrl,
+  required bool isEdit,
   double radius = 60,
+  required BuildContext context,
   EdgeInsetsGeometry? padding,
 }) {
-  return Container(
-    padding: padding ?? const EdgeInsets.all(2), // thickness of border
-    decoration: BoxDecoration(shape: BoxShape.circle, gradient: appGradient()),
-    child: Container(
-      height: radius * 2,
-      width: radius * 2,
-      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-      child: appCircleImage(
-        imageUrl: imageUrl,
-        icon: Icons.person_outline,
-        radius: (radius - 2),
-        onTap: () {},
+  final provider = Provider.of<ProfileProvider>(context);
+  return Stack(
+
+    clipBehavior: Clip.hardEdge,
+    alignment: AlignmentGeometry.center,
+    children: [
+      Container(
+        padding: padding ?? const EdgeInsets.all(2), // thickness of border
+        decoration: BoxDecoration(shape: BoxShape.circle, gradient: appGradient()),
+        child: Container(
+          height: radius * 2,
+          width: radius * 2,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+          child: appCircleImage(
+            imageUrl: imageUrl,
+            icon: Icons.person_outline,
+            radius: (radius - 2),
+            onTap: () {},
+          ),
+        ),
       ),
-    ),
+      isEdit?  Positioned(
+        bottom: 0,
+        child: Transform.translate(
+          offset: Offset(40, 0), // 👈 left side me 20px shift
+          child: InkWell(
+            onTap: () async {
+
+              final path = await CommonImagePicker.pickImage(
+                context: context,
+              );
+              if (path != null) {
+                provider.setPickedFile(File(path));
+                provider.uploadProfileImage( filePath: path,context: context);
+              }
+            },
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(shape: BoxShape.circle, gradient: appGradient()),
+              child: const Center(
+                child: Icon(Icons.edit_outlined,color: Colors.white,),
+              ),
+            ),
+          ),
+        ),
+      ):SizedBox.shrink(),
+    ],
   );
 }
 
@@ -1383,5 +1495,190 @@ Widget appRefreshIndicator({
     strokeWidth: 2,
     onRefresh: onRefresh,
     child: child,
+  );
+}
+Future<bool?> showCommonDialog({
+  required String title,
+  required BuildContext context,
+  String? content,
+  String confirmText = 'OK',
+  bool? barrierDismissible,
+  String cancelText = 'Cancel',
+
+  VoidCallback? onConfirm,
+  VoidCallback? onCancel,
+  VoidCallback? onPressed,
+
+  List<Widget>? actions,
+  Widget? contentView,
+  bool showCancel = true,
+}) {
+  return showCupertinoDialog<bool>(
+    barrierDismissible: barrierDismissible ?? false,
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: loadTitleText(
+          title: title,
+          textAlign: TextAlign.center,
+          fontWight: FontWeight.w500,
+          fontSize: 18,
+        ),
+        content:
+        contentView ??
+            Padding(
+              padding: const EdgeInsets.only(top: 3.0),
+              child: loadSubText(
+                title: content ?? '',
+                textAlign: TextAlign.center,
+                fontSize: 14,
+              ),
+            ),
+        actions:
+        actions ??
+            <Widget>[
+              if (showCancel)
+                CupertinoDialogAction(
+                  isDefaultAction: false,
+                  onPressed: () {
+                    onCancel?.call();
+                    Navigator.of(context).pop(false); // return false
+                  },
+                  child: loadSubText(
+                    title: cancelText.toUpperCase(),
+                    fontWight: FontWeight.w500,
+                    fontColor: Colors.red,
+                  ),
+                ),
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                // priority = onOk → onConfirm
+                onPressed: () {
+                  if (onPressed != null) {
+                    Navigator.pop(context);
+                    onPressed();
+                  } else {
+                    onConfirm?.call();
+                    Navigator.pop(context, true);
+                  }
+                },
+
+                child: loadSubText(
+                  title: confirmText.toUpperCase(),
+                  fontWight: FontWeight.w500,
+                ),
+              ),
+            ],
+      );
+    },
+  );
+}
+Widget commonRefreshIndicator({
+  required final Future<void> Function() onRefresh,
+  required final Widget child,
+}) {
+  return RefreshIndicator(
+    color: color3,
+    backgroundColor: Colors.white,
+    strokeWidth: 2,
+    onRefresh: onRefresh,
+    child: child,
+  );
+}
+
+void showCommonBottomSheet({
+  required BuildContext context,
+  required Widget content,
+
+  bool isDismissible = true,
+  EdgeInsetsGeometry? padding,
+}) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.white,
+    isDismissible: isDismissible,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (context) {
+      return Padding(
+        padding:padding?? EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          left: 16,
+          right: 16,
+          top: 24,
+        ),
+        child: content,
+      );
+    },
+  );
+}
+Widget commonBoxView({
+  required Widget contentView,
+  required String title,
+  double? fontSize,
+}) {
+  return appViewEffect(
+
+    margin: const EdgeInsets.all(0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Title
+        commonHeadingView(title: title, fontSize: fontSize),
+
+
+        // Content
+        Padding(padding: const EdgeInsets.all(12.0), child: contentView),
+      ],
+    ),
+  );
+}
+
+Widget commonHeadingView({String? title, double? fontSize}) {
+  return Padding(
+    padding: EdgeInsets.all(12.0),
+    child: Row(
+      children: [
+        Expanded(
+          child: loadTitleText(
+
+            title: title ?? "Product Information",
+            fontSize: fontSize ?? 16,
+            fontWight: FontWeight.w600,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+Widget commonRowLeftRightView({
+  required String title,
+  String? value,
+  Widget? customView,
+}) {
+  return Row(
+    children: [
+      Expanded(
+        child: loadSubText(
+          title: title,
+          fontWight: FontWeight.w500,
+          fontSize: 12,
+        ),
+      ),
+      Expanded(
+        child:
+        customView ??
+            loadSubText(
+              title: value ?? '',
+              maxLines: 1,
+              textOverflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.right,
+              fontWight: FontWeight.w400,
+              fontSize: 12,
+            ),
+      ),
+    ],
   );
 }
