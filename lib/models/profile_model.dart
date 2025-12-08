@@ -892,7 +892,7 @@ class ReportTo {
   int? id;
   String? firstname;
   String? lastname;
-  Null profileImage;
+  String ?profileImage;
 
   ReportTo({this.id, this.firstname, this.lastname, this.profileImage});
 

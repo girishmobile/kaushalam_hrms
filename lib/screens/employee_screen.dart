@@ -37,7 +37,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   @override
   Widget build(BuildContext context) {
     final appProvider = context.read<AppProvider>();
-    final isrole = appProvider.isRole == "employee" ? false : true;
+    final isRole = appProvider.isRole == "employee" ? false : true;
     return Consumer<EmpProvider>(
       builder: (context, provider, child) {
         final birthdays = provider.birthholidayModel?.birthdays ?? <BirthDay>[];
@@ -52,7 +52,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                 padding: EdgeInsets.only(
                   left: 24,
                   right: 24,
-                  top: isrole
+                  top: isRole
                       ? listTop(context)
                       : appTopPadding(context, extra: 8),
                   bottom: listBottom(context, extra: 44),

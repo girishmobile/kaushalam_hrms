@@ -67,7 +67,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                       fontWight: FontWeight.w600,
                       fontSize: 16,
                     ),
-                    SizedBox(height: 5),
+                    SizedBox(height: 15),
                     GridView.builder(
                       shrinkWrap: true,
 
@@ -75,7 +75,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                       padding: const EdgeInsets.only(
                         left: 0,
                         right: 0,
-                        bottom: 16,
+                        bottom: 0,
                       ),
                       itemCount: provider.hotlineCount.length,
 
@@ -124,7 +124,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                         );
                       },
                     ),
-
+                    SizedBox(height: 15),
                     loadTitleText(
                       // text:provider.title.toString().toTitleCase()?? "All Employees",
                       title:
