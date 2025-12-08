@@ -17,7 +17,7 @@ class AttendanceScreen extends StatelessWidget {
         return Stack(
           children: [
             _kpiGridView(context, provider),
-            topBar(context),
+            topBar(context, provider),
             provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
           ],
         );
@@ -25,7 +25,7 @@ class AttendanceScreen extends StatelessWidget {
     );
   }
 
-  Widget topBar(BuildContext context) {
+  Widget topBar(BuildContext context, AttendanceProvider provider) {
     final safeTop = MediaQuery.of(context).padding.top;
     const topBarHeight = 48.0; // your Dashboard SafeArea Row
     final listTop = safeTop + topBarHeight + 16; // search bar height + spacing
@@ -44,15 +44,26 @@ class AttendanceScreen extends StatelessWidget {
             ),
           ),
           appViewEffect(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.only(left: 12, right: 4, top: 6, bottom: 6),
             borderRadius: 8,
+            onTap: () async {
+              final selected = await appSimpleBottomSheet(
+                context,
+                selected: provider.selectedDateRange,
+                dataType: provider.dateType,
+                onClose: () => Navigator.of(context).pop(),
+              );
+              if (selected != null) {
+                provider.handleDateRangeSelection(context, selected);
+              }
+            },
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Today",
+                  provider.selectedDateRange,
                   style: TextStyle(
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                     fontSize: 14,
                     color: Colors.black87,
                   ),
@@ -78,7 +89,7 @@ class AttendanceScreen extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
-        childAspectRatio: 1,
+        childAspectRatio: 1.3,
       ),
       itemBuilder: (context, index) {
         final item = provider.attendanceGridItems[index];

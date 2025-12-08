@@ -201,7 +201,7 @@ Widget loadNetworkImage({
           ),
         ),
         errorWidget: (_, __, ___) =>
-            // loadAssetImage(name: errorImage)
+           // loadAssetImage(name: errorImage)
             _fallBackContent(icon, iconColor, text, iconSize),
       );
     } else if (imageUrl.contains(".png") ||
@@ -296,11 +296,7 @@ Widget _fallBackContent(
       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
     );
   } else {
-    return const Icon(
-      Icons.person_outline_rounded,
-      size: 24,
-      color: Colors.grey,
-    );
+    return Icon(Icons.person_outline_rounded, size: 24, color: iconColor);
     //  return  loadAssetImage(name: errorImage);
   }
 }
@@ -1177,7 +1173,7 @@ Widget appProfileImage({
           ),
           child: appCircleImage(
             imageUrl: imageUrl,
-            //   icon: Icons.person_outline,
+         //   icon: Icons.person_outline,
             radius: (radius - 2),
             onTap: () {},
           ),
@@ -1457,6 +1453,7 @@ Future<String?> appSimpleBottomSheet(
   BuildContext context, {
   String? selected,
   required List<String> dataType,
+  VoidCallback? onClose,
 }) async {
   return await showModalBottomSheet<String>(
     context: context,
@@ -1465,60 +1462,68 @@ Future<String?> appSimpleBottomSheet(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (context) => Container(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      padding: EdgeInsets.only(top: 4, left: 16, right: 8, bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Do you want to select a option?",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-            ),
-          ),
-          SizedBox(height: 12),
-          ...dataType.map((e) {
-            final isSelected = e == selected;
-            return GestureDetector(
-              onTap: () => Navigator.pop(context, e),
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 6),
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: isSelected ? btnColor2 : color2,
-                    width: 1,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Do you want to select a option?",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
                   ),
-                  gradient: viewBackgroundGradinet(),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        e,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black54,
+                IconButton(onPressed: onClose, icon: Icon(Icons.close)),
+              ],
+            ),
+            SizedBox(height: 8),
+            ...dataType.map((e) {
+              final isSelected = e == selected;
+              return GestureDetector(
+                onTap: () => Navigator.pop(context, e),
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 6),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: isSelected ? btnColor2 : color2,
+                      width: 1,
+                    ),
+                    gradient: viewBackgroundGradinet(),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          e,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black54,
+                          ),
                         ),
                       ),
-                    ),
-                    if (isSelected)
-                      Icon(Icons.check, color: Colors.orange, size: 20),
-                  ],
+                      if (isSelected)
+                        Icon(Icons.check, color: Colors.orange, size: 20),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }),
-          SizedBox(height: 12),
-        ],
+              );
+            }),
+            SizedBox(height: 12),
+          ],
+        ),
       ),
     ),
   );
