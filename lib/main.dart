@@ -3,6 +3,7 @@ import 'package:neeknots_admin/core/router/route_generate.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/provider/app_provider.dart';
 import 'package:neeknots_admin/provider/attendance_provider.dart';
+import 'package:neeknots_admin/provider/calendar_provider.dart';
 import 'package:neeknots_admin/provider/emp_notifi_provider.dart';
 import 'package:neeknots_admin/provider/emp_provider.dart';
 import 'package:neeknots_admin/provider/hotline_provider.dart';
@@ -35,6 +36,7 @@ List<SingleChildWidget> providers = [
   ),
   ChangeNotifierProvider<ProductDetailProvider>(create: (_) => ProductDetailProvider(),),
   ChangeNotifierProvider<HotlineProvider>(create: (_) => HotlineProvider(),),
+  ChangeNotifierProvider<CalendarProvider>(create: (_) => CalendarProvider(),),
 ];
 void main() {
   runApp(const MyApp());

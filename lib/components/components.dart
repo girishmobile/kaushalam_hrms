@@ -202,6 +202,7 @@ Widget loadNetworkImage({
           ),
         ),
         errorWidget: (_, __, ___) =>
+           // loadAssetImage(name: errorImage)
             _fallBackContent(icon, iconColor, text, iconSize),
       );
     } else if (imageUrl.contains(".png") ||
@@ -218,6 +219,7 @@ Widget loadNetworkImage({
     } else {
       // Invalid string (like "Girish") → fallback
       return _fallBackContent(icon, iconColor, text ?? imageUrl, iconSize);
+      //return loadAssetImage(name: errorImage);
     }
   }
 
@@ -295,7 +297,8 @@ Widget _fallBackContent(
       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
     );
   } else {
-    return const Icon(Icons.person, size: 24, color: Colors.grey);
+    //return const Icon(Icons.person, size: 24, color: Colors.grey);
+    return  loadAssetImage(name: errorImage);
   }
 }
 
@@ -1146,7 +1149,7 @@ Widget appProfileImage({
           decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
           child: appCircleImage(
             imageUrl: imageUrl,
-            icon: Icons.person_outline,
+         //   icon: Icons.person_outline,
             radius: (radius - 2),
             onTap: () {},
           ),

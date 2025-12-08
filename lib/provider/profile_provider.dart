@@ -130,7 +130,7 @@ class ProfileProvider extends ChangeNotifier {
         _setLoginSuccess(false);
       }
     } catch (e) {
-      print("errorr:- $e");
+      print("error:- $e");
       _setLoginSuccess(false);
     }
   }
@@ -142,7 +142,6 @@ class ProfileProvider extends ChangeNotifier {
     UserModel? user = await SecureStorage.getUser();
     _profileImage = user?.profile??'';
 
-    print('--_profileImage--${_profileImage}');
     notifyListeners();
 
 

@@ -53,7 +53,7 @@ class ApiConfig {
   static String hotlineUrl = "$BaseUrl/attendance/hotline";
   static String getAttendanceUrl =
       "$BaseUrl/hikattendance/getUserAttendanceByDate";
-
+  static String calenderUrl = "$BaseUrl/dashboard/getLeavesSelfDashboard";
   //API header
   static Future<Map<String, String>> getApiHeaders() async {
     final token = await SecureStorage.getToken();

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../api/api_config.dart';
+import '../core/router/route_name.dart';
+import '../provider/calendar_provider.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -13,6 +18,21 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      init();
+    });
+  }
+
+  Future<void> init() async {
+    final provider = Provider.of<CalendarProvider>(context, listen: false);
+
+    provider.getCalenderList(_selectedDay);
+    setState(() {}); // 🔥 Force rebuild once data is ready
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,79 +41,109 @@ class _CalendarScreenState extends State<CalendarScreen> {
     const topBarHeight = 48.0; // your Dashboard SafeArea Row
     final listTop = safeTop + topBarHeight; // search bar height + spacing
     final listBottom = safeBottom + topBarHeight + 16;
-    return Stack(
-      children: [
-        ListView(
-          padding: EdgeInsetsGeometry.only(
-            left: 16,
-            right: 16,
-            top: listTop,
-            bottom: listBottom,
-          ),
+    return Consumer<CalendarProvider>(
+      builder: (context, provider, child) {
+        final selectedEvents = provider.getEventsForDay(_selectedDay);
 
+        return Stack(
           children: [
-            _buildTableCalendar(),
-            _builHeader(),
-            // ListView.separated(
-            //   padding: EdgeInsets.only(bottom: listBottom),
-            //   shrinkWrap: true,
-            //   itemBuilder: (context, index) {
-            //     return appViewEffect(
-            //       child: Center(child: Text("comming soon...")),
-            //     );
-            //   },
-            //   separatorBuilder: (_, __) => SizedBox(height: 8),
-            //   itemCount: 10,
-            // ),
-            /// FIX: Do NOT use ListView inside ListView → use Column
-            ...List.generate(
-              10,
-              (index) => Padding(
-                padding: const EdgeInsetsGeometry.only(bottom: 8),
-                child: _buildItem(),
+            ListView(
+              padding: EdgeInsetsGeometry.only(
+                left: 16,
+                right: 16,
+                top: listTop,
+                bottom: listBottom,
+              ),
+
+              children: [
+                _buildTableCalendar(provider: provider),
+                _buildHeader(),
+
+            ListView.builder(
+              shrinkWrap: true,
+                itemCount: selectedEvents.length,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index){
+                  final event = selectedEvents[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: _buildItem (provider: provider,event: event),
+              );
+            })
+
+              ],
+            ),
+            provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
+          ],
+        );
+      }
+    );
+  }
+
+  Widget _buildItem({required CalendarProvider provider,required Map<String, dynamic> event}) {
+
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          RouteName.profileScreen,
+          arguments: {
+            "employeeId":'${event['id']}',
+            "isCurrentUser": false,
+          },
+          //arguments: provider.employeeId,
+        );
+      },
+      child: appViewEffect(
+        borderRadius: 4,
+        child: Row(
+          spacing: 8,
+          children: [
+            event['type']=="Birthday" ? appCircleImage(
+          borderColor: color3,
+          imageUrl:"${ApiConfig.imageBaseUrl}${event['profile']}",
+          radius: 18,
+
+        ): Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.redAccent.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Icon(Icons.pending_actions, color: Colors.redAccent),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  loadTitleText(
+                    title: event['title'].toString(),
+                    fontSize: 14,
+                    fontWight: FontWeight.w600,
+                  ),
+                  loadSubText(title: "Type: ${event['type'].toString().toUpperCase()}", fontSize: 12),
+                ],
               ),
             ),
           ],
         ),
-      ],
-    );
-  }
-
-  Widget _buildItem() {
-    return appViewEffect(
-      borderRadius: 4,
-      child: Row(
-        spacing: 8,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.redAccent.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Icon(Icons.pending_actions, color: Colors.redAccent),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                loadTitleText(
-                  title: "Girish Cahuahn",
-                  fontSize: 14,
-                  fontWight: FontWeight.w600,
-                ),
-                loadSubText(title: "Type: Leave", fontSize: 12),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
 
-  Widget _buildTableCalendar() {
-    return TableCalendar(
+  Widget _buildTableCalendar({required CalendarProvider provider}) {
+    final DateTime firstDay = DateTime(2000, 1, 1);
+
+    final DateTime lastDay = DateTime(
+      DateTime.now().year,
+    12,
+     31,
+    );
+    return  TableCalendar(
       headerStyle: HeaderStyle(
+        leftChevronIcon:  Icon(Icons.chevron_left, color: color3),
+       rightChevronIcon: _focusedDay.year == lastDay.year &&
+           _focusedDay.month == lastDay.month?SizedBox(): Icon(Icons.chevron_right, color: color3),
         formatButtonVisible: false,
         titleCentered: true,
         titleTextStyle: TextStyle(
@@ -102,12 +152,48 @@ class _CalendarScreenState extends State<CalendarScreen> {
           color: color3,
         ),
       ),
+
+      onPageChanged: (focusedDay) {
+        _focusedDay = focusedDay;
+        provider.getCalenderList(focusedDay); // 🔥 fetch new month
+      },
       onDaySelected: (selectedDay, focusedDay) {
         setState(() {
           _selectedDay = selectedDay;
           _focusedDay = focusedDay;
         });
       },
+      calendarBuilders: CalendarBuilders(
+        markerBuilder: (context, date, events) {
+          if (events.isEmpty) return const SizedBox();
+
+          final firstEvent = events.first;
+          if (firstEvent is! Map<String, dynamic>) {
+            return const SizedBox();
+          }
+
+          final type = firstEvent['type']?.toString() ?? '';
+
+          Color color;
+          if (type == 'leave') {
+            color = Colors.red;
+          } else if (type == 'attendance') {
+            color = Colors.green;
+          } else {
+            color = Colors.blue;
+          }
+
+          return Container(
+            width: 8,
+            height: 8,
+            margin: const EdgeInsets.only(top: 2),
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+          );
+        },
+      ),
       calendarStyle: CalendarStyle(
         selectedDecoration: BoxDecoration(
           color: btnColor2,
@@ -119,14 +205,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
         ),
         weekendTextStyle: TextStyle(color: Colors.redAccent),
       ),
+      eventLoader: provider.getEventsForDay,
       selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
       focusedDay: _focusedDay,
-      firstDay: DateTime.utc(2025, 1, 1),
-      lastDay: DateTime.utc(2025, 12, 31),
+      firstDay:firstDay,
+      lastDay: lastDay,
     );
   }
 
-  Widget _builHeader() {
+  Widget _buildHeader() {
     return Column(
       children: [
         const Divider(height: 20, thickness: 0.5, color: color3),
@@ -169,78 +256,3 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 }
 
-class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final double height;
-  final double topOffset;
-  final Widget child;
-
-  _StickyHeaderDelegate({
-    required this.height,
-    required this.child,
-    required this.topOffset,
-  });
-
-  @override
-  double get minExtent => height + topOffset;
-  @override
-  double get maxExtent => height + topOffset;
-
-  @override
-  Widget build(context, shrinkOffset, overlapsContent) {
-    double offset = shrinkOffset > topOffset ? topOffset : shrinkOffset;
-
-    return Transform.translate(
-      offset: Offset(0, -offset), // moves up as you scroll
-      child: Column(
-        children: [
-          SizedBox(height: topOffset), // reserve real top bar space
-          child, // sticky content
-        ],
-      ),
-    );
-  }
-
-  @override
-  bool shouldRebuild(old) => true;
-}
-
-/**
- *  CustomScrollView(
-          slivers: [
-            // 1️⃣ Real space for Top Bar (fixes overlapping)
-            SliverPadding(
-              padding: EdgeInsets.only(left: 16, right: 16),
-              sliver: SliverToBoxAdapter(child: _buildTableCalendar()),
-            ),
-            //Stikcy row
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              sliver: SliverPersistentHeader(
-                pinned: true,
-                delegate: _StickyHeaderDelegate(
-                  child: _builHeader(),
-                  topOffset: listTop,
-                  height: 60,
-                ),
-              ),
-            ),
-
-            SliverPadding(
-              padding: EdgeInsets.only(left: 16, right: 16, bottom: listBottom),
-              sliver: SliverList.separated(
-                itemBuilder: (context, index) {
-                  return appViewEffect(
-                    borderRadius: 4,
-                    child: Center(child: Text("Comming soon...")),
-                  );
-                },
-                separatorBuilder: (_, __) => SizedBox(height: 8),
-                itemCount: 80,
-              ),
-            ),
-
-            // Scrollable List
-          ],
-        ),
-  
- */

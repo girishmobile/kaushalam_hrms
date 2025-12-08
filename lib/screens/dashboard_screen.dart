@@ -55,7 +55,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ];
     final titles = [
       "CALENDAR",
-      "LEAVES",
+      "MY KPI",
       "", // Home has logo
       "ATTENDANCE",
       "SETTINGS",
