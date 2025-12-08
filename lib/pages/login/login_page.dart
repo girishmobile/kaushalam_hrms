@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/constants/string_constant.dart';
 import 'package:neeknots_admin/core/constants/validations.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/provider/login_provider.dart';
-import 'package:neeknots_admin/utility/top_snack_bar.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -149,8 +147,8 @@ class LoginPage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "© 2025 Kaushalam Inc",
+                        Text(
+                          "© ${DateTime.now().year} Kaushalam Inc",
                           style: TextStyle(
                             color: Colors.black54,
                             fontWeight: FontWeight.w500,

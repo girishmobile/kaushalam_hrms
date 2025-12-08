@@ -297,8 +297,8 @@ Widget _fallBackContent(
       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
     );
   } else {
-    //return const Icon(Icons.person, size: 24, color: Colors.grey);
-    return  loadAssetImage(name: errorImage);
+    return const Icon(Icons.person_outline_rounded, size: 24, color: Colors.grey);
+  //  return  loadAssetImage(name: errorImage);
   }
 }
 
@@ -513,17 +513,20 @@ Widget appOrangeTextField({
   bool isPassword = false,
   bool obscure = true,
   TextInputType? keyboardType,
+
   VoidCallback? onTogglePassword,
   String? Function(String?)? validator,
 }) {
   return TextFormField(
     validator: validator,
     controller: textController,
+    keyboardType: keyboardType,
     obscureText: isPassword ? obscure : false,
     autocorrect: false,
     enableSuggestions: false,
     decoration: InputDecoration(
       hintText: hintText,
+
       hintStyle: const TextStyle(color: Colors.black54, fontSize: 14),
 
       // LEFT ICON
