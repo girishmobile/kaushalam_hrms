@@ -9,6 +9,7 @@
       "dependencies": [
         "cached_network_image",
         "cupertino_icons",
+        "dropdown_button2",
         "fl_chart",
         "flutter",
         "flutter_html",
@@ -50,6 +51,14 @@
         "stream_channel",
         "test_api",
         "vector_math"
+      ]
+    },
+    {
+      "name": "dropdown_button2",
+      "version": "2.3.9",
+      "dependencies": [
+        "flutter",
+        "meta"
       ]
     },
     {

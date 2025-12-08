@@ -12,8 +12,6 @@ import 'package:neeknots_admin/models/all_leave_model.dart';
 import 'package:neeknots_admin/models/birth_holiday_model.dart';
 import 'package:neeknots_admin/models/customer_model.dart';
 import 'package:neeknots_admin/models/emp_notification_model.dart';
-import 'package:neeknots_admin/models/manager_leave_model.dart';
-import 'package:neeknots_admin/models/notification_model.dart';
 import 'package:neeknots_admin/models/order_model.dart';
 import 'package:neeknots_admin/provider/leave_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
@@ -134,13 +132,13 @@ Widget commonPrefixIcon({
 }
 
 Widget commonAssetImage(
-    String path, {
-      double? width,
-      double? height,
-      BoxFit? fit,
-      BorderRadius? borderRadius,
-      Color? color,
-    }) {
+  String path, {
+  double? width,
+  double? height,
+  BoxFit? fit,
+  BorderRadius? borderRadius,
+  Color? color,
+}) {
   Widget image = Image.asset(
     path,
     width: width,
@@ -153,6 +151,7 @@ Widget commonAssetImage(
       ? ClipRRect(borderRadius: borderRadius, child: image)
       : image;
 }
+
 BoxDecoration commonBoxDecoration({
   Color color = Colors.transparent,
   double borderRadius = 8.0,
@@ -202,7 +201,7 @@ Widget loadNetworkImage({
           ),
         ),
         errorWidget: (_, __, ___) =>
-           // loadAssetImage(name: errorImage)
+            // loadAssetImage(name: errorImage)
             _fallBackContent(icon, iconColor, text, iconSize),
       );
     } else if (imageUrl.contains(".png") ||
@@ -297,8 +296,12 @@ Widget _fallBackContent(
       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
     );
   } else {
-    return const Icon(Icons.person_outline_rounded, size: 24, color: Colors.grey);
-  //  return  loadAssetImage(name: errorImage);
+    return const Icon(
+      Icons.person_outline_rounded,
+      size: 24,
+      color: Colors.grey,
+    );
+    //  return  loadAssetImage(name: errorImage);
   }
 }
 
@@ -387,7 +390,7 @@ Widget appViewEffect({
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      margin:margin ,
+      margin: margin,
       padding: padding ?? const EdgeInsets.all(12),
       decoration: BoxDecoration(
         gradient: viewBackgroundGradinet(),
@@ -473,12 +476,11 @@ Widget appTextField({required String hintText, IconData? icon}) {
               child: Icon(icon, color: Colors.black54, size: 20),
             )
           : null,
-      prefixIconConstraints: const BoxConstraints(
-        minWidth: 32,
-        minHeight: 32,
-      ), // removes extra padding
+      prefixIconConstraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+      // removes extra padding
       filled: true,
-      fillColor: Colors.white.withValues(alpha: 0.15), // glassy effect
+      fillColor: Colors.white.withValues(alpha: 0.15),
+      // glassy effect
       contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30), // rounded corners
@@ -512,8 +514,9 @@ Widget appOrangeTextField({
   TextEditingController? textController,
   bool isPassword = false,
   bool obscure = true,
+  Widget? suffixIcon,
   TextInputType? keyboardType,
-
+  final Function(String)? onChanged,
   VoidCallback? onTogglePassword,
   String? Function(String?)? validator,
 }) {
@@ -521,9 +524,11 @@ Widget appOrangeTextField({
     validator: validator,
     controller: textController,
     keyboardType: keyboardType,
+
     obscureText: isPassword ? obscure : false,
     autocorrect: false,
     enableSuggestions: false,
+    onChanged: onChanged,
     decoration: InputDecoration(
       hintText: hintText,
 
@@ -547,7 +552,7 @@ Widget appOrangeTextField({
               ),
               onPressed: onTogglePassword,
             )
-          : null,
+          : suffixIcon,
 
       filled: true,
       fillColor: color1.withValues(alpha: 0.15),
@@ -861,7 +866,10 @@ Widget birthDayCard({required BirthDay item, double radius = 32}) {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              loadTitleText(title: item.firstname, fontSize: 14),
+              loadTitleText(
+                title: '${item.firstname} ${item.lastname}',
+                fontSize: 14,
+              ),
               loadSubText(title: item.designation),
               loadSubText(
                 title: getFormattedDate(
@@ -1037,8 +1045,6 @@ Widget loadSubText({
 
     maxLines: maxLines,
     style: TextStyle(
-
-
       color: fontColor ?? Colors.black54,
       fontSize: fontSize ?? 14,
       fontWeight: fontWight ?? FontWeight.w500,
@@ -1048,7 +1054,12 @@ Widget loadSubText({
   );
 }
 
-Widget appNavigationBar({required String title, VoidCallback? onTap}) {
+Widget appNavigationBar({
+  required String title,
+  VoidCallback? onTap,
+  VoidCallback? onRightIconTap,
+  IconData ?rightIcon ,
+}) {
   return SafeArea(
     child: Container(
       height: 48,
@@ -1077,6 +1088,15 @@ Widget appNavigationBar({required String title, VoidCallback? onTap}) {
             ),
             gradient: appGradient(),
           ),
+          rightIcon!=null?  Align(
+            alignment: Alignment.centerRight,
+            child: appCircleIcon(
+              icon: rightIcon,
+              iconSize: 24,
+              gradient: appGradient(),
+              onTap: onRightIconTap,
+            ),
+          ):SizedBox.shrink(),
         ],
       ),
     ),
@@ -1139,51 +1159,63 @@ Widget appProfileImage({
 }) {
   final provider = Provider.of<ProfileProvider>(context);
   return Stack(
-
     clipBehavior: Clip.hardEdge,
     alignment: AlignmentGeometry.center,
     children: [
       Container(
         padding: padding ?? const EdgeInsets.all(2), // thickness of border
-        decoration: BoxDecoration(shape: BoxShape.circle, gradient: appGradient()),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: appGradient(),
+        ),
         child: Container(
           height: radius * 2,
           width: radius * 2,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+          ),
           child: appCircleImage(
             imageUrl: imageUrl,
-         //   icon: Icons.person_outline,
+            //   icon: Icons.person_outline,
             radius: (radius - 2),
             onTap: () {},
           ),
         ),
       ),
-      isEdit?  Positioned(
-        bottom: 0,
-        child: Transform.translate(
-          offset: Offset(40, 0), // 👈 left side me 20px shift
-          child: InkWell(
-            onTap: () async {
-
-              final path = await CommonImagePicker.pickImage(
-                context: context,
-              );
-              if (path != null) {
-                provider.setPickedFile(File(path));
-                provider.uploadProfileImage( filePath: path,context: context);
-              }
-            },
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(shape: BoxShape.circle, gradient: appGradient()),
-              child: const Center(
-                child: Icon(Icons.edit_outlined,color: Colors.white,),
+      isEdit
+          ? Positioned(
+              bottom: 0,
+              child: Transform.translate(
+                offset: Offset(40, 0), // 👈 left side me 20px shift
+                child: InkWell(
+                  onTap: () async {
+                    final path = await CommonImagePicker.pickImage(
+                      context: context,
+                    );
+                    if (path != null) {
+                      provider.setPickedFile(File(path));
+                      provider.uploadProfileImage(
+                        filePath: path,
+                        context: context,
+                      );
+                    }
+                  },
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: appGradient(),
+                    ),
+                    child: const Center(
+                      child: Icon(Icons.edit_outlined, color: Colors.white),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
-      ):SizedBox.shrink(),
+            )
+          : SizedBox.shrink(),
     ],
   );
 }
@@ -1524,6 +1556,7 @@ Widget appRefreshIndicator({
     child: child,
   );
 }
+
 Future<bool?> showCommonDialog({
   required String title,
   required BuildContext context,
@@ -1552,7 +1585,7 @@ Future<bool?> showCommonDialog({
           fontSize: 18,
         ),
         content:
-        contentView ??
+            contentView ??
             Padding(
               padding: const EdgeInsets.only(top: 3.0),
               child: loadSubText(
@@ -1562,7 +1595,7 @@ Future<bool?> showCommonDialog({
               ),
             ),
         actions:
-        actions ??
+            actions ??
             <Widget>[
               if (showCancel)
                 CupertinoDialogAction(
@@ -1600,6 +1633,7 @@ Future<bool?> showCommonDialog({
     },
   );
 }
+
 Widget commonRefreshIndicator({
   required final Future<void> Function() onRefresh,
   required final Widget child,
@@ -1643,6 +1677,7 @@ void showCommonBottomSheet({
     },
   );
 }
+
 Widget commonBoxView({
   required Widget contentView,
   required String title,
@@ -1661,13 +1696,13 @@ Widget commonBoxView({
         // Title
         commonHeadingView(title: title, fontSize: fontSize),
 
-
         // Content
         Padding(padding: const EdgeInsets.all(12.0), child: contentView),
       ],
     ),
   );
 }
+
 Widget commonHeadingView({String? title, double? fontSize}) {
   return Padding(
     padding: EdgeInsets.all(12.0),
@@ -1685,6 +1720,7 @@ Widget commonHeadingView({String? title, double? fontSize}) {
     ),
   );
 }
+
 Widget commonRowLeftRightView({
   required String title,
   String? value,
@@ -1701,7 +1737,7 @@ Widget commonRowLeftRightView({
       ),
       Expanded(
         child:
-        customView ??
+            customView ??
             loadSubText(
               title: value ?? '',
               maxLines: 1,
@@ -1712,5 +1748,17 @@ Widget commonRowLeftRightView({
             ),
       ),
     ],
+  );
+}
+OutlineInputBorder commonTextFiledBorder({
+  double? borderRadius,
+  Color? borderColor,
+}) {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(borderRadius ?? 12),
+    borderSide: BorderSide(
+      width: 1.1,
+      color: borderColor ?? color3,
+    ),
   );
 }

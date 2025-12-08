@@ -147,12 +147,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           _builBasicRowInfo(
             label: "Full Name",
-            titleText:
-                "${provider.profileModel?.firstname} ${provider.profileModel?.lastname}",
+            titleText:provider.profileModel?.firstname!=null?
+                "${provider.profileModel?.firstname} ${provider.profileModel?.lastname}":'',
           ),
           _builBasicRowInfo(
             label: "Employee ID",
-            titleText: "${provider.profileModel?.employeeId}",
+            titleText: provider.profileModel?.employeeId!=null?"${provider.profileModel?.employeeId}":'',
           ),
           _builBasicRowInfo(
             label: "Personal Email",

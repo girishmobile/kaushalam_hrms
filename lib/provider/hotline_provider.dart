@@ -169,10 +169,10 @@ class HotlineProvider with ChangeNotifier {
 
   List<DesignationData> _designationList = [];
   DesignationData? _selectDesignation;
-
+  DesignationData? get selectDesignation => _selectDesignation;
   List<DesignationData> get designationList => _designationList;
 
-  DesignationData? get selectDesignation => _selectDesignation;
+
 
   /// Load data (from API or local JSON)
   void setDesignationData(List<DesignationData> list) {
@@ -181,6 +181,13 @@ class HotlineProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  clearDesignation(){
+    _selectDesignation = null;      // assign null
+    _selectedDepartment = null;     // assign null
+
+
+    notifyListeners();
+  }
   /// Select a department
   void selectDesignationData(DesignationData designationData) {
     _selectDesignation = designationData;

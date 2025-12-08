@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../api/api_config.dart';
 import '../../common/app_scaffold.dart';
+import '../../components/common_dropdown.dart';
 import '../../core/constants/context_extension.dart';
 import '../../core/router/route_name.dart';
 import '../../models/hotline_count_model.dart';
@@ -45,7 +46,15 @@ class _HotlineScreenState extends State<HotlineScreen> {
     final provider = context.watch<HotlineProvider>();
     var size = MediaQuery.sizeOf(context);
 
+    final departmentNames = provider.departments
+        .map((e) => e.name ?? '')
+        .toList();
+    final selectedDeptName = provider.selectedDepartment?.name;
 
+    final designationNames = provider.designationList
+        .map((e) => e.name ?? '')
+        .toList();
+    final selectedDesignationName = provider.selectDesignation?.name;
     return AppScaffold(
 
 
@@ -242,6 +251,154 @@ class _HotlineScreenState extends State<HotlineScreen> {
 
           provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
           appNavigationBar(
+
+            onRightIconTap: (){
+
+              showCommonBottomSheet(
+                content: Consumer<HotlineProvider>(
+                  builder: (context, provider, child) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 15,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: loadTitleText(
+                                title: "Filter Hotline",
+                                fontWight: FontWeight.w700,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Container(
+                              width: 35,
+                              height: 35,
+                              decoration: commonBoxDecoration(
+                                shape: BoxShape.circle,
+
+                                color: Colors.black,
+                              ),
+                              child: Center(
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                 //   provider.getAllHotline();
+                                  },
+                                  icon: Icon(
+                                    size: 14,
+                                    Icons.close,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            loadSubText(
+                              title: "Department",
+                              fontWight: FontWeight.w600,
+                            ),
+                            SizedBox(height: 8),
+
+                            CommonDropdown(
+                              items: departmentNames,
+                              initialValue: selectedDeptName,
+                              hint: "Select Department",
+                              onChanged: (value) {
+                                if (value != null) {
+                                  Navigator.of(context).pop();
+                                  final selected = provider.departments
+                                      .firstWhere((d) => d.name == value);
+                                  provider.selectDepartment(selected);
+                                  provider.clearDesignation();
+
+                                  //        provider.getAllHotline(depId: selected.id);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            loadTitleText(
+                              title: "Designation",
+                              fontWight: FontWeight.w600,
+                            ),
+                            SizedBox(height: 8),
+                            CommonDropdown(
+                              items: designationNames.toSet().toList(),
+                              // remove duplicates
+                              initialValue:
+                              designationNames.contains(
+                                selectedDesignationName,
+                              )
+                                  ? selectedDesignationName
+                                  : null,
+                              hint: "Select Department",
+                              onChanged: (value) {
+                                if (value != null) {
+                                  Navigator.of(context).pop();
+                                  final selected = provider.designationList
+                                      .firstWhere((d) => d.name == value);
+                                  provider.selectDesignationData(selected);
+                                  provider.getAllHotline(desId: selected.id);
+                                  provider.clearDesignation();
+
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            loadTitleText(
+                              title: "Search Employee",
+                              fontWight: FontWeight.w600,
+                            ),
+                            SizedBox(height: 8),
+                            appOrangeTextField(
+                              suffixIcon: IconButton(onPressed: (){
+
+                                provider.getAllHotline();
+                              }, icon: Icon(Icons.close,size: 18,)),
+
+                              onChanged: (value){
+                                final text = value.trim();
+                                print("onChanged: '$value' ${value.length}");// changed >3 -> >=3
+                                if (text.length >= 4) {
+
+                                  provider.getAllHotline(search: text);
+                                }
+                              },
+
+                              hintText: "Search Employee",
+                              /*suffixIcon: IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.search),
+                              ),*/
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 50),
+                      ],
+                    );
+                  },
+                ),
+                context: context,
+              );
+            },
+            rightIcon: Icons.filter_alt_outlined,
             title: "Hotline",
             onTap: () {
               Navigator.pop(context);
