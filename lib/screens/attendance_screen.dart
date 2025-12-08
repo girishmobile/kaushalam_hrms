@@ -50,7 +50,7 @@ class AttendanceScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Year 2025",
+                  "Today",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
