@@ -59,38 +59,37 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 _buildTableCalendar(provider: provider),
                 _buildHeader(),
 
-            ListView.builder(
-              shrinkWrap: true,
-                itemCount: selectedEvents.length,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index){
-                  final event = selectedEvents[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: _buildItem (provider: provider,event: event),
-              );
-            })
-
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: selectedEvents.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final event = selectedEvents[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: _buildItem(provider: provider, event: event),
+                    );
+                  },
+                ),
               ],
             ),
             provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
           ],
         );
-      }
+      },
     );
   }
 
-  Widget _buildItem({required CalendarProvider provider,required Map<String, dynamic> event}) {
-
+  Widget _buildItem({
+    required CalendarProvider provider,
+    required Map<String, dynamic> event,
+  }) {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(
           context,
           RouteName.profileScreen,
-          arguments: {
-            "employeeId":'${event['id']}',
-            "isCurrentUser": false,
-          },
+          arguments: {"employeeId": '${event['id']}', "isCurrentUser": false},
           //arguments: provider.employeeId,
         );
       },
@@ -99,19 +98,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
         child: Row(
           spacing: 8,
           children: [
-            event['type']=="Birthday" ? appCircleImage(
-          borderColor: color3,
-          imageUrl:"${ApiConfig.imageBaseUrl}${event['profile']}",
-          radius: 18,
-
-        ): Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.redAccent.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Icon(Icons.pending_actions, color: Colors.redAccent),
-            ),
+            event['type'] == "Birthday"
+                ? appCircleImage(
+                    borderColor: color3,
+                    iconColor: color3,
+                    imageUrl: "${ApiConfig.imageBaseUrl}${event['profile']}",
+                    radius: 18,
+                  )
+                : Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Icon(Icons.pending_actions, color: Colors.redAccent),
+                  ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +122,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     fontSize: 14,
                     fontWight: FontWeight.w600,
                   ),
-                  loadSubText(title: "Type: ${event['type'].toString().toUpperCase()}", fontSize: 12),
+                  loadSubText(
+                    title: "Type: ${event['type'].toString().toUpperCase()}",
+                    fontSize: 12,
+                  ),
                 ],
               ),
             ),
@@ -134,16 +138,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget _buildTableCalendar({required CalendarProvider provider}) {
     final DateTime firstDay = DateTime(2000, 1, 1);
 
-    final DateTime lastDay = DateTime(
-      DateTime.now().year,
-    12,
-     31,
-    );
-    return  TableCalendar(
+    final DateTime lastDay = DateTime(DateTime.now().year, 12, 31);
+    return TableCalendar(
       headerStyle: HeaderStyle(
-        leftChevronIcon:  Icon(Icons.chevron_left, color: color3),
-       rightChevronIcon: _focusedDay.year == lastDay.year &&
-           _focusedDay.month == lastDay.month?SizedBox(): Icon(Icons.chevron_right, color: color3),
+        leftChevronIcon: Icon(Icons.chevron_left, color: color3),
+        rightChevronIcon:
+            _focusedDay.year == lastDay.year &&
+                _focusedDay.month == lastDay.month
+            ? SizedBox()
+            : Icon(Icons.chevron_right, color: color3),
         formatButtonVisible: false,
         titleCentered: true,
         titleTextStyle: TextStyle(
@@ -187,10 +190,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             width: 8,
             height: 8,
             margin: const EdgeInsets.only(top: 2),
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           );
         },
       ),
@@ -208,7 +208,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       eventLoader: provider.getEventsForDay,
       selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
       focusedDay: _focusedDay,
-      firstDay:firstDay,
+      firstDay: firstDay,
       lastDay: lastDay,
     );
   }
@@ -218,10 +218,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
       children: [
         const Divider(height: 20, thickness: 0.5, color: color3),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+
           children: [
             rowItem(color: Colors.red, label: 'Leave', onTaped: () {}),
-            rowItem(color: Colors.green, label: 'Attendance', onTaped: () {}),
+            //rowItem(color: Colors.green, label: 'Attendance', onTaped: () {}),
             rowItem(color: Colors.blue, label: 'Birthday', onTaped: () {}),
           ],
         ),
@@ -255,4 +256,3 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 }
-

@@ -134,13 +134,13 @@ Widget commonPrefixIcon({
 }
 
 Widget commonAssetImage(
-    String path, {
-      double? width,
-      double? height,
-      BoxFit? fit,
-      BorderRadius? borderRadius,
-      Color? color,
-    }) {
+  String path, {
+  double? width,
+  double? height,
+  BoxFit? fit,
+  BorderRadius? borderRadius,
+  Color? color,
+}) {
   Widget image = Image.asset(
     path,
     width: width,
@@ -153,6 +153,7 @@ Widget commonAssetImage(
       ? ClipRRect(borderRadius: borderRadius, child: image)
       : image;
 }
+
 BoxDecoration commonBoxDecoration({
   Color color = Colors.transparent,
   double borderRadius = 8.0,
@@ -202,7 +203,7 @@ Widget loadNetworkImage({
           ),
         ),
         errorWidget: (_, __, ___) =>
-           // loadAssetImage(name: errorImage)
+            // loadAssetImage(name: errorImage)
             _fallBackContent(icon, iconColor, text, iconSize),
       );
     } else if (imageUrl.contains(".png") ||
@@ -297,8 +298,8 @@ Widget _fallBackContent(
       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
     );
   } else {
-    return const Icon(Icons.person_outline_rounded, size: 24, color: Colors.grey);
-  //  return  loadAssetImage(name: errorImage);
+    return Icon(Icons.person_outline_rounded, size: 24, color: iconColor);
+    //  return  loadAssetImage(name: errorImage);
   }
 }
 
@@ -387,7 +388,7 @@ Widget appViewEffect({
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      margin:margin ,
+      margin: margin,
       padding: padding ?? const EdgeInsets.all(12),
       decoration: BoxDecoration(
         gradient: viewBackgroundGradinet(),
@@ -1037,8 +1038,6 @@ Widget loadSubText({
 
     maxLines: maxLines,
     style: TextStyle(
-
-
       color: fontColor ?? Colors.black54,
       fontSize: fontSize ?? 14,
       fontWeight: fontWight ?? FontWeight.w500,
@@ -1139,51 +1138,63 @@ Widget appProfileImage({
 }) {
   final provider = Provider.of<ProfileProvider>(context);
   return Stack(
-
     clipBehavior: Clip.hardEdge,
     alignment: AlignmentGeometry.center,
     children: [
       Container(
         padding: padding ?? const EdgeInsets.all(2), // thickness of border
-        decoration: BoxDecoration(shape: BoxShape.circle, gradient: appGradient()),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: appGradient(),
+        ),
         child: Container(
           height: radius * 2,
           width: radius * 2,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+          ),
           child: appCircleImage(
             imageUrl: imageUrl,
-         //   icon: Icons.person_outline,
+            //   icon: Icons.person_outline,
             radius: (radius - 2),
             onTap: () {},
           ),
         ),
       ),
-      isEdit?  Positioned(
-        bottom: 0,
-        child: Transform.translate(
-          offset: Offset(40, 0), // 👈 left side me 20px shift
-          child: InkWell(
-            onTap: () async {
-
-              final path = await CommonImagePicker.pickImage(
-                context: context,
-              );
-              if (path != null) {
-                provider.setPickedFile(File(path));
-                provider.uploadProfileImage( filePath: path,context: context);
-              }
-            },
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(shape: BoxShape.circle, gradient: appGradient()),
-              child: const Center(
-                child: Icon(Icons.edit_outlined,color: Colors.white,),
+      isEdit
+          ? Positioned(
+              bottom: 0,
+              child: Transform.translate(
+                offset: Offset(40, 0), // 👈 left side me 20px shift
+                child: InkWell(
+                  onTap: () async {
+                    final path = await CommonImagePicker.pickImage(
+                      context: context,
+                    );
+                    if (path != null) {
+                      provider.setPickedFile(File(path));
+                      provider.uploadProfileImage(
+                        filePath: path,
+                        context: context,
+                      );
+                    }
+                  },
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: appGradient(),
+                    ),
+                    child: const Center(
+                      child: Icon(Icons.edit_outlined, color: Colors.white),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
-      ):SizedBox.shrink(),
+            )
+          : SizedBox.shrink(),
     ],
   );
 }
@@ -1425,6 +1436,7 @@ Future<String?> appSimpleBottomSheet(
   BuildContext context, {
   String? selected,
   required List<String> dataType,
+  VoidCallback? onClose,
 }) async {
   return await showModalBottomSheet<String>(
     context: context,
@@ -1433,60 +1445,68 @@ Future<String?> appSimpleBottomSheet(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (context) => Container(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      padding: EdgeInsets.only(top: 4, left: 16, right: 8, bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Do you want to select a option?",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-            ),
-          ),
-          SizedBox(height: 12),
-          ...dataType.map((e) {
-            final isSelected = e == selected;
-            return GestureDetector(
-              onTap: () => Navigator.pop(context, e),
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 6),
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: isSelected ? btnColor2 : color2,
-                    width: 1,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Do you want to select a option?",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
                   ),
-                  gradient: viewBackgroundGradinet(),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        e,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black54,
+                IconButton(onPressed: onClose, icon: Icon(Icons.close)),
+              ],
+            ),
+            SizedBox(height: 8),
+            ...dataType.map((e) {
+              final isSelected = e == selected;
+              return GestureDetector(
+                onTap: () => Navigator.pop(context, e),
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 6),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: isSelected ? btnColor2 : color2,
+                      width: 1,
+                    ),
+                    gradient: viewBackgroundGradinet(),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          e,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black54,
+                          ),
                         ),
                       ),
-                    ),
-                    if (isSelected)
-                      Icon(Icons.check, color: Colors.orange, size: 20),
-                  ],
+                      if (isSelected)
+                        Icon(Icons.check, color: Colors.orange, size: 20),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }),
-          SizedBox(height: 12),
-        ],
+              );
+            }),
+            SizedBox(height: 12),
+          ],
+        ),
       ),
     ),
   );
@@ -1524,6 +1544,7 @@ Widget appRefreshIndicator({
     child: child,
   );
 }
+
 Future<bool?> showCommonDialog({
   required String title,
   required BuildContext context,
@@ -1552,7 +1573,7 @@ Future<bool?> showCommonDialog({
           fontSize: 18,
         ),
         content:
-        contentView ??
+            contentView ??
             Padding(
               padding: const EdgeInsets.only(top: 3.0),
               child: loadSubText(
@@ -1562,7 +1583,7 @@ Future<bool?> showCommonDialog({
               ),
             ),
         actions:
-        actions ??
+            actions ??
             <Widget>[
               if (showCancel)
                 CupertinoDialogAction(
@@ -1600,6 +1621,7 @@ Future<bool?> showCommonDialog({
     },
   );
 }
+
 Widget commonRefreshIndicator({
   required final Future<void> Function() onRefresh,
   required final Widget child,
@@ -1643,6 +1665,7 @@ void showCommonBottomSheet({
     },
   );
 }
+
 Widget commonBoxView({
   required Widget contentView,
   required String title,
@@ -1661,13 +1684,13 @@ Widget commonBoxView({
         // Title
         commonHeadingView(title: title, fontSize: fontSize),
 
-
         // Content
         Padding(padding: const EdgeInsets.all(12.0), child: contentView),
       ],
     ),
   );
 }
+
 Widget commonHeadingView({String? title, double? fontSize}) {
   return Padding(
     padding: EdgeInsets.all(12.0),
@@ -1685,6 +1708,7 @@ Widget commonHeadingView({String? title, double? fontSize}) {
     ),
   );
 }
+
 Widget commonRowLeftRightView({
   required String title,
   String? value,
@@ -1701,7 +1725,7 @@ Widget commonRowLeftRightView({
       ),
       Expanded(
         child:
-        customView ??
+            customView ??
             loadSubText(
               title: value ?? '',
               maxLines: 1,

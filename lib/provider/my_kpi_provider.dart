@@ -1,18 +1,38 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/api/network_repository.dart';
+import 'package:neeknots_admin/models/my_kpi_model.dart';
 
 class MyKpiProvider extends ChangeNotifier {
-  bool _isLoading = false;
+  late List<String> years;
+  late String selectedYear;
 
+  MyKpiProvider() {
+    final currentYear = DateTime.now().year;
+    years = List.generate(5, (index) => (currentYear - index).toString());
+    selectedYear = currentYear.toString(); // 👈 Default to current year
+  }
+
+  bool _isLoading = false;
   bool get isLoading => _isLoading;
 
   void _setLoading(bool val) {
     _isLoading = val;
     notifyListeners();
   }
+
+  Future<void> setYear(String year) async {
+    selectedYear = year;
+    notifyListeners();
+    await getKPIList(date: year);
+  }
+
+  List<MyKpiModel> _kpiList = [];
+
+  List<MyKpiModel> get kpiList => _kpiList;
 
   Future<void> getKPIList({required String date}) async {
     _setLoading(true);
@@ -25,26 +45,18 @@ class MyKpiProvider extends ChangeNotifier {
 
       if (globalStatusCode == 200) {
         final decoded = json.decode(response);
-
         // Ensure it's a list
-        // if (decoded is List) {
-        //   _kpiList = decoded.map((e) => KpiModel.fromJson(e)).toList();
-        // } else {
-        //   _kpiList = [];
-        // }
+        if (decoded is List) {
+          _kpiList = decoded.map((e) => MyKpiModel.fromJson(e)).toList();
+        } else {
+          _kpiList = [];
+        }
+        _setLoading(false);
       } else {
-        // showCommonDialog(
-        //   showCancel: false,
-        //   title: "Error",
-        //   context: navigatorKey.currentContext!,
-        //   content: errorMessage,
-        // );
+        _setLoading(false);
       }
     } catch (e) {
       _setLoading(false);
-      notifyListeners();
     }
-    _setLoading(false);
-    notifyListeners();
   }
 }
