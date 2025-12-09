@@ -95,7 +95,7 @@ class LeaveBalanceProvider extends ChangeNotifier {
         {"column": 1, "dir": "asc"},
       ],
       "start": 0,
-      "length": 400,
+      "length": 200,
       "search": {"value": search, "regex": false},
     };
     try {

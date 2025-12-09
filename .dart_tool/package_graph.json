@@ -8,6 +8,7 @@
       "version": "1.0.0+1",
       "dependencies": [
         "cached_network_image",
+        "calendar_date_picker2",
         "cupertino_icons",
         "dropdown_button2",
         "fl_chart",
@@ -51,6 +52,14 @@
         "stream_channel",
         "test_api",
         "vector_math"
+      ]
+    },
+    {
+      "name": "calendar_date_picker2",
+      "version": "2.0.1",
+      "dependencies": [
+        "flutter",
+        "intl"
       ]
     },
     {
