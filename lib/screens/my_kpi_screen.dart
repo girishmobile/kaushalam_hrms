@@ -35,7 +35,9 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
     if (provider.selectedYear.isEmpty) {
       provider.selectedYear = currentYear;
     }
+
     await provider.getKPIList(date: provider.selectedYear);
+
   }
 
   @override
@@ -74,6 +76,7 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
       ),
       itemBuilder: (context, index) {
         final item = provider.kpiList[index];
+
         return GestureDetector(
           onTap: () {},
           child: _buildGridItem(index: index, item: item),
@@ -84,7 +87,7 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
   }
 
   Widget _buildGridItem({required int index, required MyKpiModel item}) {
-    final int percent = item.percent ?? 0;
+    final num? percent = item.percent ;
 
     const List<String> monthNames = [
       "January",

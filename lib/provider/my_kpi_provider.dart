@@ -44,14 +44,19 @@ class MyKpiProvider extends ChangeNotifier {
       );
 
       if (globalStatusCode == 200) {
+
         final decoded = json.decode(response);
         // Ensure it's a list
+        //_kpiList = decoded.map((e) => MyKpiModel.fromJson(e)).toList();
+
         if (decoded is List) {
           _kpiList = decoded.map((e) => MyKpiModel.fromJson(e)).toList();
         } else {
           _kpiList = [];
         }
+
         _setLoading(false);
+        notifyListeners();   // ★ IMPORTANT ★
       } else {
         _setLoading(false);
       }

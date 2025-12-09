@@ -1,6 +1,6 @@
 class MyKpiModel {
-  int? month;
-  int? percent;
+  num? month;
+  num? percent;
 
   MyKpiModel({this.month, this.percent});
 
