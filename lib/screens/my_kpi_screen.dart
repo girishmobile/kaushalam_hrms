@@ -198,37 +198,7 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
     );
   }
 
-  Widget _buildGlassEffect({
-    required Widget child,
-    double borderRadius = 12,
-    EdgeInsetsGeometry? padding,
-    double blurSigma = 10,
-    Color overlayColor = Colors.white,
-    double opacity = 0.15,
-    Color borderColor = Colors.white,
-    double borderWidth = 1.0,
-  }) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
-        child: Container(
-          padding:
-              padding ??
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: overlayColor.withValues(alpha: opacity),
-            borderRadius: BorderRadius.circular(borderRadius),
-            border: Border.all(
-              color: borderColor.withValues(alpha: 0.4),
-              width: borderWidth,
-            ),
-          ),
-          child: child,
-        ),
-      ),
-    );
-  }
+
 
   void showYearPopover({
     required BuildContext context,
