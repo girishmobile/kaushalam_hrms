@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "408577066262",
+    "project_id": "kaushalam-hrms",
+    "storage_bucket": "kaushalam-hrms.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408577066262:android:498411ba8f6f5af810fc37",
+        "android_client_info": {
+          "package_name": "com.kaushalam.hrms"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLc3p0PosR2qOipC-nmuXd7Q2kK0kv290"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
       providers: providers,
       child: MaterialApp(
         navigatorKey: navigatorKey, // ✅ IMPORTANT
-        title: 'Flutter Demo',
+        title: 'hrms',
         theme: ThemeData(
           fontFamily: "Poppins",
           colorScheme: ColorScheme.fromSeed(seedColor: btnColor2),
