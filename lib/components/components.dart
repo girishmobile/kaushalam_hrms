@@ -447,7 +447,7 @@ LinearGradient appOrangeOffGradient() {
   return LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Colors.black45, Colors.black54],
+    colors: [Colors.black38, Colors.black45],
   );
 }
 
@@ -902,21 +902,19 @@ Widget holidayCard({required Holiday item}) {
                 children: [
                   loadSubText(
                     fontWight: FontWeight.w400,
-                    title: formatDay(
-                      item.start_date.date.toString(),
-                    ),
+                    title: formatDay(item.start_date.date.toString()),
                     fontSize: 12,
-                 //   fontColor: colorText,
+                    //   fontColor: colorText,
                   ),
 
                   loadSubText(
                     fontWight: FontWeight.w400,
                     title: formatDate(
-                      item.start_date.date.toString() ,
+                      item.start_date.date.toString(),
                       format: "MMMM | EEE yyyy",
                     ),
                     fontSize: 12,
-                   // f: colorText,
+                    // f: colorText,
                   ),
                 ],
               ),
@@ -960,7 +958,7 @@ Widget birthDayCard({required BirthDay item, double radius = 32}) {
                 fontSize: 14,
               ),
               loadSubText(title: item.designation),
-            /*  loadSubText(
+              /*  loadSubText(
                 title: getFormattedDate(
                   item.dateOfBirth.date,
                   format: "dd MMM yyyy",
@@ -971,9 +969,7 @@ Widget birthDayCard({required BirthDay item, double radius = 32}) {
                 children: [
                   loadSubText(
                     fontWight: FontWeight.w400,
-                    title: formatDay(
-                      item.dateOfBirth.date.toString(),
-                    ),
+                    title: formatDay(item.dateOfBirth.date.toString()),
                     fontSize: 12,
                     //   fontColor: colorText,
                   ),
@@ -981,7 +977,7 @@ Widget birthDayCard({required BirthDay item, double radius = 32}) {
                   loadSubText(
                     fontWight: FontWeight.w400,
                     title: formatDate(
-                      item.dateOfBirth.date.toString() ,
+                      item.dateOfBirth.date.toString(),
                       format: "MMM",
                     ),
                     fontSize: 12,

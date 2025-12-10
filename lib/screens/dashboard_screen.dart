@@ -26,7 +26,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -98,7 +97,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 builder: (_, profileProvider, _) {
                   return appCircleImage(
                     borderColor: color3,
-                    imageUrl:   "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
+                    imageUrl:
+                        "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
                     radius: 18,
                     onTap: () {
                       Navigator.pushNamed(
@@ -112,7 +112,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       );
                     },
                   );
-                }
+                },
               ),
 
               // ✅ Show logo only for Home, otherwise show title
@@ -158,8 +158,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Container(
 
           margin: const EdgeInsets.symmetric(horizontal: 24),
+
           child: _buildGlassEffect(
+            overlayColor: Colors.orange,
             borderRadius: 45,
+            borderColor: Colors.orange,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -256,14 +259,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             icon: icon,
             iconSize: size, // ✅ selected = gradient, unselected = grey
             gradient: isSelected ? appGradient() : appOrangeOffGradient(),
-
-
           ),
           loadSubText(
             title: title,
             fontSize: 10,
             fontWight: isSelected ? FontWeight.w600 : FontWeight.w400,
-            fontColor: isSelected ? btnColor2 : Colors.black54,
+            fontColor: isSelected ? btnColor2 : Colors.black45,
           ),
         ],
       ),
