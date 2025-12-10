@@ -53,6 +53,7 @@ class EmpProvider extends ChangeNotifier {
   List<Holiday> holidays = [];
   List<BirthDay> birthdays = [];
   List<Department> departments = [];
+
   List<Employee> _allEmployees = [];
   List<Employee> get allEmployees => _allEmployees;
 

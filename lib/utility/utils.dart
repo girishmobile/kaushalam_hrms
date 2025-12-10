@@ -38,13 +38,13 @@ String timeAgo(DateTime date) {
 double listTop(BuildContext context, {double extra = 0}) {
   final safeTop = MediaQuery.of(context).padding.top;
   const topBarHeight = 56.0; // your Dashboard SafeArea Row
-  const searchBoxHeight = 60.0;
+  const searchBoxHeight = 56.0;
   return safeTop + topBarHeight + searchBoxHeight + 8 + extra;
 }
 
 double listBottom(BuildContext context, {double extra = 0}) {
   final safeBottom = MediaQuery.of(context).padding.bottom;
-  const bottomBarHeight = 70.0; // your Dashboard bottom bar height
+  const bottomBarHeight = 64.0; // your Dashboard bottom bar height
 
   return safeBottom + bottomBarHeight + 16 + extra;
 }
@@ -144,6 +144,7 @@ String formateDateTime(
 String getFormattedDate(DateTime dateTime, {String format = 'yyyy-MM-dd'}) {
   return DateFormat(format).format(dateTime);
 }
+
 String formatDate(String? date, {String format = "dd-MMM-yy"}) {
   if (date == null || date.isEmpty) return '';
   try {
@@ -182,6 +183,7 @@ String comrateStartEndate(dynamic startDate, dynamic endDate) {
   }
   return formattedDate;
 }
+
 String formatDay(String dateString) {
   try {
     final date = DateTime.parse(dateString);
@@ -207,7 +209,6 @@ String formatDay(String dateString) {
 
     return '$day$suffix ';
   } catch (_) {
-
     return dateString;
   }
 }
