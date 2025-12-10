@@ -26,24 +26,25 @@ class Item {
   dynamic nextPageUrl;
   String? path;
   int? perPage;
-  dynamic  prevPageUrl;
+  dynamic prevPageUrl;
   int? to;
   int? total;
 
-  Item(
-      {this.currentPage,
-        this.data,
-        this.firstPageUrl,
-        this.from,
-        this.lastPage,
-        this.lastPageUrl,
-        this.links,
-        this.nextPageUrl,
-        this.path,
-        this.perPage,
-        this.prevPageUrl,
-        this.to,
-        this.total});
+  Item({
+    this.currentPage,
+    this.data,
+    this.firstPageUrl,
+    this.from,
+    this.lastPage,
+    this.lastPageUrl,
+    this.links,
+    this.nextPageUrl,
+    this.path,
+    this.perPage,
+    this.prevPageUrl,
+    this.to,
+    this.total,
+  });
 
   Item.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
@@ -110,21 +111,22 @@ class HotLineData {
   Department? department;
   String? workStatus;
 
-  HotLineData(
-      {this.id,
-        this.firstname,
-        this.lastname,
-        this.profileImage,
-        this.isWfhAllowed,
-        this.email,
-        this.employeeId,
-        this.depId,
-        this.departmentname,
-        this.designation,
-        this.desId,
-        this.userTagList,
-        this.department,
-        this.workStatus});
+  HotLineData({
+    this.id,
+    this.firstname,
+    this.lastname,
+    this.profileImage,
+    this.isWfhAllowed,
+    this.email,
+    this.employeeId,
+    this.depId,
+    this.departmentname,
+    this.designation,
+    this.desId,
+    this.userTagList,
+    this.department,
+    this.workStatus,
+  });
 
   HotLineData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -138,7 +140,7 @@ class HotLineData {
     departmentname = json['departmentname'];
     designation = json['designation'];
     desId = json['des_id'];
-  /*  if (json['user_tag_list'] != null) {
+    /*  if (json['user_tag_list'] != null) {
       userTagList = <Null>[];
       json['user_tag_list'].forEach((v) {
         userTagList!.add(new Null.fromJson(v));

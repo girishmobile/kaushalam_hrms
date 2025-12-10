@@ -13,6 +13,7 @@ import 'package:neeknots_admin/models/birth_holiday_model.dart';
 import 'package:neeknots_admin/models/customer_model.dart';
 import 'package:neeknots_admin/models/emp_notification_model.dart';
 import 'package:neeknots_admin/models/employees_model.dart';
+import 'package:neeknots_admin/models/hotline_list_model.dart';
 import 'package:neeknots_admin/models/order_model.dart';
 import 'package:neeknots_admin/provider/leave_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
@@ -674,6 +675,57 @@ Widget employeeCard(Employee employee) {
   );
 }
 
+Widget hotlineCard(HotLineData employee) {
+  return appViewEffect(
+    child: Row(
+      children: [
+        appCircleImage(
+          imageUrl: setImagePath(employee.profileImage),
+          radius: 24,
+          icon: Icons.person_outline,
+          iconColor: color2,
+          borderColor: color2,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 4,
+            children: [
+              Text(
+                "${employee.firstname} ${employee.lastname}",
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+              ),
+              Text(
+                employee.departmentname ?? '',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              // Text(
+              //   employee.designation ?? '',
+              //   style: const TextStyle(
+              //     fontSize: 12,
+              //     color: Colors.black54,
+              //     fontWeight: FontWeight.w400,
+              //   ),
+              // ),
+            ],
+          ),
+        ),
+
+        SizedBox(width: 4),
+        appForwardIcon(),
+      ],
+    ),
+  );
+}
+
 Widget leaveCard({
   required MyLeave item,
   required VoidCallback onReject,
@@ -1192,7 +1244,9 @@ Widget appProfileImage({
           ),
           child: appCircleImage(
             imageUrl: imageUrl,
-            //   icon: Icons.person_outline,
+            icon: Icons.person_outline,
+            iconColor: color3,
+            iconSize: radius / 1.5,
             radius: (radius - 2),
             onTap: () {},
           ),

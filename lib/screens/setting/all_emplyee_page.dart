@@ -85,14 +85,8 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
           final deptName = dept != null ? dept.name : "Loading...";
           return GestureDetector(
             onTap: () {
-              // provider.setSelectedIndex(index);
-              // final dept = provider.departments[index];
-              // provider.filterByDepartment(dept.name);
-              // 1. Hide Keyboard
               hideKeyboard(context);
-              // 2. Clear Search Box
               provider.nameController.clear();
-              // 3. Set department
               provider.setSelectedIndex(index);
               final dept = provider.departments[index];
               provider.filterByDepartment(dept.name);
