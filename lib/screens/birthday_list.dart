@@ -69,6 +69,6 @@ class BirthdayList extends StatelessWidget {
   }
 
   Widget _searchBar(BuildContext context) {
-    return appOrangeTextField(hintText: "search", icon: Icons.search);
+    return appOrangeTextField(hintText: "search", icon:Icon(Icons.search));
   }
 }

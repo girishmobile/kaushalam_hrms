@@ -82,7 +82,7 @@ class AttendanceScreen extends StatelessWidget {
           SizedBox(height: 10,),
           loadTitleText(title: '${provider.selectedDateRange} Details'),
           SizedBox(height: 10,),
-          Expanded(child: ListView.builder(
+          ListView.builder(
             shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               itemCount: provider.attendanceRecordModel?.data?.data?.length??0,
@@ -108,7 +108,7 @@ class AttendanceScreen extends StatelessWidget {
                 ],
               ),
             );
-          }))
+          })
         ],
       ),
     );

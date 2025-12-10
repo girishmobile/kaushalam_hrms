@@ -135,7 +135,7 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
     return appOrangeTextField(
       textController: provider.nameController,
       hintText: "search by employee name",
-      icon: Icons.search,
+      icon: Icon(Icons.search),
       focusNode: provider.searchFocus,
     );
   }

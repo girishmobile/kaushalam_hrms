@@ -508,7 +508,7 @@ Widget appTextField({required String hintText, IconData? icon}) {
 
 Widget appOrangeTextField({
   required String hintText,
-  IconData? icon,
+  Widget ? icon,
   TextEditingController? textController,
   bool isPassword = false,
   bool obscure = true,
@@ -534,13 +534,15 @@ Widget appOrangeTextField({
       hintStyle: const TextStyle(color: Colors.black54, fontSize: 14),
 
       // LEFT ICON
-      prefixIcon: icon != null
+      prefixIcon: Container(
+          margin: EdgeInsets.only(left: 10),
+          child: icon)/* != null
           ? Padding(
               padding: const EdgeInsets.only(left: 12, right: 8),
               child: Icon(icon, color: Colors.black54, size: 20),
             )
-          : null,
-      prefixIconConstraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+          : null*/,
+      //prefixIconConstraints: const BoxConstraints(minWidth: 32, minHeight: 32),
 
       // RIGHT ICON (Password)
       suffixIcon: isPassword
@@ -1248,7 +1250,7 @@ Widget gradientButton({
     ),
     child: TextButton.icon(
       onPressed: onPressed,
-      icon: const Icon(Icons.login, color: Colors.white),
+     // icon: const Icon(Icons.login, color: Colors.white),
       label: Text(
         title,
         style: TextStyle(

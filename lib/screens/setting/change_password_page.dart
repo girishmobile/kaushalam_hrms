@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/validations.dart';
 import '../../models/user_model.dart';
 import '../../provider/login_provider.dart';
+import '../../utility/image_utils.dart';
 import '../../utility/secure_storage.dart';
 
 class ChangePasswordPage extends StatelessWidget {
@@ -39,7 +40,7 @@ class ChangePasswordPage extends StatelessWidget {
                     appOrangeTextField(
                       hintText: "Enter your current password",
 
-                      icon: Icons.lock_outline,
+                      icon: commonPrefixIcon(image: icPassword),
                       keyboardType: TextInputType.visiblePassword,
                       textController: provider.tetCurrentPassword,
                       isPassword: true,
@@ -53,7 +54,7 @@ class ChangePasswordPage extends StatelessWidget {
                     appOrangeTextField(
                       hintText: "Enter your new password",
 
-                      icon: Icons.lock_outline,
+                      icon: commonPrefixIcon(image: icPassword),
                       keyboardType: TextInputType.visiblePassword,
                       textController: provider.tetNewPassword,
                       isPassword: true,
@@ -71,7 +72,7 @@ class ChangePasswordPage extends StatelessWidget {
                     appOrangeTextField(
                       hintText: "Enter your confirm password",
 
-                      icon: Icons.lock_outline,
+                      icon: commonPrefixIcon(image: icPassword),
                       keyboardType: TextInputType.visiblePassword,
                       textController: provider.tetConfirmPassword,
                       isPassword: true,

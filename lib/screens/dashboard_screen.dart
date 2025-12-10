@@ -156,6 +156,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: SafeArea(
         bottom: true,
         child: Container(
+
           margin: const EdgeInsets.symmetric(horizontal: 24),
           child: _buildGlassEffect(
             borderRadius: 45,

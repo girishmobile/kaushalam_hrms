@@ -65,7 +65,7 @@ class NotificationPage extends StatelessWidget {
       top: safeTop + topBarHeight + 8,
       left: 24,
       right: 24,
-      child: appOrangeTextField(hintText: "search", icon: Icons.search),
+      child: appOrangeTextField(hintText: "search", icon: Icon(Icons.search)),
     );
   }
 }

@@ -8,6 +8,8 @@ import 'package:neeknots_admin/provider/login_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../utility/image_utils.dart';
+
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
@@ -51,7 +53,7 @@ class LoginPage extends StatelessWidget {
                                   // Logo
                                   appOrangeTextField(
                                     hintText: "Employee email",
-                                    icon: Icons.email_outlined,
+                                    icon:commonPrefixIcon(image: icEmail),
                                     textController: provider.emailController,
                                     keyboardType: TextInputType.emailAddress,
                                     validator: validateEmail,
@@ -60,7 +62,7 @@ class LoginPage extends StatelessWidget {
                                   appOrangeTextField(
                                     hintText: "Password",
 
-                                    icon: Icons.lock_outline,
+                                    icon: commonPrefixIcon(image: icPassword),
                                     keyboardType: TextInputType.visiblePassword,
                                     textController: provider.passwordController,
                                     isPassword: true,

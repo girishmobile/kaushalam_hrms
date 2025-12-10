@@ -36,28 +36,28 @@ class SignupPage extends StatelessWidget {
               const SizedBox(height: 16),
               appOrangeTextField(
                 hintText: "Username",
-                icon: Icons.person_outline,
+             //   icon: commonPrefixIcon(image: icPassword),
               ),
               const SizedBox(height: 16),
               appOrangeTextField(
                 hintText: "Employee ID or Email",
-                icon: Icons.email_outlined,
+               // icon: Icons.email_outlined,
               ),
               const SizedBox(height: 16),
               appOrangeTextField(
                 hintText: "Mobile Number",
-                icon: Icons.phone_iphone_outlined,
+              //  icon: Icons.phone_iphone_outlined,
               ),
               const SizedBox(height: 16),
               appOrangeTextField(
                 hintText: "Password",
-                icon: Icons.lock_outline,
+                //icon: Icons.lock_outline,
               ),
               const SizedBox(height: 16),
 
               appOrangeTextField(
                 hintText: "Confirm Password",
-                icon: Icons.lock_outline,
+               // icon: Icons.lock_outline,
               ),
               const SizedBox(height: 32),
               // SignUp Button
