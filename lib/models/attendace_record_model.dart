@@ -4,12 +4,8 @@ class AttendaceRecordModel {
   int? recordsFiltered;
   int? recordsTotal;
 
-  AttendaceRecordModel({
-    this.data,
-    this.draw,
-    this.recordsFiltered,
-    this.recordsTotal,
-  });
+  AttendaceRecordModel(
+      {this.data, this.draw, this.recordsFiltered, this.recordsTotal});
 
   AttendaceRecordModel.fromJson(Map<String, dynamic> json) {
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
@@ -31,28 +27,119 @@ class AttendaceRecordModel {
 }
 
 class Data {
-  List<dynamic>? data;
+  List<DataItem>? data;
   LeaveData? leaveData;
 
   Data({this.data, this.leaveData});
 
   Data.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? List<dynamic>.from(json['data']) : null;
-
+    if (json['data'] != null) {
+      data = <DataItem>[];
+      json['data'].forEach((v) {
+        data!.add(DataItem.fromJson(v));
+      });
+    }
     leaveData = json['leave_data'] != null
         ? LeaveData.fromJson(json['leave_data'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> dataMap = <String, dynamic>{};
-    if (data != null) {
-      dataMap['data'] = data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     if (leaveData != null) {
-      dataMap['leave_data'] = leaveData!.toJson();
+      data['leave_data'] = leaveData!.toJson();
     }
-    return dataMap;
+    return data;
+  }
+}
+
+class DataItem {
+  String? entryTime;
+  Date? date;
+  String? breakTime;
+  String? workingTime;
+  String? exitTime;
+  Staffing? staffing;
+
+  DataItem(
+      {this.entryTime,
+        this.date,
+        this.breakTime,
+        this.workingTime,
+        this.exitTime,
+        this.staffing});
+
+  DataItem.fromJson(Map<String, dynamic> json) {
+    entryTime = json['entry_time'];
+    date = json['date'] != null ? Date.fromJson(json['date']) : null;
+    breakTime = json['break_time'];
+    workingTime = json['working_time'];
+    exitTime = json['exit_time'];
+    staffing = json['staffing'] != null
+        ? Staffing.fromJson(json['staffing'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['entry_time'] = entryTime;
+    if (date != null) {
+      data['date'] = date!.toJson();
+    }
+    data['break_time'] = breakTime;
+    data['working_time'] = workingTime;
+    data['exit_time'] = exitTime;
+    if (staffing != null) {
+      data['staffing'] = staffing!.toJson();
+    }
+    return data;
+  }
+}
+
+class Date {
+  String? date;
+  int? timezoneType;
+  String? timezone;
+
+  Date({this.date, this.timezoneType, this.timezone});
+
+  Date.fromJson(Map<String, dynamic> json) {
+    date = json['date'];
+    timezoneType = json['timezone_type'];
+    timezone = json['timezone'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['date'] = date;
+    data['timezone_type'] = timezoneType;
+    data['timezone'] = timezone;
+    return data;
+  }
+}
+
+class Staffing {
+  int? hours;
+  int? minutes;
+  double? barData;
+
+  Staffing({this.hours, this.minutes, this.barData});
+
+  Staffing.fromJson(Map<String, dynamic> json) {
+    hours = json['hours'];
+    minutes = json['minutes'];
+    barData = json['bar_data'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['hours'] = hours;
+    data['minutes'] = minutes;
+    data['bar_data'] = barData;
+    return data;
   }
 }
 
@@ -68,18 +155,17 @@ class LeaveData {
   String? productivityRatio;
   int? officeStaffing;
 
-  LeaveData({
-    this.presentDays,
-    this.lateDays,
-    this.lateDaysRatio,
-    this.halfDays,
-    this.absentDays,
-    this.absentDaysRatio,
-    this.requiredStaffing,
-    this.empStaffing,
-    this.productivityRatio,
-    this.officeStaffing,
-  });
+  LeaveData(
+      {this.presentDays,
+        this.lateDays,
+        this.lateDaysRatio,
+        this.halfDays,
+        this.absentDays,
+        this.absentDaysRatio,
+        this.requiredStaffing,
+        this.empStaffing,
+        this.productivityRatio,
+        this.officeStaffing});
 
   LeaveData.fromJson(Map<String, dynamic> json) {
     presentDays = json['presentDays'];

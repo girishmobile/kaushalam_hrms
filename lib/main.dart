@@ -105,7 +105,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         scaffoldMessengerKey: rootScaffoldMessengerKey,
         navigatorKey: navigatorKey,
-
+       // showPerformanceOverlay: true,
         title: 'hrms',
         theme: ThemeData(
           fontFamily: "Poppins",

@@ -144,6 +144,15 @@ String formateDateTime(
 String getFormattedDate(DateTime dateTime, {String format = 'yyyy-MM-dd'}) {
   return DateFormat(format).format(dateTime);
 }
+String formatDate(String? date, {String format = "dd-MMM-yy"}) {
+  if (date == null || date.isEmpty) return '';
+  try {
+    final parsed = DateTime.parse(date);
+    return DateFormat(format).format(parsed);
+  } catch (_) {
+    return date;
+  }
+}
 
 //Get only time (default HH:mm:ss)
 String getFormattedTime(DateTime dateTime, {String format = 'HH:mm:ss'}) {
@@ -172,6 +181,35 @@ String comrateStartEndate(dynamic startDate, dynamic endDate) {
         '${convertDate(startDate, format: "dd MMM yyyy")} To ${convertDate(endDate, format: "dd MMM yyyy")}';
   }
   return formattedDate;
+}
+String formatDay(String dateString) {
+  try {
+    final date = DateTime.parse(dateString);
+    final day = date.day;
+    String suffix;
+    if (day >= 11 && day <= 13) {
+      suffix = 'th';
+    } else {
+      switch (day % 10) {
+        case 1:
+          suffix = 'st';
+          break;
+        case 2:
+          suffix = 'nd';
+          break;
+        case 3:
+          suffix = 'rd';
+          break;
+        default:
+          suffix = 'th';
+      }
+    }
+
+    return '$day$suffix ';
+  } catch (_) {
+
+    return dateString;
+  }
 }
 
 String? setImagePath(String? imageUrl) {
