@@ -11,7 +11,11 @@ class ProfileScreen extends StatefulWidget {
   final String employeeId;
   final bool isCurrentUser;
 
-  const ProfileScreen({super.key, required this.employeeId,required this.isCurrentUser});
+  const ProfileScreen({
+    super.key,
+    required this.employeeId,
+    required this.isCurrentUser,
+  });
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -30,12 +34,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
     setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Map<String, dynamic> body = {"employee_id": widget.employeeId};
 
-      context.read<ProfileProvider>().getUserProfile(body: body,isCurrentUser: widget.isCurrentUser);
+      context.read<ProfileProvider>().getUserProfile(
+        body: body,
+        isCurrentUser: widget.isCurrentUser,
+      );
     });
     return AppScaffold(
       child: Consumer<ProfileProvider>(
@@ -44,27 +52,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               ListView(
                 padding: EdgeInsets.only(
-                  left: 24,
-                  right: 24,
+                  left: 20,
+                  right: 20,
                   top: appTopPadding(context),
                   bottom: appBottomPadding(context),
                 ),
                 children: [
-                 /* appProfileImage(
-                    context: context,
-                    isEdit: true,
-                    imageUrl:   "${ApiConfig.imageBaseUrl}${provider.profileImage}",
-                    radius: 60,
-                  ),*/
                   Consumer<ProfileProvider>(
-                      builder: (_, profileProvider, _) {
-                        return appProfileImage(
-                          context: context,
-                          imageUrl:   widget.isCurrentUser?"${ApiConfig.imageBaseUrl}${profileProvider.profileImage}" :"${ApiConfig.imageBaseUrl}${profileProvider.imageUrl}",
-                          radius: 60, isEdit: widget.isCurrentUser,
-                         
-                        );
-                      }
+                    builder: (_, profileProvider, _) {
+                      return appProfileImage(
+                        context: context,
+                        imageUrl: widget.isCurrentUser
+                            ? "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}"
+                            : "${ApiConfig.imageBaseUrl}${profileProvider.imageUrl}",
+                        radius: 60,
+                        isEdit: widget.isCurrentUser,
+                      );
+                    },
                   ),
                   SizedBox(height: 16),
                   loadTitleText(
@@ -81,32 +85,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: Icons.person_outline_outlined,
                     label: "Basic Information",
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 12),
                   _buildPersonalInfo(provider: provider),
                   SizedBox(height: 24),
                   _builRowTitle(
                     icon: Icons.account_balance_outlined,
                     label: "Company Relations",
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 12),
                   _buildCompnayInfo(provider: provider),
                   SizedBox(height: 24),
                   _builRowTitle(
                     icon: Icons.call_outlined,
                     label: "Contact Information",
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 12),
                   _buildContactInfo(provider: provider),
                   SizedBox(height: 24),
                   _builRowTitle(icon: Icons.book_outlined, label: "Document"),
-                  SizedBox(height: 8),
+                  SizedBox(height: 12),
                   _buildDocuments(provider: provider),
                   SizedBox(height: 24),
                   _builRowTitle(
                     icon: Icons.share_outlined,
                     label: "Social Network",
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 12),
                   _buildSocial(provider: provider),
                   SizedBox(height: 24),
                   gradientButton(title: "LOGOUT", onPressed: () {}),
@@ -118,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Navigator.pop(context);
                 },
               ),
-              provider.isLoading?showProgressIndicator():SizedBox.shrink()
+              provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
           );
         },
@@ -143,23 +147,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildPersonalInfo({required ProfileProvider provider}) {
     return appViewEffect(
       child: Column(
-        spacing: 16,
+        spacing: 8,
         children: [
           _builBasicRowInfo(
             label: "Full Name",
-            titleText:provider.profileModel?.firstname!=null?
-                "${provider.profileModel?.firstname} ${provider.profileModel?.lastname}":'',
+            titleText: provider.profileModel?.firstname != null
+                ? "${provider.profileModel?.firstname} ${provider.profileModel?.lastname}"
+                : '',
           ),
           _builBasicRowInfo(
             label: "Employee ID",
-            titleText: provider.profileModel?.employeeId!=null?"${provider.profileModel?.employeeId}":'',
+            titleText: provider.profileModel?.employeeId != null
+                ? "${provider.profileModel?.employeeId}"
+                : '',
           ),
           _builBasicRowInfo(
-            label: "Personal Email",
+            label: "Per Email",
             titleText: provider.profileModel?.email ?? '-',
           ),
           _builBasicRowInfo(
-            label: "Company Email",
+            label: "Com Email",
             titleText: provider.profileModel?.companyEmail ?? '-',
           ),
           _builBasicRowInfo(
@@ -208,7 +215,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return appViewEffect(
       child: Column(
-        spacing: 16,
+        spacing: 8,
         children: [
           _builBasicRowInfo(
             label: "Department",
@@ -252,7 +259,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildContactInfo({required ProfileProvider provider}) {
     return appViewEffect(
       child: Column(
-        spacing: 16,
+        spacing: 8,
         children: [
           _builBasicRowInfo(
             label: "Mobile Phone",
@@ -282,10 +289,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildDocuments({required ProfileProvider provider}) {
     return appViewEffect(
       child: Column(
-        spacing: 16,
+        spacing: 8,
         children: [
           _builBasicRowInfo(
-            label: "Driving License Number",
+            label: "Driving License",
             titleText: provider.profileModel?.drivingLicenseNumber ?? '-',
           ),
           _builBasicRowInfo(
@@ -320,7 +327,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildSocial({required ProfileProvider provider}) {
     return appViewEffect(
       child: Column(
-        spacing: 16,
+        spacing: 8,
         children: [
           _builBasicRowInfo(
             label: "Slack username",
@@ -344,21 +351,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _builBasicRowInfo({required String label, required String titleText}) {
-    return Row(
-      spacing: 8,
-
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        loadTitleText(title: label, fontWight: FontWeight.w500, fontSize: 12),
-        Expanded(
-          child: loadSubText(
-            title: titleText,
-            textAlign: TextAlign.end,
-            fontSize: 12,
+    return appViewEffect(
+      child: Row(
+        spacing: 8,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          loadTitleText(title: label, fontWight: FontWeight.w500, fontSize: 12),
+          Expanded(
+            child: loadSubText(
+              title: titleText,
+              textAlign: TextAlign.end,
+              fontSize: 12,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

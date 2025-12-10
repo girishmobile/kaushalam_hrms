@@ -11,7 +11,6 @@ import '../models/hotline_list_model.dart';
 
 class HotlineProvider with ChangeNotifier {
   bool _isLoading = false;
-
   bool get isLoading => _isLoading;
 
   void _setLoading(bool val) {
@@ -22,6 +21,7 @@ class HotlineProvider with ChangeNotifier {
   List<HotlineCountModel> _hotlineCount = [];
 
   List<HotlineCountModel> get hotlineCount => _hotlineCount;
+
   int? _selectedHotlineIndex = 0;
 
   int? get selectedHotlineIndex => _selectedHotlineIndex;
@@ -31,6 +31,7 @@ class HotlineProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
   Future<void> resetHotlineData() async {
     _setLoading(true);
 
@@ -48,6 +49,7 @@ class HotlineProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
   String? _title = "online";
 
   String? get title => _title;
@@ -100,11 +102,9 @@ class HotlineProvider with ChangeNotifier {
       );
 
       if (globalStatusCode == 200) {
-
         _departmentModel = DepartmentModel.fromJson(json.decode(response));
         setDepartments(departmentModel?.data ?? []);
         _setLoading(false);
-
       } else {
         _setLoading(false);
       }
@@ -152,7 +152,6 @@ class HotlineProvider with ChangeNotifier {
       );
 
       if (globalStatusCode == 200) {
-
         _designationModel = DesignationModel.fromJson(json.decode(response));
         setDesignationData(_designationModel?.data ?? []);
         _setLoading(false);
@@ -172,8 +171,6 @@ class HotlineProvider with ChangeNotifier {
   DesignationData? get selectDesignation => _selectDesignation;
   List<DesignationData> get designationList => _designationList;
 
-
-
   /// Load data (from API or local JSON)
   void setDesignationData(List<DesignationData> list) {
     _designationList = list;
@@ -181,13 +178,13 @@ class HotlineProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  clearDesignation(){
-    _selectDesignation = null;      // assign null
-    _selectedDepartment = null;     // assign null
-
+  clearDesignation() {
+    _selectDesignation = null; // assign null
+    _selectedDepartment = null; // assign null
 
     notifyListeners();
   }
+
   /// Select a department
   void selectDesignationData(DesignationData designationData) {
     _selectDesignation = designationData;
@@ -227,10 +224,8 @@ class HotlineProvider with ChangeNotifier {
       );
 
       if (globalStatusCode == 200) {
-
         _hotlineListModel = HotlineListModel.fromJson(json.decode(response));
         _setLoading(false);
-
       } else {
         _setLoading(false);
       }

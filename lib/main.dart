@@ -15,6 +15,7 @@ import 'package:neeknots_admin/provider/hotline_provider.dart';
 import 'package:neeknots_admin/provider/leave_balance_provider.dart';
 import 'package:neeknots_admin/provider/leave_provider.dart';
 import 'package:neeknots_admin/provider/login_provider.dart';
+import 'package:neeknots_admin/provider/manager_hotline_provider.dart';
 import 'package:neeknots_admin/provider/manager_provider.dart';
 import 'package:neeknots_admin/provider/my_kpi_provider.dart';
 import 'package:neeknots_admin/provider/product_detail_provider.dart';
@@ -65,6 +66,9 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider<SettingProvider>(create: (_) => SettingProvider()),
   ChangeNotifierProvider<EmpNotifiProvider>(create: (_) => EmpNotifiProvider()),
   ChangeNotifierProvider<MyKpiProvider>(create: (_) => MyKpiProvider()),
+  ChangeNotifierProvider<ManagerHotlineProvider>(
+    create: (_) => ManagerHotlineProvider(),
+  ),
   ChangeNotifierProvider<AttendanceProvider>(
     create: (_) => AttendanceProvider(),
   ),

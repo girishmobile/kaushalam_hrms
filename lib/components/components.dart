@@ -12,6 +12,8 @@ import 'package:neeknots_admin/models/all_leave_model.dart';
 import 'package:neeknots_admin/models/birth_holiday_model.dart';
 import 'package:neeknots_admin/models/customer_model.dart';
 import 'package:neeknots_admin/models/emp_notification_model.dart';
+import 'package:neeknots_admin/models/employees_model.dart';
+import 'package:neeknots_admin/models/hotline_list_model.dart';
 import 'package:neeknots_admin/models/order_model.dart';
 import 'package:neeknots_admin/provider/leave_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
@@ -201,7 +203,7 @@ Widget loadNetworkImage({
           ),
         ),
         errorWidget: (_, __, ___) =>
-           // loadAssetImage(name: errorImage)
+            // loadAssetImage(name: errorImage)
             _fallBackContent(icon, iconColor, text, iconSize),
       );
     } else if (imageUrl.contains(".png") ||
@@ -515,12 +517,13 @@ Widget appOrangeTextField({
   final Function(String)? onChanged,
   VoidCallback? onTogglePassword,
   String? Function(String?)? validator,
+  FocusNode? focusNode,
 }) {
   return TextFormField(
     validator: validator,
     controller: textController,
     keyboardType: keyboardType,
-
+    focusNode: focusNode,
     obscureText: isPassword ? obscure : false,
     autocorrect: false,
     enableSuggestions: false,
@@ -616,11 +619,17 @@ Widget customerCard(CustomerModel customer) {
   );
 }
 
-Widget employeeCard(CustomerModel customer) {
+Widget employeeCard(Employee employee) {
   return appViewEffect(
     child: Row(
       children: [
-        appCircleImage(imageUrl: customer.imageUrl, radius: 24),
+        appCircleImage(
+          imageUrl: setImagePath(employee.profileImage),
+          radius: 24,
+          icon: Icons.person_outline,
+          iconColor: color2,
+          borderColor: color2,
+        ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -628,24 +637,84 @@ Widget employeeCard(CustomerModel customer) {
             spacing: 4,
             children: [
               Text(
-                customer.name,
+                "${employee.firstname} ${employee.lastname}",
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
                 ),
               ),
               Text(
-                customer.email,
-                style: const TextStyle(fontSize: 12, color: Colors.black54),
-              ),
-              Text(
-                "Joined:- 13-June-2013",
+                employee.departmentName,
                 style: const TextStyle(
                   fontSize: 12,
-                  color: Colors.black87,
+                  color: Colors.black54,
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              Text(
+                employee.joiningDate != null
+                    ? getFormattedDate(
+                        employee.joiningDate!,
+                        format: "dd MMM yyyy",
+                      )
+                    : '',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        SizedBox(width: 4),
+        appForwardIcon(),
+      ],
+    ),
+  );
+}
+
+Widget hotlineCard(HotLineData employee) {
+  return appViewEffect(
+    child: Row(
+      children: [
+        appCircleImage(
+          imageUrl: setImagePath(employee.profileImage),
+          radius: 24,
+          icon: Icons.person_outline,
+          iconColor: color2,
+          borderColor: color2,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 4,
+            children: [
+              Text(
+                "${employee.firstname} ${employee.lastname}",
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+              ),
+              Text(
+                employee.departmentname ?? '',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              // Text(
+              //   employee.designation ?? '',
+              //   style: const TextStyle(
+              //     fontSize: 12,
+              //     color: Colors.black54,
+              //     fontWeight: FontWeight.w400,
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -1098,7 +1167,7 @@ Widget appNavigationBar({
   required String title,
   VoidCallback? onTap,
   VoidCallback? onRightIconTap,
-  IconData ?rightIcon ,
+  IconData? rightIcon,
 }) {
   return SafeArea(
     child: Container(
@@ -1128,15 +1197,17 @@ Widget appNavigationBar({
             ),
             gradient: appGradient(),
           ),
-          rightIcon!=null?  Align(
-            alignment: Alignment.centerRight,
-            child: appCircleIcon(
-              icon: rightIcon,
-              iconSize: 24,
-              gradient: appGradient(),
-              onTap: onRightIconTap,
-            ),
-          ):SizedBox.shrink(),
+          rightIcon != null
+              ? Align(
+                  alignment: Alignment.centerRight,
+                  child: appCircleIcon(
+                    icon: rightIcon,
+                    iconSize: 24,
+                    gradient: appGradient(),
+                    onTap: onRightIconTap,
+                  ),
+                )
+              : SizedBox.shrink(),
         ],
       ),
     ),
@@ -1217,7 +1288,9 @@ Widget appProfileImage({
           ),
           child: appCircleImage(
             imageUrl: imageUrl,
-         //   icon: Icons.person_outline,
+            icon: Icons.person_outline,
+            iconColor: color3,
+            iconSize: radius / 1.5,
             radius: (radius - 2),
             onTap: () {},
           ),
@@ -1799,15 +1872,13 @@ Widget commonRowLeftRightView({
     ],
   );
 }
+
 OutlineInputBorder commonTextFiledBorder({
   double? borderRadius,
   Color? borderColor,
 }) {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(borderRadius ?? 12),
-    borderSide: BorderSide(
-      width: 1.1,
-      color: borderColor ?? color3,
-    ),
+    borderSide: BorderSide(width: 1.1, color: borderColor ?? color3),
   );
 }

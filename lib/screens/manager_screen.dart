@@ -52,23 +52,64 @@ class ManagerScreen extends StatelessWidget {
               gradient: appGradient(),
             ),
             const SizedBox(height: 8),
+
             _buildRowItem(
-              icon: Icons.people_outline,
+              icon: Icons.beach_access_outlined,
+              title: "On Leave",
+              onTap: () => Navigator.pushNamed(
+                context,
+                RouteName.hotlinePage,
+                arguments: "on_leave",
+              ),
+            ),
+            const SizedBox(height: 12),
+            _buildRowItem(
+              icon: Icons.free_breakfast_outlined,
+              title: "On Break",
+              onTap: () => Navigator.pushNamed(
+                context,
+                RouteName.hotlinePage,
+                arguments: "on_break",
+              ),
+            ),
+            const SizedBox(height: 12),
+            _buildRowItem(
+              icon: Icons.wifi_tethering_sharp,
+              title: "Online Employees",
+              onTap: () => Navigator.pushNamed(
+                context,
+                RouteName.hotlinePage,
+                arguments: "Online",
+              ),
+            ),
+            const SizedBox(height: 12),
+            _buildRowItem(
+              icon: Icons.wifi_tethering_off_outlined,
+              title: "Offline Employees",
+              onTap: () => Navigator.pushNamed(
+                context,
+                RouteName.hotlinePage,
+                arguments: "Offline",
+              ),
+            ),
+            const SizedBox(height: 12),
+            _buildRowItem(
+              icon: Icons.home_work_outlined,
+              title: "Work from home Employee",
+              onTap: () => Navigator.pushNamed(
+                context,
+                RouteName.hotlinePage,
+                arguments: "on_wfh",
+              ),
+            ),
+            const SizedBox(height: 12),
+            _buildRowItem(
+              icon: Icons.people_alt_outlined,
               title: "Total Employees",
               onTap: () =>
                   Navigator.pushNamed(context, RouteName.allEmplyeePage),
             ),
 
-            const SizedBox(height: 12),
-            _buildRowItem(
-              icon: Icons.workspaces_outlined,
-              title: "Work from home Employee",
-            ),
-            const SizedBox(height: 12),
-            _buildRowItem(
-              icon: Icons.people_outline,
-              title: "Online Employees",
-            ),
             const SizedBox(height: 16),
 
             Row(
@@ -109,6 +150,7 @@ class ManagerScreen extends StatelessWidget {
     required String title,
     required IconData icon,
     VoidCallback? onTap,
+    Color iconColor = Colors.black54,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -118,7 +160,7 @@ class ManagerScreen extends StatelessWidget {
           spacing: 4,
 
           children: [
-            Icon(icon, color: Colors.black54),
+            Icon(icon, color: iconColor),
             Expanded(
               child: loadSubText(title: title, fontColor: Colors.black54),
             ),

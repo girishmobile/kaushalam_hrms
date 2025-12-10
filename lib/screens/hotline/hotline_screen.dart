@@ -4,14 +4,12 @@ import 'package:neeknots_admin/core/constants/colors.dart';
 
 import 'package:provider/provider.dart';
 
-
 import '../../api/api_config.dart';
 import '../../common/app_scaffold.dart';
 import '../../components/common_dropdown.dart';
 import '../../core/constants/context_extension.dart';
 import '../../core/router/route_name.dart';
 import '../../models/hotline_count_model.dart';
-import '../../models/hotline_list_model.dart';
 import '../../provider/hotline_provider.dart';
 
 class HotlineScreen extends StatefulWidget {
@@ -56,11 +54,8 @@ class _HotlineScreenState extends State<HotlineScreen> {
         .toList();
     final selectedDesignationName = provider.selectDesignation?.name;
     return AppScaffold(
-
-
       child: Stack(
         children: [
-
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -70,7 +65,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: [
-                    SizedBox(height: 36,),
+                    SizedBox(height: 36),
                     loadTitleText(
                       title: "HotLine",
                       fontWight: FontWeight.w600,
@@ -89,20 +84,21 @@ class _HotlineScreenState extends State<HotlineScreen> {
                       itemCount: provider.hotlineCount.length,
 
                       gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3, // 2 columns
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 8,
-                        childAspectRatio: 2.6,
-                      ),
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3, // 2 columns
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 8,
+                            childAspectRatio: 2.6,
+                          ),
                       itemBuilder: (context, index) {
                         final item = provider.hotlineCount[index];
                         final color =
-                        provider.colors[index %
-                            provider
-                                .colors
-                                .length]; // pick color cyclically*/
-                        final isSelected = provider.selectedHotlineIndex == index;
+                            provider.colors[index %
+                                provider
+                                    .colors
+                                    .length]; // pick color cyclically*/
+                        final isSelected =
+                            provider.selectedHotlineIndex == index;
                         return buildItemView(
                           item: item,
                           isSelected: isSelected,
@@ -137,7 +133,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                     loadTitleText(
                       // text:provider.title.toString().toTitleCase()?? "All Employees",
                       title:
-                      'Employees - ${provider.title.toString().toTitleCase()}',
+                          'Employees - ${provider.title.toString().toTitleCase()}',
                       fontWight: FontWeight.w600,
                       fontSize: 16,
                     ),
@@ -145,104 +141,134 @@ class _HotlineScreenState extends State<HotlineScreen> {
 
                     provider.hotlineListModel?.data?.data?.isNotEmpty == true
                         ? ListView.builder(
-                      shrinkWrap: true,
+                            shrinkWrap: true,
+                            physics: BouncingScrollPhysics(),
+                            itemCount:
+                                provider.hotlineListModel?.data?.data?.length,
+                            itemBuilder: (context, index) {
+                              var data =
+                                  provider.hotlineListModel?.data?.data?[index];
 
-                      physics: BouncingScrollPhysics(),
-                      itemCount:
-                      provider.hotlineListModel?.data?.data?.length,
-                      itemBuilder: (context, index) {
-                        var data =
-                        provider.hotlineListModel?.data?.data?[index];
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    RouteName.profileScreen,
+                                    arguments: {
+                                      "employeeId": '${data?.id ?? 0}',
+                                      "isCurrentUser": false,
+                                    },
+                                    /* arguments:'${data?.id ?? 0}'*/
+                                  );
+                                },
 
-                        return InkWell(
-                          onTap: () {
+                                child: appViewEffect(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 12,
+                                  ),
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                    vertical: 4,
+                                  ),
 
-                            Navigator.pushNamed(
-                              context,
-                              RouteName.profileScreen,
-                              arguments: {
-                                "employeeId": '${data?.id ?? 0}',
-                                "isCurrentUser": false,
-                              },
-                              /* arguments:'${data?.id ?? 0}'*/
-                            );
-                          },
-
-                          child: appViewEffect(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 5,
-                              vertical: 15,
-                            ),
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 5,
-                              vertical: 8,
-                            ),
-
-                            /*   decoration: commonBoxDecoration(
+                                  /*   decoration: commonBoxDecoration(
                                             color: color.withValues(alpha: 0.04),
                                             borderColor: color3,
                                             borderRadius: 8,
                                           ),*/
-
-                            child: Row(
-                              spacing: 10,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                appCircleImage(
-                                  borderColor: color3,
-                                  imageUrl:   "${ApiConfig.imageBaseUrl}${ data?.profileImage}",
-                                  radius: 18,
-
-                                ),
-
-                                Expanded(
-                                  child: Column(
-                                    spacing: 1,
+                                  child: Row(
+                                    spacing: 10,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.start,
+                                        CrossAxisAlignment.start,
+
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      loadSubText(
-                                        title:
-                                        '${data?.firstname} ${data?.lastname}',
-                                        fontSize: 14,
-                                        fontWight: FontWeight.w600,
-                                        //   fontColor: color,
-                                        textAlign: TextAlign.center,
+                                      appCircleImage(
+                                        borderColor: color3,
+                                        imageUrl:
+                                            "${ApiConfig.imageBaseUrl}${data?.profileImage}",
+                                        radius: 18,
                                       ),
 
-                                      loadSubText(
-                                        title: '${data?.designation}',
-                                        fontSize: 11,
-                                        fontWight: FontWeight.w400,
-                                        // fontColor: color3,
+                                      Expanded(
+                                        child: Column(
+                                          spacing: 1,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            loadSubText(
+                                              title:
+                                                  '${data?.firstname} ${data?.lastname}',
+                                              fontSize: 14,
+                                              fontWight: FontWeight.w600,
+                                              //   fontColor: color,
+                                              textAlign: TextAlign.center,
+                                            ),
+
+                                            loadSubText(
+                                              title: '${data?.designation}',
+                                              fontSize: 11,
+                                              fontWight: FontWeight.w400,
+                                              // fontColor: color3,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      appViewEffect(
+                                        borderColor:
+                                            data?.workStatus
+                                                    .toString()
+                                                    .toLowerCase() ==
+                                                "online"
+                                            ? Colors.green
+                                            : data?.workStatus
+                                                      .toString()
+                                                      .toLowerCase() ==
+                                                  "on-break"
+                                            ? Colors.amber
+                                            : Colors.grey,
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 5,
+                                        ),
+                                        child: loadSubText(
+                                          title:
+                                              '${data?.workStatus.toString().toCapitalize()}',
+                                          fontSize: 10,
+                                          fontColor:
+                                              data?.workStatus
+                                                      .toString()
+                                                      .toLowerCase() ==
+                                                  "online"
+                                              ? Colors.green
+                                              : data?.workStatus
+                                                        .toString()
+                                                        .toLowerCase() ==
+                                                    "on-break"
+                                              ? Colors.amber
+                                              : Colors.grey,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-
-                                appViewEffect(
-
-                                    borderColor: data?.workStatus.toString().toLowerCase()=="online"?Colors.green:data?.workStatus.toString().toLowerCase()=="on-break"?Colors.amber:Colors.grey,
-                                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                                    child: loadSubText(title: '${data?.workStatus.toString().toCapitalize()}',fontSize: 10,fontColor:data?.workStatus.toString().toLowerCase()=="online"?Colors.green:data?.workStatus.toString().toLowerCase()=="on-break"?Colors.amber:Colors.grey))
-                              ],
-                            ),
-                          ),
-                          // child: _buildEmployee(data: data),
-                        );
-                      },
-                    )
+                                // child: _buildEmployee(data: data),
+                              );
+                            },
+                          )
                         : SizedBox(
-                      width: size.width,
-                      height: size.height * 0.6,
-                      child: provider.isLoading
-                          ? SizedBox.shrink()
-                          : Center(child: loadSubText(title: "No data found")),
-                    ),
+                            width: size.width,
+                            height: size.height * 0.6,
+                            child: provider.isLoading
+                                ? SizedBox.shrink()
+                                : Center(
+                                    child: loadSubText(title: "No data found"),
+                                  ),
+                          ),
                   ],
                 ),
               ),
@@ -251,9 +277,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
 
           provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
           appNavigationBar(
-
-            onRightIconTap: (){
-
+            onRightIconTap: () {
               showCommonBottomSheet(
                 content: Consumer<HotlineProvider>(
                   builder: (context, provider, child) {
@@ -285,7 +309,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                   padding: EdgeInsets.zero,
                                   onPressed: () {
                                     Navigator.of(context).pop();
-                                 //   provider.getAllHotline();
+                                    //   provider.getAllHotline();
                                   },
                                   icon: Icon(
                                     size: 14,
@@ -338,9 +362,9 @@ class _HotlineScreenState extends State<HotlineScreen> {
                               items: designationNames.toSet().toList(),
                               // remove duplicates
                               initialValue:
-                              designationNames.contains(
-                                selectedDesignationName,
-                              )
+                                  designationNames.contains(
+                                    selectedDesignationName,
+                                  )
                                   ? selectedDesignationName
                                   : null,
                               hint: "Select Department",
@@ -352,7 +376,6 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                   provider.selectDesignationData(selected);
                                   provider.getAllHotline(desId: selected.id);
                                   provider.clearDesignation();
-
                                 }
                               },
                             ),
@@ -368,16 +391,19 @@ class _HotlineScreenState extends State<HotlineScreen> {
                             ),
                             SizedBox(height: 8),
                             appOrangeTextField(
-                              suffixIcon: IconButton(onPressed: (){
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  provider.getAllHotline();
+                                },
+                                icon: Icon(Icons.close, size: 18),
+                              ),
 
-                                provider.getAllHotline();
-                              }, icon: Icon(Icons.close,size: 18,)),
-
-                              onChanged: (value){
+                              onChanged: (value) {
                                 final text = value.trim();
-                                print("onChanged: '$value' ${value.length}");// changed >3 -> >=3
+                                print(
+                                  "onChanged: '$value' ${value.length}",
+                                ); // changed >3 -> >=3
                                 if (text.length >= 4) {
-
                                   provider.getAllHotline(search: text);
                                 }
                               },
@@ -399,7 +425,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
               );
             },
             rightIcon: Icons.filter_alt_outlined,
-            title: "Hotline",
+            title: "HOTLINE",
             onTap: () {
               Navigator.pop(context);
             },
@@ -408,9 +434,6 @@ class _HotlineScreenState extends State<HotlineScreen> {
       ),
     );
   }
-
-
-
 
   Widget buildItemView({
     required HotlineCountModel item,
@@ -441,7 +464,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
               title: item.title.toString().toTitleCase(),
               fontSize: 12,
               fontWight: FontWeight.w500,
-           //   fontColor: color3,
+              //   fontColor: color3,
             ),
             const SizedBox(width: 6),
             loadSubText(

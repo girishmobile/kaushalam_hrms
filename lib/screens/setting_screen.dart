@@ -56,14 +56,15 @@ class _SettingScreenState extends State<SettingScreen> {
                     radius: 60,
                   ),*/
                   Consumer<ProfileProvider>(
-                      builder: (_, profileProvider, _) {
-                        return appProfileImage(
-                          context: context,
-                          imageUrl:   "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
-                          radius: 60, isEdit: false,
-
-                        );
-                      }
+                    builder: (_, profileProvider, _) {
+                      return appProfileImage(
+                        context: context,
+                        imageUrl:
+                            "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
+                        radius: 60,
+                        isEdit: false,
+                      );
+                    },
                   ),
                   SizedBox(height: 16),
                   loadTitleText(title: username, textAlign: TextAlign.center),
@@ -73,16 +74,16 @@ class _SettingScreenState extends State<SettingScreen> {
                     title: "Edit Profile",
                     icon: Icons.edit_outlined,
                     onTap: () =>
-                      /*  Navigator.pushNamed(context, RouteName.editProfilePage),*/
-                    Navigator.pushNamed(
-                      context,
-                      RouteName.profileScreen,
-                      arguments: {
-                        "employeeId": '${provider.userModel?.id??0}',
-                        "isCurrentUser": true,
-                      },
-                      // arguments: '${provider.userModel?.id??0}',
-                    )
+                        /*  Navigator.pushNamed(context, RouteName.editProfilePage),*/
+                        Navigator.pushNamed(
+                          context,
+                          RouteName.profileScreen,
+                          arguments: {
+                            "employeeId": '${provider.userModel?.id ?? 0}',
+                            "isCurrentUser": true,
+                          },
+                          // arguments: '${provider.userModel?.id??0}',
+                        ),
                   ),
                   const SizedBox(height: 12),
 
@@ -113,7 +114,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   const SizedBox(height: 12),
                   _buildRowItem(
                     title: "Hotline",
-                    icon: Icons.people_outline_outlined,
+                    icon: Icons.support_agent,
                     onTap: () =>
                         Navigator.pushNamed(context, RouteName.hotlineScreen),
                   ),

@@ -5,15 +5,36 @@ import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/api/network_repository.dart';
 import 'package:neeknots_admin/models/attendance_model.dart';
 import 'package:neeknots_admin/models/birth_holiday_model.dart';
+import 'package:neeknots_admin/models/employees_model.dart';
 import 'package:neeknots_admin/models/leave_summary.dart';
 
 import '../models/my_work_model.dart';
 
 class EmpProvider extends ChangeNotifier {
+  final nameController = TextEditingController();
+  final searchFocus = FocusNode();
+
+  EmpProvider() {
+    nameController.addListener(() {
+      if (searchFocus.hasFocus) {
+        setSelectedIndex(0); // reset department selection
+        filterByDepartment("All"); // filter all employees
+      }
+      searchByName(nameController.text);
+    });
+  }
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   void _setLoading(bool val) {
     _isLoading = val;
+    notifyListeners();
+  }
+
+  int _selectedIndex = 0;
+  int get selectedIndex => _selectedIndex;
+
+  void setSelectedIndex(int index) {
+    _selectedIndex = index;
     notifyListeners();
   }
 
@@ -31,6 +52,43 @@ class EmpProvider extends ChangeNotifier {
 
   List<Holiday> holidays = [];
   List<BirthDay> birthdays = [];
+  List<Department> departments = [];
+  List<Employee> _allEmployees = [];
+  List<Employee> get allEmployees => _allEmployees;
+
+  //Searching and filtering
+  List<Employee> filteredList = [];
+
+  void searchByName(String query) {
+    if (query.isEmpty) {
+      filteredList = _allEmployees;
+    } else {
+      filteredList = _allEmployees
+          .where(
+            (e) =>
+                e.firstname.toLowerCase().contains(query.toLowerCase()) ||
+                e.lastname.toLowerCase().contains(query.toLowerCase()),
+          )
+          .toList();
+    }
+    notifyListeners();
+  }
+
+  void filterByDepartment(String? departmentName) {
+    if (departmentName == null || departmentName == "All") {
+      filteredList = _allEmployees; // Reset
+    } else {
+      filteredList = _allEmployees
+          .where(
+            (emp) =>
+                emp.departmentName.toLowerCase() ==
+                departmentName.toLowerCase(),
+          )
+          .toList();
+    }
+
+    notifyListeners();
+  }
 
   Future<void> getCurrentAttendance() async {
     _setLoading(true);
@@ -173,10 +231,10 @@ class EmpProvider extends ChangeNotifier {
       _setLoading(false);
       notifyListeners();
     } catch (e) {
-      debugPrint('=====e=$e');
       _setLoading(false);
     }
   }
+
   final List<Color> colors = [
     Colors.orange,
     Colors.red,
@@ -186,5 +244,141 @@ class EmpProvider extends ChangeNotifier {
     Colors.redAccent,
   ];
 
-  Future<void> getBirthdays() async {}
+  Future<void> getDepartment() async {
+    _setLoading(true);
+    try {
+      final response = await callApi(
+        url: ApiConfig.getDepartmentURL,
+        method: HttpMethod.get,
+        headers: null,
+      );
+      if (globalStatusCode == 200) {
+        final decoded = jsonDecode(response);
+
+        if (decoded['response'] == "success") {
+          // Parse API list
+
+          List<Department> apiDepartments = (decoded['data'] as List<dynamic>)
+              .map((dept) => Department.fromJson(dept))
+              .toList();
+
+          departments = [
+            Department(id: 0, name: "All", employees: 0),
+            ...apiDepartments,
+          ];
+        } else {
+          errorMessage = "Something went wrong. Try again.";
+        }
+
+        _setLoading(false);
+      } else {
+        errorMessage = "Something went wrong. Try again.";
+        _setLoading(false);
+      }
+    } catch (e) {
+      errorMessage = "Something went wrong. Try again.";
+      _setLoading(false);
+    }
+  }
+
+  Future<void> getAllEmployees() async {
+    _setLoading(true);
+    Map<String, dynamic> body = {
+      "draw": 1,
+      "columns": [
+        {
+          "data": 0,
+          "name": "",
+          "searchable": false,
+          "orderable": false,
+          "search": {"value": "1", "regex": false},
+        },
+        {
+          "data": 1,
+          "name": "id",
+          "searchable": true,
+          "orderable": false,
+          "search": {"value": "", "regex": false},
+        },
+        {
+          "data": 2,
+          "name": "employee_id",
+          "searchable": true,
+          "orderable": true,
+          "search": {"value": "", "regex": false},
+        },
+        {
+          "data": 3,
+          "name": "firstname",
+          "searchable": true,
+          "orderable": true,
+          "search": {"value": "", "regex": false},
+        },
+        {
+          "data": 4,
+          "name": "name",
+          "searchable": true,
+          "orderable": true,
+          "search": {"value": "", "regex": false},
+        },
+        {
+          "data": 5,
+          "name": "joining_date",
+          "searchable": true,
+          "orderable": true,
+          "search": {"value": "", "regex": false},
+        },
+        {
+          "data": 6,
+          "name": "leaves",
+          "searchable": true,
+          "orderable": false,
+          "search": {"value": "", "regex": false},
+        },
+        {
+          "data": 7,
+          "name": "tag",
+          "searchable": false,
+          "orderable": false,
+          "search": {"value": "", "regex": false},
+        },
+
+        {
+          "data": 8,
+          "name": "actions",
+          "searchable": false,
+          "orderable": false,
+          "search": {"value": "", "regex": false},
+        },
+      ],
+      "order": [
+        {"column": 1, "dir": "asc"},
+      ],
+      "start": 0,
+      "length": 200,
+      "search": {"value": "", "regex": false},
+    };
+
+    try {
+      final response = await callApi(
+        url: ApiConfig.getAllEmployeeUrl,
+        method: HttpMethod.post,
+        headers: null,
+        body: body,
+      );
+      if (globalStatusCode == 200) {
+        final decoded = jsonDecode(response);
+        EmployeesModel model = EmployeesModel.fromJson(decoded);
+        _allEmployees = model.employees;
+        filteredList = _allEmployees;
+        _setLoading(false);
+      } else {
+        errorMessage = "Something went wrong. Try again.";
+        _setLoading(false);
+      }
+    } catch (e) {
+      errorMessage = "Something went wrong. Try again.";
+      _setLoading(false);
+    }
+  }
 }

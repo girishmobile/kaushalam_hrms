@@ -3,8 +3,9 @@ import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
-import 'package:neeknots_admin/models/customer_model.dart';
+import 'package:neeknots_admin/provider/emp_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
+import 'package:provider/provider.dart';
 
 class AllEmplyeePage extends StatefulWidget {
   const AllEmplyeePage({super.key});
@@ -14,70 +15,82 @@ class AllEmplyeePage extends StatefulWidget {
 }
 
 class _AllEmplyeePageState extends State<AllEmplyeePage> {
-  int selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
 
-  final List<String> filters = [
-    "All",
-    "Admin",
-    "HR",
-    "Web Designing",
-    "Development",
-    "Marketing",
-    "SEO",
-    "Management",
-    "Desinger",
-    "Networking",
-    "Bussiness Analyst",
-    "QA",
-    "Mobile Application",
-    "HTML",
-    "Account",
-    "Content Writer",
-    "Shopify",
-    "Deo",
-  ];
+    initEmployee();
+  }
+
+  Future<void> initEmployee() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final provider = Provider.of<EmpProvider>(context, listen: false);
+      await Future.wait([provider.getDepartment(), provider.getAllEmployees()]);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final safeTop = MediaQuery.of(context).padding.top;
-    final topBarHeight = 48.0; // from Dashboard SafeArea Row
     return AppScaffold(
-      child: Stack(
-        children: [
-          _listOfEmployee(context),
-          Positioned(
-            top: safeTop + topBarHeight + 8,
-            left: 24,
-            right: 24,
-            child: _searchBar(context),
-          ),
-          Positioned(
-            top: appTopPadding(context, extra: 64),
-            left: 24,
-            right: 24,
-            child: _filterOption(),
-          ),
-          appNavigationBar(
-            title: "EMPLOYEES",
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
+      child: Consumer<EmpProvider>(
+        builder: (context, provider, child) {
+          return Stack(
+            children: [
+              _listOfEmployee(context, provider),
+              Positioned(
+                top: appTopPadding(context),
+                left: 24,
+                right: 24,
+                child: _searchBar(context, provider),
+              ),
+              Positioned(
+                top: appTopPadding(context, extra: 64),
+                left: 24,
+                right: 24,
+                child: _filterOption(provider: provider),
+              ),
+              appNavigationBar(
+                title: "EMPLOYEES",
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _filterOption() {
+  Widget _filterOption({required EmpProvider provider}) {
+    if (provider.isLoading && provider.departments.isEmpty) {
+      return Center(
+        child: Text(
+          "Loading...",
+          style: TextStyle(fontSize: 14, color: Colors.black54),
+        ),
+      );
+    }
     return SizedBox(
       width: double.infinity,
       height: 36,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-
         itemBuilder: (context, index) {
-          final isSelected = selectedIndex == index;
+          final isSelected = provider.selectedIndex == index;
+          final dept = provider.departments.isNotEmpty
+              ? provider.departments[index]
+              : null;
+          final deptName = dept != null ? dept.name : "Loading...";
           return GestureDetector(
-            onTap: () => setState(() => selectedIndex = index),
+            onTap: () {
+              hideKeyboard(context);
+              provider.nameController.clear();
+              provider.setSelectedIndex(index);
+              final dept = provider.departments[index];
+              provider.filterByDepartment(dept.name);
+            },
             child: AnimatedContainer(
               duration: Duration(microseconds: 200),
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -94,7 +107,7 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    filters[index],
+                    deptName,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: isSelected
@@ -113,12 +126,21 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
           );
         },
         separatorBuilder: (_, _) => SizedBox(width: 10),
-        itemCount: filters.length,
+        itemCount: provider.departments.length,
       ),
     );
   }
 
-  Widget _listOfEmployee(BuildContext context) {
+  Widget _searchBar(BuildContext context, EmpProvider provider) {
+    return appOrangeTextField(
+      textController: provider.nameController,
+      hintText: "search by employee name",
+      icon: Icons.search,
+      focusNode: provider.searchFocus,
+    );
+  }
+
+  Widget _listOfEmployee(BuildContext context, EmpProvider provider) {
     return ListView.separated(
       padding: EdgeInsets.only(
         left: 24,
@@ -130,22 +152,27 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
       addRepaintBoundaries: true,
       cacheExtent: 500,
       itemBuilder: (context, index) {
-        final custModel = sampleCustomers[index];
+        final employee = provider.filteredList[index];
         return RepaintBoundary(
           child: GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, RouteName.employeeDetailPage);
             },
-            child: employeeCard(custModel),
+            child: employeeCard(employee),
           ),
         );
       },
+      itemCount: provider.filteredList.length,
       separatorBuilder: (context, index) => const SizedBox(height: 8),
-      itemCount: sampleCustomers.length,
     );
   }
+}
 
-  Widget _searchBar(BuildContext context) {
-    return appOrangeTextField(hintText: "search", icon: Icons.search);
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
