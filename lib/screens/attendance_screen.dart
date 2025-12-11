@@ -16,17 +16,20 @@ class AttendanceScreen extends StatelessWidget {
       builder: (context, provider, child) {
         return Stack(
           children: [
-            //topBar(context, provider),
             ListView(
               padding: EdgeInsets.only(
                 left: 24,
                 right: 24,
-                top: listTop(context, extra: 76),
+                top: listTop(context, extra: 80),
                 bottom: listBottom(context),
               ),
               children: [
-                loadTitleText(title: '${provider.selectedDateRange} Details'),
-                SizedBox(height: 4),
+                loadSubText(
+                  title: '${provider.selectedDateRange} Details',
+                  fontSize: 14,
+                  fontWight: FontWeight.w500,
+                ),
+                SizedBox(height: 8),
                 _buildDetailListView(provider),
               ],
             ),
@@ -51,7 +54,6 @@ class AttendanceScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         var data = provider.attendanceRecordModel?.data?.data?[index];
         return appViewEffect(
-          margin: EdgeInsets.symmetric(vertical: 3),
           child: Column(
             spacing: 5,
             children: [
@@ -136,7 +138,7 @@ class AttendanceScreen extends StatelessWidget {
 
   Widget _filterOption(AttendanceProvider provider) {
     return SizedBox(
-      height: 64,
+      height: 68,
 
       child: ListView.separated(
         shrinkWrap: true,
@@ -164,67 +166,9 @@ class AttendanceScreen extends StatelessWidget {
           ),
           loadTitleText(
             title: "${item['value']}${item['desc']}",
-            fontSize: 12,
+            fontSize: 13,
             fontWight: FontWeight.w600,
             fontColor: item['color'],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget topBar(BuildContext context, AttendanceProvider provider) {
-    final safeTop = MediaQuery.of(context).padding.top;
-    const topBarHeight = 48.0; // your Dashboard SafeArea Row
-    final listTop = safeTop + topBarHeight + 16; // search bar height + spacing
-    return Container(
-      padding: EdgeInsets.only(top: listTop),
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      child: ListView(
-        children: [
-          SizedBox(height: 10),
-          _kpiGridView(context, provider),
-          SizedBox(height: 10),
-          loadTitleText(title: '${provider.selectedDateRange} Details'),
-          SizedBox(height: 10),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: provider.attendanceRecordModel?.data?.data?.length ?? 0,
-            itemBuilder: (context, index) {
-              var data = provider.attendanceRecordModel?.data?.data?[index];
-              return appViewEffect(
-                margin: EdgeInsets.symmetric(vertical: 3),
-                child: Column(
-                  spacing: 5,
-                  children: [
-                    _commonItemView(
-                      value: formatDate(
-                        data?.date?.date.toString() ?? '',
-                        format: "dd-MM-yyyy",
-                      ),
-                    ),
-                    _commonItemView(
-                      title: "Entry Time",
-                      value: data?.entryTime ?? '',
-                    ),
-                    _commonItemView(
-                      title: "Exit time",
-                      value: data?.exitTime ?? '',
-                    ),
-                    _commonItemView(
-                      title: "Break time",
-                      value: data?.breakTime ?? '',
-                    ),
-                    _workItemView(
-                      title: "Working Hours",
-                      value:
-                          '${data?.staffing?.hours ?? 0} hrs  ${data?.staffing?.minutes ?? 0} mins',
-                    ),
-                  ],
-                ),
-              );
-            },
           ),
         ],
       ),

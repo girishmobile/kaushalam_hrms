@@ -189,7 +189,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   ),
                   SizedBox(height: 4),
                   SizedBox(
-                    height: 90,
+                    height: 100,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
@@ -221,7 +221,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   ),
                   SizedBox(height: 4),
                   SizedBox(
-                    height: 90,
+                    height: 110,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
@@ -261,10 +261,17 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                     ),
                   ),
                   Expanded(
-                    child: _buildItem(title: "Late", value:  "${provider.attendanceModel?.lateDays ?? 0} Days"),
+                    child: _buildItem(
+                      title: "Late",
+                      value: "${provider.attendanceModel?.lateDays ?? 0} Days",
+                    ),
                   ),
                   Expanded(
-                    child: _buildItem(title: "Absent", value:  "${provider.attendanceModel?.absentDays ?? 0} Days"),
+                    child: _buildItem(
+                      title: "Absent",
+                      value:
+                          "${provider.attendanceModel?.absentDays ?? 0} Days",
+                    ),
                   ),
                 ],
               ),
@@ -272,10 +279,17 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: _buildItem(title: "Half Days", value:"${provider.attendanceModel?.halfDays ?? 0} Days"),
+                    child: _buildItem(
+                      title: "Half Days",
+                      value: "${provider.attendanceModel?.halfDays ?? 0} Days",
+                    ),
                   ),
                   Expanded(
-                    child: _buildItem(title: "Worked hours", value: '${provider.attendanceModel?.empStaffing?['hours'] ?? 0} hr  ${provider.attendanceModel?.empStaffing?['minutes'] ?? 0} mins'),
+                    child: _buildItem(
+                      title: "Worked hours",
+                      value:
+                          '${provider.attendanceModel?.empStaffing?['hours'] ?? 0} hr  ${provider.attendanceModel?.empStaffing?['minutes'] ?? 0} mins',
+                    ),
                   ),
                   const Expanded(
                     child: SizedBox(),
@@ -298,13 +312,13 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     return GestureDetector(
       onTap: onTap,
       child: appViewEffect(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(12),
         child: Row(
           spacing: 4,
 
           children: [
             Icon(icon, color: Colors.black54),
-            loadSubText(title: title, fontColor: Colors.black54,fontSize: 12),
+            loadSubText(title: title, fontColor: Colors.black54),
             Spacer(),
             if (showArrow) appForwardIcon(),
           ],

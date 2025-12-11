@@ -47,7 +47,7 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
 
   Future<void> initializeTodayAttendance() async {
     DateTime now = DateTime.now();
-  //  DateTime start = DateTime(now.year, now.month, now.day);
+    //  DateTime start = DateTime(now.year, now.month, now.day);
     DateTime end = DateTime(now.year, now.month, now.day, 23, 59, 59);
     DateTime start = DateTime(now.year, now.month, 1);
     setSelectedDateRange("This Month");
@@ -57,6 +57,7 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
   void handleDateRangeSelection(BuildContext context, String value) async {
     DateTime start;
     DateTime end;
+
     if (value == "Custom Date") {
       final config = CalendarDatePicker2WithActionButtonsConfig(
         calendarType: CalendarDatePicker2Type.range,
@@ -91,8 +92,8 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
 
         setCustomDateRange(DateTimeRange(start: start, end: end));
         setSelectedDateRange(
-          "${start.toLocal().toString().split(' ')[0]} To ${end.toLocal().toString().split(' ')[0]}",
-          // "${start.day}-${start.month}-${start.year} To ${end.day}-${end.month}-${end.year}",
+          //"${start.toLocal().toString().split(' ')[0]} To ${end.toLocal().toString().split(' ')[0]}",
+          "${start.day}-${start.month}-${start.year} To ${end.day}-${end.month}-${end.year}",
         );
 
         await _fetchAttendance(
@@ -126,10 +127,10 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
             59,
           ).subtract(Duration(days: 1));
           break;
-        case "Last 7 Days":
+        case "Last 7 days":
           start = now.subtract(Duration(days: 6));
           break;
-        case "Last 30 Days":
+        case "Last 30 days":
           start = now.subtract(Duration(days: 29));
           break;
         case "This Month":
@@ -240,8 +241,8 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
       },
       {
         "title": "Late",
-        "value": (leave?.lateDays ?? 0).toInt(),
-        "desc": '% (${leave?.lateDaysRatio} Days)',
+        "value": (leave?.lateDaysRatio ?? 0).toInt(),
+        "desc": '% (${leave?.lateDays} Days)', //
         "color": const Color(0xFFFF9800), // Orange
         "icon": Icons.access_time_outlined,
       },
@@ -262,14 +263,18 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
       },
       {
         "title": "Total Office",
-        "value": leave?.requiredStaffing?.minutes==0?'${leave?.requiredStaffing?.hours ?? 0} hrs':'${leave?.requiredStaffing?.hours ?? 0} hrs ${leave?.requiredStaffing?.minutes ?? 0} mins ',
+        "value": leave?.requiredStaffing?.minutes == 0
+            ? '${leave?.requiredStaffing?.hours ?? 0} hrs'
+            : '${leave?.requiredStaffing?.hours ?? 0} hrs ${leave?.requiredStaffing?.minutes ?? 0} mins ',
         "desc": '',
         "color": const Color(0xFF03A9F4), // Light Blue
         "icon": Icons.pie_chart_outline,
       },
       {
         "title": "Total worked",
-        "value": leave?.empStaffing?.minutes==0?'${leave?.empStaffing?.hours ?? 0} hrs':'${leave?.empStaffing?.hours ?? 0} hrs ${leave?.empStaffing?.minutes ?? 0} mins ',
+        "value": leave?.empStaffing?.minutes == 0
+            ? '${leave?.empStaffing?.hours ?? 0} hrs'
+            : '${leave?.empStaffing?.hours ?? 0} hrs ${leave?.empStaffing?.minutes ?? 0} mins ',
         "desc": '',
         "color": const Color(0xFF009688), // Teal
         "icon": Icons.trending_up,
@@ -281,7 +286,7 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
         "color": const Color(0xFF673AB7), // Deep Purple
         "icon": Icons.groups_outlined,
       },
-     /* if (leave?.requiredStaffing != null)
+      /* if (leave?.requiredStaffing != null)
         {
           "title": "Required Staffing",
           "value":
@@ -291,7 +296,7 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
           "color": const Color(0xFF2196F3), // Blue
           "icon": Icons.group_add_outlined,
         },*/
-     /* if (leave?.empStaffing != null)
+      /* if (leave?.empStaffing != null)
         {
           "title": "Employee Staffing",
           "value":
