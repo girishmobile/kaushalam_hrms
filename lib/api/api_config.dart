@@ -3,10 +3,11 @@
 import 'package:neeknots_admin/utility/secure_storage.dart';
 
 class ApiConfig {
-  static String BaseUrl = "https://redefinecommerce.net/krms/backend/api";
+ // static String BaseUrl = "https://redefinecommerce.net/krms/backend/api";
+  static String BaseUrl = "https://www.kaushalam.info/backend/api";
 
-  static String imageBaseUrl =
-      "https://redefinecommerce.net/krms/backend/public/upload/";
+  //static String imageBaseUrl = "https://redefinecommerce.net/krms/backend/public/upload/";
+  static String imageBaseUrl = "https://www.kaushalam.info/backend/public/upload/";
 
   //End point
   static String loginUrl = "$BaseUrl/login";

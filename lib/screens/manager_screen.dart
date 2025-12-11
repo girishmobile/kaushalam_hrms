@@ -162,7 +162,9 @@ class ManagerScreen extends StatelessWidget {
           children: [
             Icon(icon, color: iconColor),
             Expanded(
-              child: loadSubText(title: title, fontColor: Colors.black54),
+              child: loadSubText(
+                  fontSize: 12,
+                  title: title, fontColor: Colors.black54),
             ),
 
             appForwardIcon(),

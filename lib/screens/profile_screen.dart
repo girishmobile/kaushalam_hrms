@@ -25,16 +25,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    init();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Provider.of<ProfileProvider>(
-        context,
-        listen: false,
-      ).loadProfileFromCache();
-    });
-    setState(() {});
   }
-
+void init(){
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+    await Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).loadProfileFromCache();
+  });
+  setState(() {});
+}
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -46,86 +48,91 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     });
     return AppScaffold(
-      child: Consumer<ProfileProvider>(
-        builder: (context, provider, child) {
-          return Stack(
-            children: [
-              ListView(
-                padding: EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  top: appTopPadding(context),
-                  bottom: appBottomPadding(context),
-                ),
-                children: [
-                  Consumer<ProfileProvider>(
-                    builder: (_, profileProvider, _) {
-                      return appProfileImage(
-                        context: context,
-                        imageUrl: widget.isCurrentUser
-                            ? "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}"
-                            : "${ApiConfig.imageBaseUrl}${profileProvider.imageUrl}",
-                        radius: 60,
-                        isEdit: widget.isCurrentUser,
-                      );
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  loadTitleText(
-                    title:
-                        "${provider.profileModel?.firstname ?? '-'} ${provider.profileModel?.lastname ?? '-'}",
-                    textAlign: TextAlign.center,
-                  ),
-                  loadSubText(
-                    title: provider.profileModel?.designation?.name ?? '-',
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 32),
-                  _builRowTitle(
-                    icon: Icons.person_outline_outlined,
-                    label: "Basic Information",
-                  ),
-                  SizedBox(height: 12),
-                  _buildPersonalInfo(provider: provider),
-                  SizedBox(height: 24),
-                  _builRowTitle(
-                    icon: Icons.account_balance_outlined,
-                    label: "Company Relations",
-                  ),
-                  SizedBox(height: 12),
-                  _buildCompnayInfo(provider: provider),
-                  SizedBox(height: 24),
-                  _builRowTitle(
-                    icon: Icons.call_outlined,
-                    label: "Contact Information",
-                  ),
-                  SizedBox(height: 12),
-                  _buildContactInfo(provider: provider),
-                  SizedBox(height: 24),
-                  _builRowTitle(icon: Icons.book_outlined, label: "Document"),
-                  SizedBox(height: 12),
-                  _buildDocuments(provider: provider),
-                  SizedBox(height: 24),
-                  _builRowTitle(
-                    icon: Icons.share_outlined,
-                    label: "Social Network",
-                  ),
-                  SizedBox(height: 12),
-                  _buildSocial(provider: provider),
-                  SizedBox(height: 24),
-                  gradientButton(title: "LOGOUT", onPressed: () {}),
-                ],
-              ),
-              appNavigationBar(
-                title: "PROFILE",
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
-            ],
-          );
+      child: commonRefreshIndicator(
+        onRefresh: ()async{
+          init();
         },
+        child: Consumer<ProfileProvider>(
+          builder: (context, provider, child) {
+            return Stack(
+              children: [
+                ListView(
+                  padding: EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    top: appTopPadding(context),
+                    bottom: appBottomPadding(context),
+                  ),
+                  children: [
+                    Consumer<ProfileProvider>(
+                      builder: (_, profileProvider, _) {
+                        return appProfileImage(
+                          context: context,
+                          imageUrl: widget.isCurrentUser
+                              ? "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}"
+                              : "${ApiConfig.imageBaseUrl}${profileProvider.imageUrl}",
+                          radius: 60,
+                          isEdit: widget.isCurrentUser,
+                        );
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    loadTitleText(
+                      title:
+                          "${provider.profileModel?.firstname ?? '-'} ${provider.profileModel?.lastname ?? '-'}",
+                      textAlign: TextAlign.center,
+                    ),
+                    loadSubText(
+                      title: provider.profileModel?.designation?.name ?? '-',
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 32),
+                    _builRowTitle(
+                      icon: Icons.person_outline_outlined,
+                      label: "Basic Information",
+                    ),
+                    SizedBox(height: 12),
+                    _buildPersonalInfo(provider: provider),
+                    SizedBox(height: 24),
+                    _builRowTitle(
+                      icon: Icons.account_balance_outlined,
+                      label: "Company Relations",
+                    ),
+                    SizedBox(height: 12),
+                    _buildCompnayInfo(provider: provider),
+                    SizedBox(height: 24),
+                    _builRowTitle(
+                      icon: Icons.call_outlined,
+                      label: "Contact Information",
+                    ),
+                    SizedBox(height: 12),
+                    _buildContactInfo(provider: provider),
+                    SizedBox(height: 24),
+                    _builRowTitle(icon: Icons.book_outlined, label: "Document"),
+                    SizedBox(height: 12),
+                    _buildDocuments(provider: provider),
+                    SizedBox(height: 24),
+                    _builRowTitle(
+                      icon: Icons.share_outlined,
+                      label: "Social Network",
+                    ),
+                    SizedBox(height: 12),
+                    _buildSocial(provider: provider),
+                    SizedBox(height: 24),
+                    gradientButton(title: "LOGOUT", onPressed: () {}),
+                  ],
+                ),
+                appNavigationBar(
+                  title: "PROFILE",
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -134,7 +141,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Row(
       spacing: 4,
       children: [
-        appCircleIcon(icon: icon, gradient: appGradient()),
+        appCircleIcon(
+
+            icon: icon, gradient: appGradient()),
         appGradientText(
           text: label,
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),

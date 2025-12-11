@@ -15,8 +15,11 @@ import 'package:neeknots_admin/screens/calendar_screen.dart';
 import 'package:neeknots_admin/screens/home_screen.dart';
 import 'package:neeknots_admin/screens/my_kpi_screen.dart';
 import 'package:neeknots_admin/screens/setting_screen.dart';
+import 'package:neeknots_admin/utility/image_utils.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
+
+import '../utility/secure_storage.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -34,6 +37,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final user = await SecureStorage.getUser();
+      Map<String, dynamic> body = {"employee_id": user?.id};
+
+      await  context.read<ProfileProvider>().getUserProfile(
+        body: body,
+        isCurrentUser: true,
+      );
       await Provider.of<ProfileProvider>(
         context,
         listen: false,
@@ -84,10 +94,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }) {
     return Consumer<AppProvider>(
       builder: (context, provider, child) {
-        final fullImageUrl =
-            (provider.profileImage != null && provider.profileImage!.isNotEmpty)
-            ? "${ApiConfig.imageBaseUrl}${provider.profileImage}"
-            : hostImage;
+
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Row(
@@ -135,8 +142,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ), //loadAssetImage(name: headerlogo, height: 26)
 
               appCircleIcon(
-                icon: Icons.notifications_outlined,
+              //  icon: Icons.notifications_outlined,
 
+                customIcon: commonPrefixIcon(image: icNotification),
                 gradient: appGradient(),
                 iconSize: 24,
                 onTap: () {
@@ -227,10 +235,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Container(
           padding: padding ?? const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: overlayColor.withOpacity(opacity),
+            color: overlayColor.withValues(alpha: opacity),
             borderRadius: BorderRadius.circular(borderRadius),
             border: Border.all(
-              color: borderColor.withOpacity(0.4),
+              color: borderColor.withValues(alpha: 0.4),
               width: borderWidth,
             ),
           ),
@@ -295,7 +303,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 );
 
                 if (refresh == true) {
-                  print("back to Dashboard");
                   // user is employee
                   final emp = context.read<EmpProvider>();
                   final app = context.read<AppProvider>();

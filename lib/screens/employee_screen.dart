@@ -189,7 +189,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   ),
                   SizedBox(height: 4),
                   SizedBox(
-                    height: 100,
+                    height: 90,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
@@ -221,7 +221,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   ),
                   SizedBox(height: 4),
                   SizedBox(
-                    height: 110,
+                    height: 90,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
@@ -298,13 +298,13 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     return GestureDetector(
       onTap: onTap,
       child: appViewEffect(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(10),
         child: Row(
           spacing: 4,
 
           children: [
             Icon(icon, color: Colors.black54),
-            loadSubText(title: title, fontColor: Colors.black54),
+            loadSubText(title: title, fontColor: Colors.black54,fontSize: 12),
             Spacer(),
             if (showArrow) appForwardIcon(),
           ],

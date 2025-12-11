@@ -53,12 +53,12 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
   void clearProfile() {
-    _profileModel = null;
+  //  _profileModel = null;
     notifyListeners();
   }
   Future<void> getUserProfile({required Map<String, dynamic> body,required bool isCurrentUser}) async {
     _setLoading(true);
-    _profileModel = null;   // reset the model
+   // _profileModel = null;   // reset the model
     _imageUrl = null;   // reset the model
     notifyListeners();
 
@@ -71,8 +71,8 @@ class ProfileProvider extends ChangeNotifier {
       );
 
       if (globalStatusCode == 200) {
-        final decoded = jsonDecode(response);
-        _profileModel = ProfileModel.fromJson(decoded);
+
+        _profileModel = ProfileModel.fromJson(json.decode(response));
         setNetworkImage(
           '${ApiConfig.imageBaseUrl}/${_profileModel?.profileImage ?? ''}',
         );
@@ -111,6 +111,7 @@ class ProfileProvider extends ChangeNotifier {
           },
         };
 
+        //print('==formattedJson=${formattedJson}');
         if(isCurrentUser){
           final userModel = UserModel.fromLocalJson1(
             Map<String, dynamic>.from(formattedJson),
@@ -130,7 +131,7 @@ class ProfileProvider extends ChangeNotifier {
         _setLoginSuccess(false);
       }
     } catch (e) {
-      print("error:- $e");
+
       _setLoginSuccess(false);
     }
   }
@@ -182,7 +183,9 @@ class ProfileProvider extends ChangeNotifier {
           _profileModel!,
           fileName,
         );
-        await updateProfileData(body: requestBody,context: context);
+
+
+          await updateProfileData(body: requestBody,context: context);
 
         _setLoading(false);
       } else {
@@ -214,14 +217,14 @@ class ProfileProvider extends ChangeNotifier {
       ) {
     return {
       "id": profile.id,
-      "spouse_dob": _formatDate(profile.spouseDob),
-      "child1_dob": _formatDate(profile.child1Dob),
-      "joining_date": _formatDate(profile.joiningDate),
+      "spouse_dob": _formatDate(profile.spouseDob?.date),
+      "child1_dob": _formatDate(profile.child1Dob?.date),
+      "joining_date": _formatDate(profile.joiningDate?.date),
       "increment_date": _formatDate(profile.incrementDate),
-      "probation_end_date": _formatDate(profile.probationEndDate),
+      "probation_end_date": _formatDate(profile.probationEndDate?.date),
       "exit_date": _formatDate(profile.exitDate),
-      "date_of_birth": _formatDate(profile.dateOfBirth),
-      "marriage_anniversary_date": _formatDate(profile.marriageAnniversaryDate),
+      "date_of_birth": _formatDate(profile.dateOfBirth?.date),
+      "marriage_anniversary_date": _formatDate(profile.marriageAnniversaryDate?.date),
       "passport_issue_date": _formatDate(profile.passportIssueDate),
       "passport_expiry_date": _formatDate(profile.passportExpiryDate),
       "visa_issue_date": _formatDate(profile.visaIssueDate),

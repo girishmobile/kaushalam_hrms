@@ -18,6 +18,10 @@ const String icMenuProfile="$iconDashboardPath/user.png";
 const String icMenuAttendance="$iconDashboardPath/attendance.png";
 const String icMenuCalender="$iconDashboardPath/calenders.png";
 const String icMenuUser="$iconDashboardPath/user.png";
+const String icNotification="$iconDashboardPath/ic_bell.png";
+const String icEmployee="$iconDashboardPath/employee.png";
+const String icHours="$iconDashboardPath/clock.png";
+const String icHotline="$iconDashboardPath/street_view.png";
 
 const String icEdit="$iconDashboardPath/edit.png";
 const String icGirl="$iconDashboardPath/ic_girl_dummy.jpg";

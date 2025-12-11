@@ -4,6 +4,7 @@ import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/provider/app_provider.dart';
 import 'package:neeknots_admin/provider/setting_provider.dart';
+import 'package:neeknots_admin/utility/image_utils.dart';
 import 'package:neeknots_admin/utility/secure_storage.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +73,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   SizedBox(height: 32),
                   _buildRowItem(
                     title: "Edit Profile",
-                    icon: Icons.edit_outlined,
+                    icon: icMenuProfile,
                     onTap: () =>
                         /*  Navigator.pushNamed(context, RouteName.editProfilePage),*/
                         Navigator.pushNamed(
@@ -89,7 +90,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
                   _buildRowItem(
                     title: "Change Password",
-                    icon: Icons.lock_outline,
+                    icon: icPassword,
                     onTap: () => Navigator.pushNamed(
                       context,
                       RouteName.changePasswordPage,
@@ -99,7 +100,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
                   _buildRowItem(
                     title: "My Hours",
-                    icon: Icons.watch_later_outlined,
+                    icon: icHours,
                     onTap: () =>
                         Navigator.pushNamed(context, RouteName.myHoursPage),
                   ),
@@ -107,14 +108,14 @@ class _SettingScreenState extends State<SettingScreen> {
 
                   _buildRowItem(
                     title: "Employees",
-                    icon: Icons.people_outline_outlined,
+                    icon: icEmployee,
                     onTap: () =>
                         Navigator.pushNamed(context, RouteName.allEmplyeePage),
                   ),
                   const SizedBox(height: 12),
                   _buildRowItem(
                     title: "Hotline",
-                    icon: Icons.support_agent,
+                    icon: icHotline,
                     onTap: () =>
                         Navigator.pushNamed(context, RouteName.hotlineScreen),
                   ),
@@ -149,7 +150,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   Widget _buildRowItem({
     required String title,
-    required IconData icon,
+    required String icon,
     VoidCallback? onTap,
   }) {
     return GestureDetector(
@@ -157,10 +158,11 @@ class _SettingScreenState extends State<SettingScreen> {
       child: appViewEffect(
         padding: const EdgeInsets.all(16),
         child: Row(
-          spacing: 4,
+          spacing: 8,
 
           children: [
-            Icon(icon, color: Colors.black54),
+            commonPrefixIcon(image: icon),
+            //Icon(icon, color: Colors.black54),
             loadSubText(title: title, fontColor: Colors.black54),
             Spacer(),
             appForwardIcon(),

@@ -27,6 +27,7 @@ double rightPadding = 16;
 
 Widget appCircleIcon({
   IconData? icon,
+  Widget? customIcon,          // <-- NEW (icon/text/image ANY widget)
   double? iconSize = 28,
   VoidCallback? onTap,
   Color? iconColor = Colors.white60, // fallback if gradient is null
@@ -34,13 +35,52 @@ Widget appCircleIcon({
   String? text,
   Color? borderColor,
 }) {
+  Widget finalChild;
+
+  if (customIcon != null) {
+    finalChild = customIcon; // user custom widget
+  } else if (icon != null) {
+      finalChild = ShaderMask(
+      shaderCallback: (bounds) {
+        return gradient?.createShader(
+          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+        ) ??
+            LinearGradient(
+              colors: [?iconColor, ?iconColor],
+            ).createShader(
+              Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+            );
+      },
+      child: Icon(
+        icon,
+        size: iconSize,
+        color: Colors.white, // white needed for shader
+      ),
+    );
+  } else {
+    finalChild = Text(
+      (text != null && text.isNotEmpty) ? text[0].toUpperCase() : "?",
+      style: TextStyle(
+        foreground: gradient != null
+            ? (Paint()
+          ..shader = gradient!.createShader(
+            const Rect.fromLTWH(0, 0, 200, 70),
+          ))
+            : null,
+        color: gradient == null ? iconColor : null,
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+  }
   return Material(
     color: Colors.transparent,
     child: InkWell(
       customBorder: const CircleBorder(),
       onTap: onTap,
       child: Container(
-        child: icon != null
+        child: finalChild,
+        /*child: icon != null
             ? ShaderMask(
                 shaderCallback: (bounds) {
                   return gradient?.createShader(
@@ -71,7 +111,7 @@ Widget appCircleIcon({
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
-              ),
+              ),*/
       ),
     ),
   );
@@ -957,7 +997,7 @@ Widget birthDayCard({required BirthDay item, double radius = 32}) {
                 title: '${item.firstname} ${item.lastname}',
                 fontSize: 14,
               ),
-              loadSubText(title: item.designation),
+              loadSubText(title: item.designation,fontSize: 12),
               /*  loadSubText(
                 title: getFormattedDate(
                   item.dateOfBirth.date,
