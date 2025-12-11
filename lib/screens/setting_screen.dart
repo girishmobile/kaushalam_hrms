@@ -155,7 +155,7 @@ class _SettingScreenState extends State<SettingScreen> {
     return GestureDetector(
       onTap: onTap,
       child: appViewEffect(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Row(
           spacing: 4,
 

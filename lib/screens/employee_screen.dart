@@ -261,10 +261,17 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                     ),
                   ),
                   Expanded(
-                    child: _buildItem(title: "Late", value:  "${provider.attendanceModel?.lateDays ?? 0} Days"),
+                    child: _buildItem(
+                      title: "Late",
+                      value: "${provider.attendanceModel?.lateDays ?? 0} Days",
+                    ),
                   ),
                   Expanded(
-                    child: _buildItem(title: "Absent", value:  "${provider.attendanceModel?.absentDays ?? 0} Days"),
+                    child: _buildItem(
+                      title: "Absent",
+                      value:
+                          "${provider.attendanceModel?.absentDays ?? 0} Days",
+                    ),
                   ),
                 ],
               ),
@@ -272,10 +279,17 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: _buildItem(title: "Half Days", value:"${provider.attendanceModel?.halfDays ?? 0} Days"),
+                    child: _buildItem(
+                      title: "Half Days",
+                      value: "${provider.attendanceModel?.halfDays ?? 0} Days",
+                    ),
                   ),
                   Expanded(
-                    child: _buildItem(title: "Worked hours", value: '${provider.attendanceModel?.empStaffing?['hours'] ?? 0} hr  ${provider.attendanceModel?.empStaffing?['minutes'] ?? 0} mins'),
+                    child: _buildItem(
+                      title: "Worked hours",
+                      value:
+                          '${provider.attendanceModel?.empStaffing?['hours'] ?? 0} hr  ${provider.attendanceModel?.empStaffing?['minutes'] ?? 0} mins',
+                    ),
                   ),
                   const Expanded(
                     child: SizedBox(),
@@ -298,7 +312,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     return GestureDetector(
       onTap: onTap,
       child: appViewEffect(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Row(
           spacing: 4,
 
