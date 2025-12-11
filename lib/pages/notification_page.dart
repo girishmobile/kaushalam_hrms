@@ -18,7 +18,7 @@ class NotificationPage extends StatelessWidget {
         builder: (context, provider, child) {
           return Stack(
             children: [
-              provider.notifications.isEmpty && !provider.isLoading
+              provider.filteredList.isEmpty && !provider.isLoading
                   ? Center(child: Text("You don’t have any notification yet."))
                   : ListView.separated(
                       padding: EdgeInsets.only(
@@ -31,7 +31,7 @@ class NotificationPage extends StatelessWidget {
                       addRepaintBoundaries: true,
                       cacheExtent: 500,
                       itemBuilder: (context, index) {
-                        final dataModel = provider.notifications[index];
+                        final dataModel = provider.filteredList[index];
                         return RepaintBoundary(
                           child: GestureDetector(
                             onTap: () {},
@@ -41,9 +41,9 @@ class NotificationPage extends StatelessWidget {
                       },
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 8),
-                      itemCount: provider.notifications.length,
+                      itemCount: provider.filteredList.length,
                     ),
-              _searchBar(context),
+              _searchBar(context, provider),
               appNavigationBar(
                 title: "NOTIFICATION",
                 onTap: () {
@@ -58,14 +58,18 @@ class NotificationPage extends StatelessWidget {
     );
   }
 
-  Widget _searchBar(BuildContext context) {
+  Widget _searchBar(BuildContext context, EmpNotifiProvider provider) {
     final safeTop = MediaQuery.of(context).padding.top;
     final topBarHeight = 48.0; // from Dashboard SafeArea Row
     return Positioned(
       top: safeTop + topBarHeight + 8,
       left: 24,
       right: 24,
-      child: appOrangeTextField(hintText: "search", icon: Icon(Icons.search)),
+      child: appOrangeTextField(
+        textController: provider.nameController,
+        hintText: "search",
+        icon: Icon(Icons.search),
+      ),
     );
   }
 }

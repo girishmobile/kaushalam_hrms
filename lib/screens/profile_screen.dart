@@ -26,17 +26,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     init();
-
   }
-void init(){
-  WidgetsBinding.instance.addPostFrameCallback((_) async {
-    await Provider.of<ProfileProvider>(
-      context,
-      listen: false,
-    ).loadProfileFromCache();
-  });
-  setState(() {});
-}
+
+  void init() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      ).loadProfileFromCache();
+    });
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -48,8 +49,8 @@ void init(){
       );
     });
     return AppScaffold(
-      child: commonRefreshIndicator(
-        onRefresh: ()async{
+      child: appRefreshIndicator(
+        onRefresh: () async {
           init();
         },
         child: Consumer<ProfileProvider>(
@@ -128,7 +129,9 @@ void init(){
                     Navigator.pop(context);
                   },
                 ),
-                provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
+                provider.isLoading
+                    ? showProgressIndicator()
+                    : SizedBox.shrink(),
               ],
             );
           },
@@ -141,9 +144,7 @@ void init(){
     return Row(
       spacing: 4,
       children: [
-        appCircleIcon(
-
-            icon: icon, gradient: appGradient()),
+        appCircleIcon(icon: icon, gradient: appGradient()),
         appGradientText(
           text: label,
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),

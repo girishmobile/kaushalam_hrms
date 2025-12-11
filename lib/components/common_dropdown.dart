@@ -32,10 +32,14 @@ class CommonDropdown extends StatelessWidget {
           : null,
       decoration: InputDecoration(
         enabled: enabled,
-        border: commonTextFiledBorder(borderRadius: borderRadius,borderColor: color3.withValues(alpha: 0.05)),
+        border: commonTextFiledBorder(
+          borderRadius: borderRadius,
+          borderColor: color3.withValues(alpha: 0.05),
+        ),
         enabledBorder: commonTextFiledBorder(
-            borderColor: color3.withValues(alpha: 0.5),
-            borderRadius: borderRadius),
+          borderColor: color3.withValues(alpha: 0.5),
+          borderRadius: borderRadius,
+        ),
         focusedBorder: commonTextFiledBorder(borderRadius: borderRadius),
         contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 2),
       ),
@@ -45,7 +49,9 @@ class CommonDropdown extends StatelessWidget {
           ? loadSubText(
               fontSize: 12,
               title: displayText ?? hint ?? '',
-              fontColor: displayText != null ? Colors.black : Colors.grey.shade500,
+              fontColor: displayText != null
+                  ? Colors.black
+                  : Colors.grey.shade500,
               textOverflow: TextOverflow.ellipsis,
             )
           : null,
@@ -53,7 +59,10 @@ class CommonDropdown extends StatelessWidget {
           .map(
             (item) => DropdownMenuItem<String>(
               value: item,
-              child: loadSubText(title: item, textOverflow: TextOverflow.ellipsis),
+              child: loadSubText(
+                title: item,
+                textOverflow: TextOverflow.ellipsis,
+              ),
             ),
           )
           .toList(),

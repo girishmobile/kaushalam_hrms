@@ -50,12 +50,6 @@ class _SettingScreenState extends State<SettingScreen> {
                   top: appTopPadding(context),
                 ),
                 children: [
-                  /*appProfileImage(
-                    isEdit: false,
-                    context: context,
-                    imageUrl: setImagePath(provider.userModel?.profile),
-                    radius: 60,
-                  ),*/
                   Consumer<ProfileProvider>(
                     builder: (_, profileProvider, _) {
                       return appProfileImage(
@@ -130,7 +124,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
                       if (!context.mounted) return;
                       // 🔥 Set page index BEFORE navigation
-                      context.read<AppProvider>().setPageIndex(2);
+                      context.read<AppProvider>().resetApp();
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         RouteName.loginPage,

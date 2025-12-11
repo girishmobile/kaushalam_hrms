@@ -53,7 +53,7 @@ class LoginPage extends StatelessWidget {
                                   // Logo
                                   appOrangeTextField(
                                     hintText: "Employee email",
-                                    icon:commonPrefixIcon(image: icEmail),
+                                    icon: commonPrefixIcon(image: icEmail),
                                     textController: provider.emailController,
                                     keyboardType: TextInputType.emailAddress,
                                     validator: validateEmail,
@@ -117,13 +117,12 @@ class LoginPage extends StatelessWidget {
                                             message: "Login Sccussful",
                                             bgColor: Colors.green,
                                           );
-
+                                          provider.resetState();
                                           Navigator.pushNamedAndRemoveUntil(
                                             context,
                                             RouteName.dashboardScreen,
                                             (route) => false,
                                           );
-                                          provider.resetState();
                                         } else {
                                           showSnackBar(
                                             context,
