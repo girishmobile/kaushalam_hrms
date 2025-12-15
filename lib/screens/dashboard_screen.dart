@@ -162,9 +162,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
 
                         appCircleIcon(
-                        //  icon: Icons.notifications_outlined,
+                         icon: Icons.notifications_outlined,
 
-                          customIcon: commonPrefixIcon(image: icNotification,colorIcon: Colors.black),
+                       //   icon: commonPrefixIcon(image: icNotification,colorIcon: Colors.black),
                           gradient: appGradient(),
                           iconSize: 24,
                          /* onTap: () {
