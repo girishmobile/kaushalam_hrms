@@ -124,12 +124,12 @@ class CalendarProvider extends ChangeNotifier {
 
     final teamMembers = data["leader"] ?? [];
 
-    print('======${teamMembers}');
 
     /// 🔹 LEAVES
     for (var member in teamMembers) {
       final leaveData = member["0"];
       if (leaveData == null) continue;
+
 
       final startDateStr = leaveData["leave_date"]?["date"];
       final endDateStr = leaveData["leave_end_date"]?["date"];

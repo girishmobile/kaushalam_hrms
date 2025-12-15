@@ -29,38 +29,34 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
   @override
   void initState() {
-    super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initData();
+      context.read<EmpProvider>().getUpcomingBirthHodliday();
     });
+
+    super.initState();
+    _initdashboard();
+
+    setState(() {});
   }
 
-  Future<void> _initData() async {
-    final empProvider = context.read<EmpProvider>();
-    final profileProvider = context.read<ProfileProvider>();
-    final notiProvider = context.read<EmpNotifiProvider>();
-
-    // 🔹 Non-dependent API
-    empProvider.getUpcomingBirthHodliday();
-
-    // 🔹 Dependent API
-    final user = await SecureStorage.getUser();
-    if (user != null) {
-      final body = {"employee_id": user.id};
+  Future<void> _initdashboard() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final provider = Provider.of<ProfileProvider>(context, listen: false);
+      final empProvider = Provider.of<EmpNotifiProvider>(
+        context,
+        listen: false,
+      );
+      final user = await SecureStorage.getUser();
+      final body = {"employee_id": user?.id};
 
       await Future.wait([
-        profileProvider.getUserProfile(
-          body: body,
-          isCurrentUser: true,
-        ),
-        profileProvider.loadProfileFromCache(),
-        notiProvider.getEmployeeNotification(),
+        provider.getUserProfile(body: body, isCurrentUser: true),
+        provider.loadProfileFromCache(),
+        empProvider.getEmployeeNotification(),
       ]);
-    }
+    });
   }
 
   @override
@@ -154,43 +150,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Consumer<EmpNotifiProvider>(
                 builder: (context, empProvider, _) {
                   return InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pushNamed(context, RouteName.notificationPage);
                     },
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
-
-                        appCircleIcon(
-                         icon: Icons.notifications_outlined,
-
-                       //   icon: commonPrefixIcon(image: icNotification,colorIcon: Colors.black),
+                        appGradientImage(
+                          imagePath: icNotification,
+                          size: 24,
                           gradient: appGradient(),
-                          iconSize: 24,
-                         /* onTap: () {
-                            Navigator.pushNamed(context, RouteName.notificationPage);
-                          },*/
                         ),
                         Positioned(
-                            right: -2,
-                            top: -3,
-                            child: Container(
-                              decoration: commonBoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.red,
-                              ),
-                              width: 18,
+                          right: -2,
+                          top: -3,
+                          child: Container(
+                            decoration: commonBoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                            width: 18,
 
-                              height: 18,
+                            height: 18,
 
-                              child: Center(
-                                child: loadSubText(title:   empProvider.unreadCount.toString(),fontColor: Colors.white,fontSize: 10),
+                            child: Center(
+                              child: loadSubText(
+                                title: empProvider.unreadCount.toString(),
+                                fontColor: Colors.white,
+                                fontSize: 10,
                               ),
-                            )),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   );
-                }
+                },
               ),
             ],
           ),

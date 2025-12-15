@@ -11,7 +11,6 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      context.read<EmpNotifiProvider>().readAllNotification();
       context.read<EmpNotifiProvider>().getEmployeeNotification();
     });
     return AppScaffold(
@@ -19,32 +18,32 @@ class NotificationPage extends StatelessWidget {
         builder: (context, provider, child) {
           return Stack(
             children: [
-              provider.notifications.isEmpty && !provider.isLoading
+              provider.filteredList.isEmpty && !provider.isLoading
                   ? Center(child: Text("You don’t have any notification yet."))
                   : ListView.separated(
-                      padding: EdgeInsets.only(
-                        left: 24,
-                        right: 24,
-                        top: appTopPadding(context),
-                        bottom: appBottomPadding(context),
-                      ),
-                      addAutomaticKeepAlives: false,
-                      addRepaintBoundaries: true,
-                      cacheExtent: 500,
-                      itemBuilder: (context, index) {
-                        final dataModel = provider.notifications[index];
-                        return RepaintBoundary(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: notificationCard(dataModel),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 8),
-                      itemCount: provider.notifications.length,
+                padding: EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                  top: listTop(context),
+                  bottom: appBottomPadding(context),
+                ),
+                addAutomaticKeepAlives: false,
+                addRepaintBoundaries: true,
+                cacheExtent: 500,
+                itemBuilder: (context, index) {
+                  final dataModel = provider.filteredList[index];
+                  return RepaintBoundary(
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: notificationCard(dataModel),
                     ),
-           //   _searchBar(context),
+                  );
+                },
+                separatorBuilder: (context, index) =>
+                const SizedBox(height: 8),
+                itemCount: provider.filteredList.length,
+              ),
+              _searchBar(context, provider),
               appNavigationBar(
                 title: "NOTIFICATION",
                 onTap: () {
@@ -59,14 +58,18 @@ class NotificationPage extends StatelessWidget {
     );
   }
 
-  Widget _searchBar(BuildContext context) {
+  Widget _searchBar(BuildContext context, EmpNotifiProvider provider) {
     final safeTop = MediaQuery.of(context).padding.top;
     final topBarHeight = 48.0; // from Dashboard SafeArea Row
     return Positioned(
       top: safeTop + topBarHeight + 8,
       left: 24,
       right: 24,
-      child: appOrangeTextField(hintText: "search", icon: Icon(Icons.search)),
+      child: appOrangeTextField(
+        textController: provider.nameController,
+        hintText: "search",
+        icon: Icon(Icons.search),
+      ),
     );
   }
 }

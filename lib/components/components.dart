@@ -1821,3 +1821,23 @@ OutlineInputBorder commonTextFiledBorder({
     borderSide: BorderSide(width: 1.1, color: borderColor ?? color3),
   );
 }
+Center commonErrorView({String? text}) {
+  return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 20,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        //commonAssetImage(icNoData, width: 100, height: 100),
+        loadTitleText(
+          textAlign: TextAlign.center,
+          title: text ?? '',
+          fontSize: 16,
+          fontWight: FontWeight.w500,
+          fontColor: Colors.black.withValues(alpha: 0.8),
+        ),
+      ],
+    ),
+  );
+}

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:neeknots_admin/core/router/route_generate.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
+import 'package:neeknots_admin/firebase/fcm_service.dart';
+import 'package:neeknots_admin/firebase/local_notification_service.dart';
 import 'package:neeknots_admin/provider/app_provider.dart';
 import 'package:neeknots_admin/provider/attendance_provider.dart';
 import 'package:neeknots_admin/provider/calendar_provider.dart';
@@ -26,6 +28,7 @@ import 'package:provider/single_child_widget.dart';
 
 import 'firebase/firebase_options.dart';
 import 'firebase/notification_service.dart';
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -33,6 +36,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     "📩 BG Notification received: ${message.messageId}, data: ${message.data}",
   );
 }
+
 Future<void> _initializeFirebase() async {
   int attempts = 0;
   const maxAttempts = 3;
@@ -55,7 +59,7 @@ Future<void> _initializeFirebase() async {
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
-GlobalKey<ScaffoldMessengerState>();
+    GlobalKey<ScaffoldMessengerState>();
 List<SingleChildWidget> providers = [
   ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider()),
   ChangeNotifierProvider<AppProvider>(create: (_) => AppProvider()),
@@ -83,33 +87,39 @@ List<SingleChildWidget> providers = [
 ];
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    // Initialize core services
 
-    await _initializeFirebase();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-    // Initialize notifications after Firebase
-    await NotificationService.initializeApp(navigatorKey: navigatorKey);
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  } catch (e, s) {
-    debugPrint('🔥 Critical initialization error: $e\n$s');
-    // We'll continue to show UI even if services fail
-  }
-  runApp( MyApp( navigatorKey: navigatorKey,));
+  FirebaseMessagingService.registerBackgroundHandler();
+  await LocalNotificationService.init();
+  runApp(MyApp(navigatorKey: navigatorKey));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key,  required this.navigatorKey,});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key, required this.navigatorKey});
   final GlobalKey<NavigatorState> navigatorKey;
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+
+    /// Do NOT await
+    FirebaseMessagingService.instance.initialize();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: providers,
       child: MaterialApp(
         scaffoldMessengerKey: rootScaffoldMessengerKey,
-        navigatorKey: navigatorKey,
-       // showPerformanceOverlay: true,
+        navigatorKey: widget.navigatorKey,
+        // showPerformanceOverlay: true,
         title: 'hrms',
         theme: ThemeData(
           fontFamily: "Poppins",
@@ -123,3 +133,18 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+
+/**
+ * // try {
+  //   // Initialize core services
+  //   await _initializeFirebase();
+  //   // Initialize notifications after Firebase
+  //   await NotificationService.initializeApp(navigatorKey: navigatorKey);
+  //   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // } catch (e, s) {
+  //   debugPrint('🔥 Critical initialization error: $e\n$s');
+  //   // We'll continue to show UI even if services fail
+  // }
+ */

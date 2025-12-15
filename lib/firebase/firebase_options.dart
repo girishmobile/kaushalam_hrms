@@ -16,19 +16,12 @@ class DefaultFirebaseOptions {
         return android;
       case TargetPlatform.iOS:
         return ios;
-
       case TargetPlatform.macOS:
+        return macos;
+      default:
         throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+          'DefaultFirebaseOptions are not supported for this platform.',
         );
-      case TargetPlatform.fuchsia:
-      // TODO: Handle this case.
-      case TargetPlatform.linux:
-      // TODO: Handle this case.
-      case TargetPlatform.windows:
-        return web;
-      // TODO: Handle this case.
     }
   }
 
@@ -57,5 +50,14 @@ class DefaultFirebaseOptions {
     messagingSenderId: "380744735472",
     appId: "1:380744735472:web:d16f75db3520f6b6234035",
     measurementId: "G-1J6ZPSTCE5",
+  );
+  // macOS CONFIG (optional)
+  static const FirebaseOptions macos = FirebaseOptions(
+    iosBundleId: 'com.kaushalam.hrms',
+    apiKey: 'AIzaSyCrN1wqJ5ncSuP9flTISLmtw-Xpzc0x2NE',
+    appId: '1:408577066262:ios:9856a2667938426b10fc37',
+    messagingSenderId: '408577066262',
+    projectId: 'kaushalam-hrms',
+    storageBucket: 'kaushalam-hrms.firebasestorage.app',
   );
 }

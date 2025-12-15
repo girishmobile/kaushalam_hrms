@@ -155,16 +155,14 @@ class ManagerScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: appViewEffect(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Row(
           spacing: 4,
 
           children: [
             Icon(icon, color: iconColor),
             Expanded(
-              child: loadSubText(
-                  fontSize: 12,
-                  title: title, fontColor: Colors.black54),
+              child: loadSubText(title: title, fontColor: Colors.black54),
             ),
 
             appForwardIcon(),

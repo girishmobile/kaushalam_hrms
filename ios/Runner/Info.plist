@@ -37,5 +37,10 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+    <key>FirebaseAppDelegateProxyEnabled</key>
+<false/>
+
+<key>NSUserNotificationUsageDescription</key>
+<string>This app uses notifications.</string>
 </dict>
 </plist>
