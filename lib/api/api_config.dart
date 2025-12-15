@@ -61,6 +61,7 @@ class ApiConfig {
   static String getDepartmentURL = "$BaseUrl/department/get_all_department";
 
   static String getAllEmployeeUrl = "$BaseUrl/datatable/getDatatableUsers";
+  static String realAllNotification = "$BaseUrl/activity_box/readAllNotificationsEmp";
 
   //API header
   static Future<Map<String, String>> getApiHeaders() async {

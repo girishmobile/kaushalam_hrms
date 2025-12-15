@@ -63,7 +63,7 @@ Widget appCircleIcon({
       style: TextStyle(
         foreground: gradient != null
             ? (Paint()
-          ..shader = gradient!.createShader(
+          ..shader = gradient.createShader(
             const Rect.fromLTWH(0, 0, 200, 70),
           ))
             : null,

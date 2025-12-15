@@ -11,6 +11,7 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      context.read<EmpNotifiProvider>().readAllNotification();
       context.read<EmpNotifiProvider>().getEmployeeNotification();
     });
     return AppScaffold(
@@ -24,7 +25,7 @@ class NotificationPage extends StatelessWidget {
                       padding: EdgeInsets.only(
                         left: 24,
                         right: 24,
-                        top: listTop(context),
+                        top: appTopPadding(context),
                         bottom: appBottomPadding(context),
                       ),
                       addAutomaticKeepAlives: false,
@@ -43,7 +44,7 @@ class NotificationPage extends StatelessWidget {
                           const SizedBox(height: 8),
                       itemCount: provider.notifications.length,
                     ),
-              _searchBar(context),
+           //   _searchBar(context),
               appNavigationBar(
                 title: "NOTIFICATION",
                 onTap: () {

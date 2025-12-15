@@ -42,4 +42,25 @@ class EmpNotifiProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
+  Future<void> readAllNotification() async {
+    _setLoading(true);
+    try {
+      final response = await callApi(
+        url: ApiConfig.realAllNotification,
+        method: HttpMethod.get,
+        headers: null,
+      );
+      if (globalStatusCode == 200) {
+
+        _setLoading(false);
+      } else {
+        _setLoading(false);
+      }
+    } catch (e) {
+      _setLoading(false);
+    }
+  }
+  int get unreadCount {
+    return _notifications.where((n) => n.isRead == false).length;
+  }
 }

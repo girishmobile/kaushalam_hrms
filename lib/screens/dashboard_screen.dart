@@ -5,7 +5,6 @@ import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
-import 'package:neeknots_admin/core/constants/string_constant.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/provider/app_provider.dart';
 import 'package:neeknots_admin/provider/emp_provider.dart';
@@ -19,6 +18,7 @@ import 'package:neeknots_admin/utility/image_utils.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/emp_notifi_provider.dart';
 import '../utility/secure_storage.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -29,27 +29,38 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<EmpProvider>().getUpcomingBirthHodliday();
-    });
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final user = await SecureStorage.getUser();
-      Map<String, dynamic> body = {"employee_id": user?.id};
-
-      await  context.read<ProfileProvider>().getUserProfile(
-        body: body,
-        isCurrentUser: true,
-      );
-      await Provider.of<ProfileProvider>(
-        context,
-        listen: false,
-      ).loadProfileFromCache();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initData();
     });
-    setState(() {});
+  }
+
+  Future<void> _initData() async {
+    final empProvider = context.read<EmpProvider>();
+    final profileProvider = context.read<ProfileProvider>();
+    final notiProvider = context.read<EmpNotifiProvider>();
+
+    // 🔹 Non-dependent API
+    empProvider.getUpcomingBirthHodliday();
+
+    // 🔹 Dependent API
+    final user = await SecureStorage.getUser();
+    if (user != null) {
+      final body = {"employee_id": user.id};
+
+      await Future.wait([
+        profileProvider.getUserProfile(
+          body: body,
+          isCurrentUser: true,
+        ),
+        profileProvider.loadProfileFromCache(),
+        notiProvider.getEmployeeNotification(),
+      ]);
+    }
   }
 
   @override
@@ -141,15 +152,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       gradient: appGradient(),
                     ), //loadAssetImage(name: headerlogo, height: 26)
 
-              appCircleIcon(
-              //  icon: Icons.notifications_outlined,
+              Consumer<EmpNotifiProvider>(
+                builder: (context, empProvider, _) {
+                  return InkWell(
+                    onTap: (){
+                      Navigator.pushNamed(context, RouteName.notificationPage);
+                    },
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
 
-                customIcon: commonPrefixIcon(image: icNotification),
-                gradient: appGradient(),
-                iconSize: 24,
-                onTap: () {
-                  Navigator.pushNamed(context, RouteName.notificationPage);
-                },
+                        appCircleIcon(
+                        //  icon: Icons.notifications_outlined,
+
+                          customIcon: commonPrefixIcon(image: icNotification,colorIcon: Colors.black),
+                          gradient: appGradient(),
+                          iconSize: 24,
+                         /* onTap: () {
+                            Navigator.pushNamed(context, RouteName.notificationPage);
+                          },*/
+                        ),
+                        Positioned(
+                            right: -2,
+                            top: -3,
+                            child: Container(
+                              decoration: commonBoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.red,
+                              ),
+                              width: 18,
+
+                              height: 18,
+
+                              child: Center(
+                                child: loadSubText(title:   empProvider.unreadCount.toString(),fontColor: Colors.white,fontSize: 10),
+                              ),
+                            )),
+                      ],
+                    ),
+                  );
+                }
               ),
             ],
           ),
@@ -178,6 +220,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 _buildBottomIcon(
                   context,
                   index: 0,
+                  
                   icon: Icons.calendar_month_outlined,
                   title: "Calendar",
                   size: 24,
@@ -265,6 +308,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           appCircleIcon(
             icon: icon,
+            //customIcon: Image.asset(icCall,width: 24,height: 24,),
             iconSize: size, // ✅ selected = gradient, unselected = grey
             gradient: isSelected ? appGradient() : appOrangeOffGradient(),
           ),

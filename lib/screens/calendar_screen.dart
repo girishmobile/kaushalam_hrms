@@ -18,6 +18,7 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -56,6 +57,53 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
 
               children: [
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                  children: [
+                    loadTitleText(
+                  title:"Calendar View",
+                      fontSize: 14,
+                      fontWight: FontWeight.w600,
+                      fontColor: Colors.black87,
+                    ),
+                    Container(
+                      height: 35,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.black.withValues(alpha: 0.5)),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<CalendarViewType>(
+                          value: provider.selectedType,
+                          icon: Icon(Icons.keyboard_arrow_down, color: Colors.black.withValues(alpha: 0.5)),
+                          items:  [
+                            DropdownMenuItem(
+                              value: CalendarViewType.month,
+                              child: loadSubText(title: "Month",fontSize: 12),
+                            ),
+                            DropdownMenuItem(
+                              value: CalendarViewType.week,
+                              child: loadSubText(title: "Week",fontSize: 12),
+                            ),
+                            DropdownMenuItem(
+                              value: CalendarViewType.twoWeeks,
+                              child: loadSubText(title: "2 Weeks",fontSize: 12),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            if (value != null) {
+                              provider.changeCalendarType(value);
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+
                 _buildTableCalendar(provider: provider),
                 _buildHeader(),
 
@@ -80,6 +128,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 
+
+
   Widget _buildItem({
     required CalendarProvider provider,
     required Map<String, dynamic> event,
@@ -98,7 +148,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         child: Row(
           spacing: 8,
           children: [
-            event['type'] == "Birthday"
+            event['type'] == "birthday"
                 ? appCircleImage(
                     borderColor: color3,
                     iconColor: color3,
@@ -140,6 +190,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     final DateTime lastDay = DateTime(DateTime.now().year, 12, 31);
     return TableCalendar(
+
+      calendarFormat: provider.calendarFormat,
+      //   calendarFormat: CalendarFormat.month,
       headerStyle: HeaderStyle(
         leftChevronIcon: Icon(Icons.chevron_left, color: color3),
         rightChevronIcon:
@@ -166,35 +219,60 @@ class _CalendarScreenState extends State<CalendarScreen> {
           _focusedDay = focusedDay;
         });
       },
+
       calendarBuilders: CalendarBuilders(
-        markerBuilder: (context, date, events) {
-          if (events.isEmpty) return const SizedBox();
+        defaultBuilder: (context, day, focusedDay) {
+          final events = provider.getEventsForDay(day);
+          if (events.isEmpty) return null;
 
-          final firstEvent = events.first;
-          if (firstEvent is! Map<String, dynamic>) {
-            return const SizedBox();
+          Map<String, dynamic>? attn;
+          bool hasLeave = false;
+          bool hasBirthday = false;
+
+          for (var e in events) {
+            if (e["type"] == "attendance") attn = e;
+            if (e["type"] == "leave") hasLeave = true;
+            if (e["type"] == "birthday") hasBirthday = true;
           }
 
-          final type = firstEvent['type']?.toString() ?? '';
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
 
-          Color color;
-          if (type == 'leave') {
-            color = Colors.red;
-          } else if (type == 'attendance') {
-            color = Colors.green;
-          } else {
-            color = Colors.blue;
-          }
+              loadSubText(title: '${day.day}' ,fontSize: 12,fontColor: Colors.black),
 
-          return Container(
-            width: 8,
-            height: 8,
-            margin: const EdgeInsets.only(top: 2),
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              const SizedBox(height: 4),
+
+              /// 🟢 Attendance hours text
+              if (attn != null)
+                Container(
+                    decoration: commonBoxDecoration(
+                      color: Colors.green.withValues(alpha: 0.2)
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 5,vertical: 2),
+                    child: loadSubText(title: '${attn["hours"]}h ${attn["minutes"]}m' ,fontSize: 8,   fontColor: Colors.black,fontWight: FontWeight.w400)),
+
+              const SizedBox(height: 2),
+
+              /// 🔴 Leave + 🟣 Birthday dots
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (hasLeave)
+                    _dot(Colors.red),
+                  if (hasBirthday)
+                    _dot(Colors.blue),
+                  if (attn != null)
+                    _dot(Colors.green),
+                ],
+              ),
+            ],
           );
         },
       ),
+
       calendarStyle: CalendarStyle(
+        markersMaxCount: 0, // ❌ disable default black markers
         selectedDecoration: BoxDecoration(
           color: btnColor2,
           shape: BoxShape.circle,
@@ -212,7 +290,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
       lastDay: lastDay,
     );
   }
-
+  Widget _dot(Color color) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 1),
+      width: 6,
+      height: 6,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+      ),
+    );
+  }
   Widget _buildHeader() {
     return Column(
       children: [
@@ -222,7 +310,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
           children: [
             rowItem(color: Colors.red, label: 'Leave', onTaped: () {}),
-            //rowItem(color: Colors.green, label: 'Attendance', onTaped: () {}),
+            rowItem(color: Colors.green, label: 'Attendance', onTaped: () {}),
             rowItem(color: Colors.blue, label: 'Birthday', onTaped: () {}),
           ],
         ),
