@@ -8,6 +8,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "app_settings",
+      "rootUri": "file:///Users/girish/.pub-cache/hosted/pub.dev/app_settings-7.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "args",
       "rootUri": "file:///Users/girish/.pub-cache/hosted/pub.dev/args-2.7.0",
       "packageUri": "lib/",
@@ -81,7 +87,7 @@
     },
     {
       "name": "crypto",
-      "rootUri": "file:///Users/girish/.pub-cache/hosted/pub.dev/crypto-3.0.6",
+      "rootUri": "file:///Users/girish/.pub-cache/hosted/pub.dev/crypto-3.0.7",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -483,13 +489,13 @@
     },
     {
       "name": "path_provider_android",
-      "rootUri": "file:///Users/girish/.pub-cache/hosted/pub.dev/path_provider_android-2.2.20",
+      "rootUri": "file:///Users/girish/.pub-cache/hosted/pub.dev/path_provider_android-2.2.22",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
     {
       "name": "path_provider_foundation",
-      "rootUri": "file:///Users/girish/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.3",
+      "rootUri": "file:///Users/girish/.pub-cache/hosted/pub.dev/path_provider_foundation-2.5.1",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },

@@ -5,7 +5,6 @@ import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
-import 'package:neeknots_admin/core/constants/string_constant.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/provider/app_provider.dart';
 import 'package:neeknots_admin/provider/emp_provider.dart';
@@ -34,22 +33,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<EmpProvider>().getUpcomingBirthHodliday();
     });
+
     super.initState();
+    _initdashboard();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final user = await SecureStorage.getUser();
-      Map<String, dynamic> body = {"employee_id": user?.id};
-
-      await context.read<ProfileProvider>().getUserProfile(
-        body: body,
-        isCurrentUser: true,
-      );
-      await Provider.of<ProfileProvider>(
-        context,
-        listen: false,
-      ).loadProfileFromCache();
-    });
     setState(() {});
+  }
+
+  Future<void> _initdashboard() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final provider = Provider.of<ProfileProvider>(context, listen: false);
+      final user = await SecureStorage.getUser();
+      final body = {"employee_id": user?.id};
+
+      await Future.wait([
+        provider.getUserProfile(body: body, isCurrentUser: true),
+        provider.loadProfileFromCache(),
+      ]);
+    });
   }
 
   @override

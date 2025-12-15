@@ -1,4 +1,6 @@
 PODS:
+  - app_settings (6.1.2):
+    - Flutter
   - Firebase/CoreOnly (12.4.0):
     - FirebaseCore (~> 12.4.0)
   - Firebase/Messaging (12.4.0):
@@ -85,6 +87,7 @@ PODS:
   - TOCropViewController (2.8.0)
 
 DEPENDENCIES:
+  - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
@@ -110,6 +113,8 @@ SPEC REPOS:
     - TOCropViewController
 
 EXTERNAL SOURCES:
+  app_settings:
+    :path: ".symlinks/plugins/app_settings/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_messaging:
@@ -132,6 +137,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
 
 SPEC CHECKSUMS:
+  app_settings: 9217ccbe946aa9a3751b5459dcf50dabc87517b2
   Firebase: f07b15ae5a6ec0f93713e30b923d9970d144af3e
   firebase_core: e6b8bb503b7d1d9856e698d4f193f7b414e6bf1f
   firebase_messaging: fc7b6af84f4cd885a4999f51ea69ef20f380d70d
@@ -153,6 +159,6 @@ SPEC CHECKSUMS:
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   TOCropViewController: 797deaf39c90e6e9ddd848d88817f6b9a8a09888
 
-PODFILE CHECKSUM: 3c63482e143d1b91d2d2560aee9fb04ecc74ac7e
+PODFILE CHECKSUM: 333efbbf12de0e18efdf9c969a9ab5d335232de6
 
 COCOAPODS: 1.16.2
