@@ -37,7 +37,6 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
     }
 
     await provider.getKPIList(date: provider.selectedYear);
-
   }
 
   @override
@@ -86,10 +85,8 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
     );
   }
 
-  Widget _buildGridItem({required int index, required MyKpiModel item}) {
-    final num? percent = item.percent ;
-
-    const List<String> monthNames = [
+  String getMonthName(int month) {
+    const names = [
       "January",
       "February",
       "March",
@@ -103,6 +100,12 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
       "November",
       "December",
     ];
+    return names[month - 1];
+  }
+
+  Widget _buildGridItem({required int index, required MyKpiModel item}) {
+    final num? percent = item.percent;
+
     return appViewEffect(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,7 +119,7 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
             iconSize: 36,
           ),
           Text(
-            monthNames[index],
+            getMonthName(item.month?.toInt() ?? 1),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -197,8 +200,6 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
       ),
     );
   }
-
-
 
   void showYearPopover({
     required BuildContext context,

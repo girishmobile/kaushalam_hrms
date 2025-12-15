@@ -2,8 +2,8 @@
 
 class EmpNotificationModel {
   int? id;
-  String? title;
-  String? details;
+  String title;
+  String details;
   bool? isRead;
   NotiDate? createdAt;
   NotiDate? updatedAt;
@@ -11,8 +11,8 @@ class EmpNotificationModel {
 
   EmpNotificationModel({
     this.id,
-    this.title,
-    this.details,
+    required this.title,
+    required this.details,
     this.isRead,
     this.createdAt,
     this.updatedAt,

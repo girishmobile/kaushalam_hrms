@@ -105,7 +105,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }) {
     return Consumer<AppProvider>(
       builder: (context, provider, child) {
-
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Row(
@@ -206,11 +205,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: SafeArea(
         bottom: true,
         child: Container(
-
           margin: const EdgeInsets.symmetric(horizontal: 24),
 
           child: _buildGlassEffect(
-            overlayColor: Colors.orange,
+            // overlayColor: Colors.white,
             borderRadius: 45,
             borderColor: Colors.orange,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -220,9 +218,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 _buildBottomIcon(
                   context,
                   index: 0,
-                  
+
                   icon: Icons.calendar_month_outlined,
                   title: "Calendar",
+                  imagePath: icMenuCalender,
                   size: 24,
                 ),
                 _buildBottomIcon(
@@ -230,28 +229,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   index: 1,
                   icon: Icons.grade_outlined,
                   title: "My KPI",
-                  size: 28,
+                  imagePath: icMenuKPI,
+                  size: 20,
                 ),
                 _buildBottomIcon(
                   context,
                   index: 2,
                   icon: Icons.home_outlined,
                   title: "Home",
-                  size: 28,
+                  imagePath: icMenuHome,
+                  size: 20,
                 ),
                 _buildBottomIcon(
                   context,
                   index: 3,
                   icon: Icons.perm_contact_cal_outlined,
                   title: "Attendance",
-                  size: 24,
+                  imagePath: icMenuAttendance,
+                  size: 20,
                 ),
                 _buildBottomIcon(
                   context,
                   index: 4,
                   icon: Icons.settings_outlined,
                   title: "Setting",
-                  size: 28,
+                  imagePath: icSetting,
+                  size: 20,
                 ),
               ],
             ),
@@ -296,6 +299,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required int index,
     required IconData icon,
     required String title,
+    required String imagePath,
     double? size,
   }) {
     final provider = context.watch<AppProvider>();
@@ -306,10 +310,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          appCircleIcon(
-            icon: icon,
-            //customIcon: Image.asset(icCall,width: 24,height: 24,),
-            iconSize: size, // ✅ selected = gradient, unselected = grey
+          // appCircleIcon(
+          //   icon: icon,
+          //   iconSize: size, // ✅ selected = gradient, unselected = grey
+          //   gradient: isSelected ? appGradient() : appOrangeOffGradient(),
+          // ),
+          appGradientImage(
+            imagePath: imagePath,
+            size: 24,
             gradient: isSelected ? appGradient() : appOrangeOffGradient(),
           ),
           loadSubText(

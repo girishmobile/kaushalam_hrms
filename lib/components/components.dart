@@ -25,9 +25,37 @@ import '../provider/profile_provider.dart';
 double leftPadding = 16;
 double rightPadding = 16;
 
+Widget appGradientImage({
+  required String imagePath,
+  required double size,
+  required Gradient gradient,
+  VoidCallback? onTap,
+}) {
+  return Material(
+    color: Colors.transparent,
+    child: InkWell(
+      customBorder: const CircleBorder(),
+      onTap: onTap,
+      child: ShaderMask(
+        blendMode: BlendMode.srcIn,
+        shaderCallback: (bounds) {
+          return gradient.createShader(
+            Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+          );
+        },
+        child: Image.asset(
+          imagePath,
+          width: size,
+          height: size,
+          color: Colors.white, // must be white for gradient effect
+        ),
+      ),
+    ),
+  );
+}
+
 Widget appCircleIcon({
   IconData? icon,
-  Widget? customIcon,          // <-- NEW (icon/text/image ANY widget)
   double? iconSize = 28,
   VoidCallback? onTap,
   Color? iconColor = Colors.white60, // fallback if gradient is null
@@ -35,52 +63,13 @@ Widget appCircleIcon({
   String? text,
   Color? borderColor,
 }) {
-  Widget finalChild;
-
-  if (customIcon != null) {
-    finalChild = customIcon; // user custom widget
-  } else if (icon != null) {
-      finalChild = ShaderMask(
-      shaderCallback: (bounds) {
-        return gradient?.createShader(
-          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-        ) ??
-            LinearGradient(
-              colors: [?iconColor, ?iconColor],
-            ).createShader(
-              Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-            );
-      },
-      child: Icon(
-        icon,
-        size: iconSize,
-        color: Colors.white, // white needed for shader
-      ),
-    );
-  } else {
-    finalChild = Text(
-      (text != null && text.isNotEmpty) ? text[0].toUpperCase() : "?",
-      style: TextStyle(
-        foreground: gradient != null
-            ? (Paint()
-          ..shader = gradient.createShader(
-            const Rect.fromLTWH(0, 0, 200, 70),
-          ))
-            : null,
-        color: gradient == null ? iconColor : null,
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-      ),
-    );
-  }
   return Material(
     color: Colors.transparent,
     child: InkWell(
       customBorder: const CircleBorder(),
       onTap: onTap,
       child: Container(
-        child: finalChild,
-        /*child: icon != null
+        child: icon != null
             ? ShaderMask(
                 shaderCallback: (bounds) {
                   return gradient?.createShader(
@@ -111,7 +100,7 @@ Widget appCircleIcon({
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
-              ),*/
+              ),
       ),
     ),
   );
@@ -548,7 +537,7 @@ Widget appTextField({required String hintText, IconData? icon}) {
 
 Widget appOrangeTextField({
   required String hintText,
-  Widget ? icon,
+  Widget? icon,
   TextEditingController? textController,
   bool isPassword = false,
   bool obscure = true,
@@ -575,8 +564,9 @@ Widget appOrangeTextField({
 
       // LEFT ICON
       prefixIcon: Container(
-          margin: EdgeInsets.only(left: 10),
-          child: icon)/* != null
+        margin: EdgeInsets.only(left: 10),
+        child: icon,
+      ) /* != null
           ? Padding(
               padding: const EdgeInsets.only(left: 12, right: 8),
               child: Icon(icon, color: Colors.black54, size: 20),
@@ -997,7 +987,7 @@ Widget birthDayCard({required BirthDay item, double radius = 32}) {
                 title: '${item.firstname} ${item.lastname}',
                 fontSize: 14,
               ),
-              loadSubText(title: item.designation,fontSize: 12),
+              loadSubText(title: item.designation, fontSize: 12),
               /*  loadSubText(
                 title: getFormattedDate(
                   item.dateOfBirth.date,
@@ -1043,7 +1033,7 @@ Widget notificationCard(EmpNotificationModel notification) {
             spacing: 4,
             children: [
               Text(
-                notification.title ?? '-',
+                notification.title,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   color: Colors.black87,
@@ -1052,7 +1042,7 @@ Widget notificationCard(EmpNotificationModel notification) {
               ),
 
               Html(
-                data: notification.details ?? '',
+                data: notification.details,
                 style: {
                   "body": Style(
                     fontSize: FontSize(12),
@@ -1079,9 +1069,6 @@ Widget notificationCard(EmpNotificationModel notification) {
             ],
           ),
         ),
-
-        SizedBox(width: 4),
-        appForwardIcon(),
       ],
     ),
   );
@@ -1286,7 +1273,7 @@ Widget gradientButton({
     ),
     child: TextButton.icon(
       onPressed: onPressed,
-     // icon: const Icon(Icons.login, color: Colors.white),
+      // icon: const Icon(Icons.login, color: Colors.white),
       label: Text(
         title,
         style: TextStyle(
@@ -1794,19 +1781,6 @@ Future<bool?> showCommonDialog({
   );
 }
 
-Widget commonRefreshIndicator({
-  required final Future<void> Function() onRefresh,
-  required final Widget child,
-}) {
-  return RefreshIndicator(
-    color: color3,
-    backgroundColor: Colors.white,
-    strokeWidth: 2,
-    onRefresh: onRefresh,
-    child: child,
-  );
-}
-
 void showCommonBottomSheet({
   required BuildContext context,
   required Widget content,
@@ -1835,79 +1809,6 @@ void showCommonBottomSheet({
         child: content,
       );
     },
-  );
-}
-
-Widget commonBoxView({
-  required Widget contentView,
-  required String title,
-  double? fontSize,
-}) {
-  return Container(
-    decoration: commonBoxDecoration(
-      color: color3.withValues(alpha: 0.01),
-      borderColor: color3,
-      borderRadius: 8,
-    ),
-    margin: const EdgeInsets.all(0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Title
-        commonHeadingView(title: title, fontSize: fontSize),
-
-        // Content
-        Padding(padding: const EdgeInsets.all(12.0), child: contentView),
-      ],
-    ),
-  );
-}
-
-Widget commonHeadingView({String? title, double? fontSize}) {
-  return Padding(
-    padding: EdgeInsets.all(12.0),
-    child: Row(
-      children: [
-        Expanded(
-          child: loadTitleText(
-            fontColor: color3,
-            title: title ?? "Product Information",
-            fontSize: fontSize ?? 16,
-            fontWight: FontWeight.w600,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget commonRowLeftRightView({
-  required String title,
-  String? value,
-  Widget? customView,
-}) {
-  return Row(
-    children: [
-      Expanded(
-        child: loadSubText(
-          title: title,
-          fontWight: FontWeight.w500,
-          fontSize: 12,
-        ),
-      ),
-      Expanded(
-        child:
-            customView ??
-            loadSubText(
-              title: value ?? '',
-              maxLines: 1,
-              textOverflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.right,
-              fontWight: FontWeight.w400,
-              fontSize: 12,
-            ),
-      ),
-    ],
   );
 }
 
