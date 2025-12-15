@@ -400,9 +400,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
 
                               onChanged: (value) {
                                 final text = value.trim();
-                                print(
-                                  "onChanged: '$value' ${value.length}",
-                                ); // changed >3 -> >=3
+
                                 if (text.length >= 4) {
                                   provider.getAllHotline(search: text);
                                 }

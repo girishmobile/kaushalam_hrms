@@ -180,7 +180,6 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
 
   BoxBorder getStatusBorder(String? status) {
     final value = status?.toLowerCase() ?? "";
-    print("status:- $status");
     switch (value) {
       case "pending":
         return BoxBorder.all(color: Colors.orange, width: 1);

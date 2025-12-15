@@ -4,8 +4,14 @@ class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
   static Future<void> init() async {
-    const ios = DarwinInitializationSettings();
-    const settings = InitializationSettings(iOS: ios);
+    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const ios = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
+    const settings = InitializationSettings(iOS: ios, android: android);
     await _plugin.initialize(settings);
   }
 
@@ -20,7 +26,15 @@ class LocalNotificationService {
       presentSound: true,
     );
 
-    const details = NotificationDetails(iOS: ios);
+    const android = AndroidNotificationDetails(
+      'default_channel', // id
+      'Default', // name
+      channelDescription: 'Default channel for notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: true,
+    );
+    const details = NotificationDetails(iOS: ios, android: android);
 
     await _plugin.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,

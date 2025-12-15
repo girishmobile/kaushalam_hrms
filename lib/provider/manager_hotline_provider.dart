@@ -94,4 +94,14 @@ class ManagerHotlineProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void reset() {
+    nameController.clear();
+    searchFocus.unfocus();
+    _isLoading = false;
+    _hotlineDataList = [];
+    filteredList = [];
+    _hotlineListModel = null;
+    notifyListeners();
+  }
 }

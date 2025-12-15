@@ -64,4 +64,13 @@ class MyKpiProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
+
+  void reset() {
+    final currentYear = DateTime.now().year;
+    years = List.generate(5, (index) => (currentYear - index).toString());
+    selectedYear = currentYear.toString();
+    _kpiList = [];
+    _isLoading = false;
+    notifyListeners();
+  }
 }

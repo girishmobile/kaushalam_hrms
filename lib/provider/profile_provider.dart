@@ -52,14 +52,19 @@ class ProfileProvider extends ChangeNotifier {
     _isSuccess = val;
     notifyListeners();
   }
+
   void clearProfile() {
-  //  _profileModel = null;
+    //  _profileModel = null;
     notifyListeners();
   }
-  Future<void> getUserProfile({required Map<String, dynamic> body,required bool isCurrentUser}) async {
+
+  Future<void> getUserProfile({
+    required Map<String, dynamic> body,
+    required bool isCurrentUser,
+  }) async {
     _setLoading(true);
-   // _profileModel = null;   // reset the model
-    _imageUrl = null;   // reset the model
+    // _profileModel = null;   // reset the model
+    _imageUrl = null; // reset the model
     notifyListeners();
 
     try {
@@ -71,7 +76,6 @@ class ProfileProvider extends ChangeNotifier {
       );
 
       if (globalStatusCode == 200) {
-
         _profileModel = ProfileModel.fromJson(json.decode(response));
         setNetworkImage(
           '${ApiConfig.imageBaseUrl}/${_profileModel?.profileImage ?? ''}',
@@ -92,46 +96,42 @@ class ProfileProvider extends ChangeNotifier {
               "profile_image": _profileModel?.profileImage ?? '',
               "profile": _profileModel?.profileImage ?? '',
               "role":
-              _profileModel?.roles != null &&
-                  _profileModel!.roles!.isNotEmpty
+                  _profileModel?.roles != null &&
+                      _profileModel!.roles!.isNotEmpty
                   ? {
-                "id": _profileModel!.roles![0].id,
-                "name": _profileModel!.roles![0].name,
-              }
+                      "id": _profileModel!.roles![0].id,
+                      "name": _profileModel!.roles![0].name,
+                    }
                   : null,
               "batch_data": _profileModel?.location != null
                   ? {
-                "id": _profileModel!.location!.id,
-                "working_days": _profileModel!.location!.workingDays,
-                "alt_sat": _profileModel!.location!.altSat,
-              }
+                      "id": _profileModel!.location!.id,
+                      "working_days": _profileModel!.location!.workingDays,
+                      "alt_sat": _profileModel!.location!.altSat,
+                    }
                   : null,
               "location_id": _profileModel?.location?.id,
             },
           },
         };
 
-        //print('==formattedJson=${formattedJson}');
-        if(isCurrentUser){
+        if (isCurrentUser) {
           final userModel = UserModel.fromLocalJson1(
             Map<String, dynamic>.from(formattedJson),
           );
           await SecureStorage.saveUser(userModel);
 
           await loadProfileFromCache();
+        } else {
+          _imageUrl = _profileModel?.profileImage ?? '';
+          notifyListeners();
         }
-        else
-          {
-            _imageUrl = _profileModel?.profileImage ?? '';
-            notifyListeners();
-          }
 
         _setLoginSuccess(true);
       } else {
         _setLoginSuccess(false);
       }
     } catch (e) {
-
       _setLoginSuccess(false);
     }
   }
@@ -141,21 +141,22 @@ class ProfileProvider extends ChangeNotifier {
   String? get profileImage => _profileImage;
   Future<void> loadProfileFromCache() async {
     UserModel? user = await SecureStorage.getUser();
-    _profileImage = user?.profile??'';
+    _profileImage = user?.profile ?? '';
 
     notifyListeners();
-
-
   }
 
-/*  Future<void> loadProfileFromCache() async {
+  /*  Future<void> loadProfileFromCache() async {
     UserModel? user = await SecureStorage.getUserModel();
     _profileImage = user?.data?.user?.profileImage;
 
     notifyListeners();
   }*/
 
-  Future<void> uploadProfileImage({required String filePath,required BuildContext context}) async {
+  Future<void> uploadProfileImage({
+    required String filePath,
+    required BuildContext context,
+  }) async {
     _setLoading(true);
     try {
       var uri = Uri.parse(ApiConfig.uploadProfileImageUrl);
@@ -174,7 +175,6 @@ class ProfileProvider extends ChangeNotifier {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         final fileName = jsonResponse['filename'];
@@ -184,12 +184,11 @@ class ProfileProvider extends ChangeNotifier {
           fileName,
         );
 
-
-          await updateProfileData(body: requestBody,context: context);
+        await updateProfileData(body: requestBody, context: context);
 
         _setLoading(false);
       } else {
-      /*  showCommonDialog(
+        /*  showCommonDialog(
           showCancel: false,
           title: "Error",
           context: navigatorKey.currentContext!,
@@ -203,6 +202,7 @@ class ProfileProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
+
   String? _formatDate(dynamic date) {
     if (date == null) return null;
     if (date is String) return date; // already formatted
@@ -211,10 +211,11 @@ class ProfileProvider extends ChangeNotifier {
     }
     return null;
   }
+
   Map<String, dynamic> _buildProfileUpdateBody(
-      ProfileModel profile,
-      String fileName,
-      ) {
+    ProfileModel profile,
+    String fileName,
+  ) {
     return {
       "id": profile.id,
       "spouse_dob": _formatDate(profile.spouseDob?.date),
@@ -224,7 +225,9 @@ class ProfileProvider extends ChangeNotifier {
       "probation_end_date": _formatDate(profile.probationEndDate?.date),
       "exit_date": _formatDate(profile.exitDate),
       "date_of_birth": _formatDate(profile.dateOfBirth?.date),
-      "marriage_anniversary_date": _formatDate(profile.marriageAnniversaryDate?.date),
+      "marriage_anniversary_date": _formatDate(
+        profile.marriageAnniversaryDate?.date,
+      ),
       "passport_issue_date": _formatDate(profile.passportIssueDate),
       "passport_expiry_date": _formatDate(profile.passportExpiryDate),
       "visa_issue_date": _formatDate(profile.visaIssueDate),
@@ -311,9 +314,10 @@ class ProfileProvider extends ChangeNotifier {
     };
   }
 
-
-
-  Future<void> updateProfileData({required Map<String, dynamic> body,required BuildContext context}) async {
+  Future<void> updateProfileData({
+    required Map<String, dynamic> body,
+    required BuildContext context,
+  }) async {
     _setLoading(true);
 
     try {
@@ -326,10 +330,9 @@ class ProfileProvider extends ChangeNotifier {
 
       if (globalStatusCode == 200) {
         UserModel? user = await SecureStorage.getUser();
-        Map<String, dynamic> body = {"employee_id": '${user?.id??0}'};
+        Map<String, dynamic> body = {"employee_id": '${user?.id ?? 0}'};
 
-        getUserProfile(body: body,isCurrentUser: true);
-
+        getUserProfile(body: body, isCurrentUser: true);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -341,9 +344,9 @@ class ProfileProvider extends ChangeNotifier {
             duration: const Duration(seconds: 3),
           ),
         );
-              _setLoading(false);
+        _setLoading(false);
       } else {
-       /* showCommonDialog(
+        /* showCommonDialog(
           showCancel: false,
           title: "Error",
 
@@ -356,5 +359,15 @@ class ProfileProvider extends ChangeNotifier {
       debugPrint('===$e');
       _setLoading(false);
     }
+  }
+
+  void reset() {
+    _isLoading = false; // Stop any loading indicators
+    _isSuccess = false; // Reset API success flag
+    _profileModel = null; // Clear the loaded profile data
+    _pickedFile = null; // Clear any selected image file
+    _imageUrl = null; // Clear the displayed image
+    _profileImage = null; // Clear cached profile image
+    notifyListeners(); // Notify UI of changes
   }
 }

@@ -3,6 +3,17 @@ import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/provider/app_provider.dart';
+import 'package:neeknots_admin/provider/attendance_provider.dart';
+import 'package:neeknots_admin/provider/calendar_provider.dart';
+import 'package:neeknots_admin/provider/emp_notifi_provider.dart';
+import 'package:neeknots_admin/provider/emp_provider.dart';
+import 'package:neeknots_admin/provider/hotline_provider.dart';
+import 'package:neeknots_admin/provider/leave_balance_provider.dart';
+import 'package:neeknots_admin/provider/leave_provider.dart';
+import 'package:neeknots_admin/provider/login_provider.dart';
+import 'package:neeknots_admin/provider/manager_hotline_provider.dart';
+import 'package:neeknots_admin/provider/manager_provider.dart';
+import 'package:neeknots_admin/provider/my_kpi_provider.dart';
 import 'package:neeknots_admin/provider/setting_provider.dart';
 import 'package:neeknots_admin/utility/image_utils.dart';
 import 'package:neeknots_admin/utility/secure_storage.dart';
@@ -125,6 +136,18 @@ class _SettingScreenState extends State<SettingScreen> {
                       if (!context.mounted) return;
                       // 🔥 Set page index BEFORE navigation
                       context.read<AppProvider>().resetApp();
+                      context.read<MyKpiProvider>().reset();
+                      context.read<AttendanceProvider>().reset();
+                      context.read<CalendarProvider>().reset();
+                      context.read<EmpNotifiProvider>().reset();
+                      context.read<EmpProvider>().reset();
+                      context.read<HotlineProvider>().reset();
+                      context.read<LeaveBalanceProvider>().reset();
+                      context.read<LeaveProvider>().reset();
+                      context.read<LoginProvider>().reset();
+                      context.read<ManagerHotlineProvider>().reset();
+                      context.read<ManagerProvider>().reset();
+                      context.read<ProfileProvider>().reset();
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         RouteName.loginPage,

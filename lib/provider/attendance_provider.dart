@@ -308,4 +308,12 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
         },*/
     ];
   }
+
+  void reset() {
+    _selectedDateRange = 'Today';
+    _customDateRange = null;
+    _isLoading = false;
+    _attendanceRecordModel = null;
+    notifyListeners();
+  }
 }

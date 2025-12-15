@@ -137,4 +137,20 @@ class EmpNotifiProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
+
+  void reset() {
+    // Clear notifications
+    _notifications.clear();
+    filteredList.clear();
+    // Reset search
+    nameController.clear();
+    _lastQuery = '';
+    // Cancel any pending debounce
+    _debounce?.cancel();
+    _debounce = null;
+    // Reset loading state
+    _isLoading = false;
+    // Notify UI to refresh
+    notifyListeners();
+  }
 }

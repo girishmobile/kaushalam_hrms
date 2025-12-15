@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:neeknots_admin/firebase/local_notification_service.dart';
 
 class NotificationHandler {
@@ -14,10 +15,10 @@ class NotificationHandler {
   }
 
   static Future<void> handleBackgroundMessage(RemoteMessage message) async {
-    print('Background message: ${message.messageId}');
+    debugPrint('Background message: ${message.messageId}');
   }
 
   static Future<void> handleMessageOpenedApp(RemoteMessage message) async {
-    print('Opened app from notification: ${message.messageId}');
+    debugPrint('Opened app from notification: ${message.messageId}');
   }
 }

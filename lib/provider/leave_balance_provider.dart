@@ -128,4 +128,14 @@ class LeaveBalanceProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
+
+  void reset() {
+    _isLoading = false;
+    nameController.clear();
+    emp_leave_balance.clear();
+    filteredList.clear();
+    errorMessage = null; // if you have this defined
+
+    notifyListeners();
+  }
 }

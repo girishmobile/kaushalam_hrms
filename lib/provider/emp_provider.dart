@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/api/network_repository.dart';
@@ -36,6 +37,37 @@ class EmpProvider extends ChangeNotifier {
   void setSelectedIndex(int index) {
     _selectedIndex = index;
     notifyListeners();
+  }
+
+  Future<void> updateFCMToken() async {
+    _setLoading(true);
+
+    try {
+      String? fcmToken;
+      try {
+        fcmToken = await FirebaseMessaging.instance.getToken();
+      } catch (e) {
+        debugPrint('Error getting FCM token for update: $e');
+        fcmToken = null;
+      }
+
+      Map<String, dynamic> body = {"fcm_token": fcmToken};
+      await callApi(
+        url: ApiConfig.updateFCMTokenUrl,
+        method: HttpMethod.post,
+
+        body: body,
+        headers: null,
+      );
+
+      if (globalStatusCode == 200) {
+        _setLoading(false);
+      } else {}
+      _setLoading(false);
+      notifyListeners();
+    } catch (e) {
+      _setLoading(false);
+    }
   }
 
   AttendanceModel? _attendanceModel;
@@ -381,5 +413,35 @@ class EmpProvider extends ChangeNotifier {
       errorMessage = "Something went wrong. Try again.";
       _setLoading(false);
     }
+  }
+
+  void reset() {
+    // Clear text input and focus
+    nameController.clear();
+    searchFocus.unfocus();
+
+    // Reset loading state
+    _isLoading = false;
+
+    // Reset UI/filter
+    _selectedIndex = 0;
+
+    // Clear all user-specific data
+    _attendanceModel = null;
+    _leaveSummary = null;
+    _leaveBalance = null;
+    _birthHolidayModel = null;
+
+    holidays.clear();
+    birthdays.clear();
+    departments.clear();
+
+    _allEmployees.clear();
+    filteredList.clear();
+
+    _myWorkModel = null;
+
+    // Notify UI
+    notifyListeners();
   }
 }

@@ -43,7 +43,6 @@ class CalendarProvider extends ChangeNotifier {
       } else {
         notifyListeners();
         _setLoading(false);
-
       }
     } catch (e) {
       notifyListeners();
@@ -84,15 +83,15 @@ class CalendarProvider extends ChangeNotifier {
     }
 
     // Add birthdays (mark for same month in current year)
-      final birthdays = data["month_bday_data"] ?? [];
+    final birthdays = data["month_bday_data"] ?? [];
     for (var person in birthdays) {
       final dob = DateTime.parse(person["date_of_birth"]["date"]);
       final dateKey = DateTime(monthDate.year, dob.month, dob.day); // ✅ fixed
       _events.putIfAbsent(dateKey, () => []).add({
         "title": "${person["firstname"]} ${person["lastname"]}",
-         "type": "Birthday",
-         "id": person['id'],
-        "profile":person["profile_image"],
+        "type": "Birthday",
+        "id": person['id'],
+        "profile": person["profile_image"],
       });
     }
 
@@ -102,5 +101,10 @@ class CalendarProvider extends ChangeNotifier {
   /// Return events for a specific day
   List<Map<String, dynamic>> getEventsForDay(DateTime day) {
     return _events[DateTime(day.year, day.month, day.day)] ?? [];
+  }
+
+  void reset() {
+    _events.clear();
+    _isLoading = false;
   }
 }
