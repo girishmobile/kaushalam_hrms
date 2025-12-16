@@ -185,6 +185,8 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       appCircleImage(
+                                        text: data?.firstname,
+                                        //icon: Icons.person_outline,
                                         borderColor: color3,
                                         imageUrl:
                                             "${ApiConfig.imageBaseUrl}${data?.profileImage}",
@@ -277,6 +279,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
 
           provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
           appNavigationBar(
+
             onRightIconTap: () {
               showCommonBottomSheet(
                 content: Consumer<HotlineProvider>(
@@ -296,6 +299,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                 fontSize: 16,
                               ),
                             ),
+
                             Container(
                               width: 35,
                               height: 35,

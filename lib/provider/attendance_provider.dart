@@ -42,6 +42,10 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
 
   void setCustomDateRange(DateTimeRange range) {
     _customDateRange = range;
+
+
+
+
     notifyListeners();
   }
 

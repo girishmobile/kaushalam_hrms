@@ -106,7 +106,7 @@ Widget appCircleIcon({
   );
 }
 
-Widget appCircleImage({
+Widget  appCircleImage({
   IconData? icon,
   double radius = 24,
   double? iconSize = 24,
@@ -265,6 +265,7 @@ Widget _buildImageOrFallback({
   String? text,
   double? iconSize = 24,
 }) {
+
   if (imageUrl != null && imageUrl.isNotEmpty) {
     if (imageUrl.startsWith("http")) {
       // Network image
@@ -322,9 +323,11 @@ Widget _fallBackContent(
   if (icon != null) {
     return Icon(icon, color: iconColor, size: iconSize ?? 24);
   } else if (text != null && text.isNotEmpty) {
-    return Text(
-      text.characters.first.toUpperCase(),
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return Center(
+      child: Text(
+        text.characters.first.toUpperCase(),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      ),
     );
   } else {
     return Icon(Icons.person_outline_rounded, size: 24, color: iconColor);
@@ -656,9 +659,10 @@ Widget employeeCard(Employee employee) {
     child: Row(
       children: [
         appCircleImage(
+          text: employee.firstname,
           imageUrl: setImagePath(employee.profileImage),
           radius: 24,
-          icon: Icons.person_outline,
+         // icon: Icons.person_outline,
           iconColor: color2,
           borderColor: color2,
         ),
