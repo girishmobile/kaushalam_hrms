@@ -191,8 +191,8 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                         imageUrl:
                                             "${ApiConfig.imageBaseUrl}${data?.profileImage}",
                                         radius: 18,
-                                        icon: Icons.person_outline,
-                                        text: data?.firstname ?? '',
+
+
                                       ),
 
                                       Expanded(
