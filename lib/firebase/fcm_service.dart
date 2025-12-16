@@ -34,7 +34,7 @@ class FirebaseMessagingService {
 
     // 3️⃣ Token refresh (safe)
     FirebaseMessaging.instance.onTokenRefresh.listen((token) {
-      print('🔥 FCM Token: $token');
+      print('🔥 Refreshed Token: $token');
     });
     // 4️⃣ Foreground messages
     FirebaseMessaging.onMessage.listen(
