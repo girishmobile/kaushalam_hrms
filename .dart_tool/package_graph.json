@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "neeknots_admin",
-      "version": "1.0.3+3",
+      "version": "1.0.2+4",
       "dependencies": [
         "app_settings",
         "cached_network_image",
@@ -344,7 +344,7 @@
     },
     {
       "name": "matcher",
-      "version": "0.12.18",
+      "version": "0.12.17",
       "dependencies": [
         "async",
         "meta",
@@ -355,7 +355,7 @@
     },
     {
       "name": "test_api",
-      "version": "0.7.8",
+      "version": "0.7.7",
       "dependencies": [
         "async",
         "boolean_selector",
@@ -820,7 +820,7 @@
     },
     {
       "name": "material_color_utilities",
-      "version": "0.13.0",
+      "version": "0.11.1",
       "dependencies": [
         "collection"
       ]

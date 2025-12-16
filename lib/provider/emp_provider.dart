@@ -64,7 +64,6 @@ class EmpProvider extends ChangeNotifier {
         _setLoading(false);
       } else {}
       _setLoading(false);
-      notifyListeners();
     } catch (e) {
       _setLoading(false);
     }

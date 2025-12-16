@@ -29,7 +29,6 @@ import 'package:provider/single_child_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase/firebase_options.dart';
-import 'firebase/notification_service.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -37,26 +36,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   log(
     "📩 BG Notification received: ${message.messageId}, data: ${message.data}",
   );
-}
-
-Future<void> _initializeFirebase() async {
-  int attempts = 0;
-  const maxAttempts = 3;
-
-  while (attempts < maxAttempts) {
-    try {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-
-      return;
-    } catch (e) {
-      attempts++;
-
-      if (attempts == maxAttempts) rethrow;
-      await Future.delayed(Duration(seconds: 1));
-    }
-  }
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -144,18 +123,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-
-
-/**
- * // try {
-  //   // Initialize core services
-  //   await _initializeFirebase();
-  //   // Initialize notifications after Firebase
-  //   await NotificationService.initializeApp(navigatorKey: navigatorKey);
-  //   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  // } catch (e, s) {
-  //   debugPrint('🔥 Critical initialization error: $e\n$s');
-  //   // We'll continue to show UI even if services fail
-  // }
- */

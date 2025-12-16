@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:provider/provider.dart';
@@ -57,53 +58,61 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
 
               children: [
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                  children: [
-                    loadTitleText(
-                  title:"Calendar View",
-                      fontSize: 14,
-                      fontWight: FontWeight.w600,
-                      fontColor: Colors.black87,
-                    ),
-                    Container(
-                      height: 35,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.black.withValues(alpha: 0.5)),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<CalendarViewType>(
-                          value: provider.selectedType,
-                          icon: Icon(Icons.keyboard_arrow_down, color: Colors.black.withValues(alpha: 0.5)),
-                          items:  [
-                            DropdownMenuItem(
-                              value: CalendarViewType.month,
-                              child: loadSubText(title: "Month",fontSize: 12),
-                            ),
-                            DropdownMenuItem(
-                              value: CalendarViewType.week,
-                              child: loadSubText(title: "Week",fontSize: 12),
-                            ),
-                            DropdownMenuItem(
-                              value: CalendarViewType.twoWeeks,
-                              child: loadSubText(title: "2 Weeks",fontSize: 12),
-                            ),
-                          ],
-                          onChanged: (value) {
-                            if (value != null) {
-                              provider.changeCalendarType(value);
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     appGradientText(
+                //       text: "Calendar View",
+                //       style: TextStyle(
+                //         fontSize: 14,
+                //         fontWeight: FontWeight.w500,
+                //       ),
+                //       gradient: appGradient(),
+                //     ),
 
-
+                //     Container(
+                //       height: 35,
+                //       padding: const EdgeInsets.symmetric(horizontal: 12),
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(10),
+                //         border: Border.all(
+                //           color: Colors.black.withValues(alpha: 0.5),
+                //         ),
+                //       ),
+                //       child: DropdownButtonHideUnderline(
+                //         child: DropdownButton<CalendarViewType>(
+                //           value: provider.selectedType,
+                //           icon: Icon(
+                //             Icons.keyboard_arrow_down,
+                //             color: Colors.black.withValues(alpha: 0.5),
+                //           ),
+                //           items: [
+                //             DropdownMenuItem(
+                //               value: CalendarViewType.month,
+                //               child: loadSubText(title: "Month", fontSize: 12),
+                //             ),
+                //             DropdownMenuItem(
+                //               value: CalendarViewType.week,
+                //               child: loadSubText(title: "Week", fontSize: 12),
+                //             ),
+                //             DropdownMenuItem(
+                //               value: CalendarViewType.twoWeeks,
+                //               child: loadSubText(
+                //                 title: "2 Weeks",
+                //                 fontSize: 12,
+                //               ),
+                //             ),
+                //           ],
+                //           onChanged: (value) {
+                //             if (value != null) {
+                //               provider.changeCalendarType(value);
+                //             }
+                //           },
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 _buildTableCalendar(provider: provider),
                 _buildHeader(),
 
@@ -127,8 +136,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
       },
     );
   }
-
-
 
   Widget _buildItem({
     required CalendarProvider provider,
@@ -154,14 +161,25 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     iconColor: color3,
                     imageUrl: "${ApiConfig.imageBaseUrl}${event['profile']}",
                     radius: 18,
+
+                    icon: Icons.cake_outlined,
                   )
                 : Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.redAccent.withValues(alpha: 0.1),
+                      color: event['type'] == "attendance"
+                          ? Colors.green.withValues(alpha: 0.1)
+                          : Colors.redAccent.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: Icon(Icons.pending_actions, color: Colors.redAccent),
+                    child: Icon(
+                      event['type'] == "attendance"
+                          ? Icons.access_time
+                          : Icons.pending_actions,
+                      color: event['type'] == "attendance"
+                          ? Colors.green
+                          : Colors.redAccent,
+                    ),
                   ),
             Expanded(
               child: Column(
@@ -190,9 +208,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     final DateTime lastDay = DateTime(DateTime.now().year, 12, 31);
     return TableCalendar(
-
       calendarFormat: provider.calendarFormat,
-      //   calendarFormat: CalendarFormat.month,
+      // calendarFormat: CalendarFormat.month,
       headerStyle: HeaderStyle(
         leftChevronIcon: Icon(Icons.chevron_left, color: color3),
         rightChevronIcon:
@@ -238,19 +255,28 @@ class _CalendarScreenState extends State<CalendarScreen> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
-              loadSubText(title: '${day.day}' ,fontSize: 12,fontColor: Colors.black),
+              loadSubText(
+                title: '${day.day}',
+                fontSize: 12,
+                fontColor: Colors.black,
+              ),
 
               const SizedBox(height: 4),
 
               /// 🟢 Attendance hours text
               if (attn != null)
                 Container(
-                    decoration: commonBoxDecoration(
-                      color: Colors.green.withValues(alpha: 0.2)
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 5,vertical: 2),
-                    child: loadSubText(title: '${attn["hours"]}h ${attn["minutes"]}m' ,fontSize: 8,   fontColor: Colors.black,fontWight: FontWeight.w400)),
+                  decoration: commonBoxDecoration(
+                    color: Colors.green.withValues(alpha: 0.2),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  child: loadSubText(
+                    title: '${attn["hours"]}h ${attn["minutes"]}m',
+                    fontSize: 8,
+                    fontColor: Colors.black,
+                    fontWight: FontWeight.w400,
+                  ),
+                ),
 
               const SizedBox(height: 2),
 
@@ -258,12 +284,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (hasLeave)
-                    _dot(Colors.red),
-                  if (hasBirthday)
-                    _dot(Colors.blue),
-                  if (attn != null)
-                    _dot(Colors.green),
+                  if (hasLeave) _dot(Colors.red),
+                  if (hasBirthday) _dot(Colors.blue),
+                  if (attn != null) _dot(Colors.green),
                 ],
               ),
             ],
@@ -290,17 +313,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
       lastDay: lastDay,
     );
   }
+
   Widget _dot(Color color) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 1),
       width: 6,
       height: 6,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
+
   Widget _buildHeader() {
     return Column(
       children: [

@@ -186,13 +186,10 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                     children: [
                                       appCircleImage(
                                         text: data?.firstname,
-                                        //icon: Icons.person_outline,
                                         borderColor: color3,
                                         imageUrl:
                                             "${ApiConfig.imageBaseUrl}${data?.profileImage}",
                                         radius: 18,
-
-
                                       ),
 
                                       Expanded(
@@ -281,7 +278,6 @@ class _HotlineScreenState extends State<HotlineScreen> {
 
           provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
           appNavigationBar(
-
             onRightIconTap: () {
               showCommonBottomSheet(
                 content: Consumer<HotlineProvider>(
