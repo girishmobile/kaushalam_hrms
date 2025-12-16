@@ -300,12 +300,7 @@ Widget _buildImageOrFallback({
       );
     } else {
       // Invalid string (like "Girish") → fallback
-      return _fallBackContent(
-        Icons.image_outlined,
-        iconColor,
-        text ?? imageUrl,
-        iconSize,
-      );
+      return _fallBackContent(icon, iconColor, text ?? imageUrl, iconSize);
     }
   }
 
@@ -334,7 +329,7 @@ Widget _fallBackContent(
       ),
     );
   } else {
-    return Icon(Icons.person_outline_rounded, size: 24, color: iconColor);
+    return Icon(Icons.image_outlined, size: 24, color: iconColor);
     //  return  loadAssetImage(name: errorImage);
   }
 }
@@ -1292,6 +1287,7 @@ Widget appProfileImage({
   double radius = 60,
   required BuildContext context,
   EdgeInsetsGeometry? padding,
+  String? text,
 }) {
   final provider = Provider.of<ProfileProvider>(context);
   return Stack(
@@ -1313,7 +1309,7 @@ Widget appProfileImage({
           ),
           child: appCircleImage(
             imageUrl: imageUrl,
-            icon: Icons.person_outline,
+            text: text,
             iconColor: color3,
             iconSize: radius / 1.5,
             radius: (radius - 2),

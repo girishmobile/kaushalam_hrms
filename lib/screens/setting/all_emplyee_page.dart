@@ -156,7 +156,15 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
         return RepaintBoundary(
           child: GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, RouteName.employeeDetailPage);
+              // Navigator.pushNamed(context, RouteName.employeeDetailPage);
+              Navigator.pushNamed(
+                context,
+                RouteName.profileScreen,
+                arguments: {
+                  "employeeId": '${employee.id}',
+                  "isCurrentUser": false,
+                },
+              );
             },
             child: employeeCard(employee),
           ),

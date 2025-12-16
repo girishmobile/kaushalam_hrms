@@ -42,7 +42,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Map<String, dynamic> body = {"employee_id": widget.employeeId};
-
       context.read<ProfileProvider>().getUserProfile(
         body: body,
         isCurrentUser: widget.isCurrentUser,
@@ -68,6 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Consumer<ProfileProvider>(
                       builder: (_, profileProvider, _) {
                         return appProfileImage(
+                          text: profileProvider.profileModel?.firstname ?? '',
                           context: context,
                           imageUrl: widget.isCurrentUser
                               ? "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}"
@@ -80,11 +80,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(height: 16),
                     loadTitleText(
                       title:
-                          "${provider.profileModel?.firstname ?? '-'} ${provider.profileModel?.lastname ?? '-'}",
+                          "${provider.profileModel?.firstname ?? ''} ${provider.profileModel?.lastname ?? ''}",
                       textAlign: TextAlign.center,
                     ),
                     loadSubText(
-                      title: provider.profileModel?.designation?.name ?? '-',
+                      title: provider.profileModel?.designation?.name ?? '',
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 32),

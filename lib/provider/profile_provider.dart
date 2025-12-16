@@ -62,6 +62,7 @@ class ProfileProvider extends ChangeNotifier {
     required Map<String, dynamic> body,
     required bool isCurrentUser,
   }) async {
+    _profileModel = null;
     _setLoading(true);
     // _profileModel = null;   // reset the model
     _imageUrl = null; // reset the model

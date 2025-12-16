@@ -50,6 +50,7 @@ class CustomerOrdersPage extends StatelessWidget {
           spacing: 16,
           children: [
             appProfileImage(
+              text: "John",
               isEdit: false,
               context: context,
               imageUrl: hostImage,
