@@ -262,6 +262,18 @@ class LeaveProvider extends ChangeNotifier {
 
     return items;
   }
+
+  void reset() {
+    _isLoading = false;
+    _employeeId = null;
+    _applySuccess = false;
+    _deleteSuccess = false;
+    leaveTypes.clear();
+    listOfLeave.clear();
+    leaveByEmp = null;
+    errorMessage = null;
+    notifyListeners();
+  }
 }
 
 class LeaveDropdownItem {

@@ -158,4 +158,20 @@ class EmpNotifiProvider extends ChangeNotifier {
   int get unreadCount {
     return _notifications.where((n) => n.isRead == false).length;
   }
+
+  void reset() {
+    // Clear notifications
+    _notifications.clear();
+    filteredList.clear();
+    // Reset search
+    nameController.clear();
+    _lastQuery = '';
+    // Cancel any pending debounce
+    _debounce?.cancel();
+    _debounce = null;
+    // Reset loading state
+    _isLoading = false;
+    // Notify UI to refresh
+    notifyListeners();
+  }
 }

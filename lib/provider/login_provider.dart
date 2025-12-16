@@ -220,4 +220,23 @@ class LoginProvider with ChangeNotifier {
       _setLoading(false);
     }
   }
+
+  void reset() {
+    emailController.clear();
+    passwordController.clear();
+    tetCurrentPassword.clear();
+    tetNewPassword.clear();
+    tetConfirmPassword.clear();
+
+    _obscurePassword = true;
+    _obscureCurrentPassword = true;
+    _obscureNewPassword = true;
+    _obscureConfirmPassword = true;
+
+    _isLoading = false;
+    _loginSuccess = false;
+    errorMessage = null;
+
+    notifyListeners();
+  }
 }

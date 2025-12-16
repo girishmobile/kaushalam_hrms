@@ -23,8 +23,10 @@ import 'package:neeknots_admin/provider/my_kpi_provider.dart';
 import 'package:neeknots_admin/provider/product_detail_provider.dart';
 import 'package:neeknots_admin/provider/profile_provider.dart';
 import 'package:neeknots_admin/provider/setting_provider.dart';
+import 'package:neeknots_admin/utility/secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase/firebase_options.dart';
 import 'firebase/notification_service.dart';
@@ -87,9 +89,8 @@ List<SingleChildWidget> providers = [
 ];
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await clearKeychainOnFreshInstall();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   FirebaseMessagingService.registerBackgroundHandler();
   await LocalNotificationService.init();
   runApp(MyApp(navigatorKey: navigatorKey));
@@ -101,6 +102,16 @@ class MyApp extends StatefulWidget {
 
   @override
   State<MyApp> createState() => _MyAppState();
+}
+
+Future<void> clearKeychainOnFreshInstall() async {
+  final prefs = await SharedPreferences.getInstance();
+  final isFirstInstall = prefs.getBool('first_install') ?? true;
+
+  if (isFirstInstall) {
+    await SecureStorage.deleteAll();
+    await prefs.setBool('first_install', false);
+  }
 }
 
 class _MyAppState extends State<MyApp> {

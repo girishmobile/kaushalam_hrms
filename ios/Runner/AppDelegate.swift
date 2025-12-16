@@ -1,28 +1,40 @@
-import Flutter
 import UIKit
+import Flutter
 import Firebase
 import FirebaseMessaging
+import UserNotifications
 
 @main
-@objc class AppDelegate: FlutterAppDelegate,MessagingDelegate {
-    override func application(
-        _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-    ) -> Bool {
+@objc class AppDelegate: FlutterAppDelegate, MessagingDelegate {
 
-FirebaseApp.configure()
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
 
-    // FCM delegate
+    FirebaseApp.configure()
+
+    // Let Flutter handle notification delegation internally
     Messaging.messaging().delegate = self
+     // 🔥 REQUIRED for foreground notifications
+    UNUserNotificationCenter.current().delegate = self
 
-    // Register for APNs
+
     application.registerForRemoteNotifications()
 
-       
- GeneratedPluginRegistrant.register(with: self)
-        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-    }
-    override func application(
+    GeneratedPluginRegistrant.register(with: self)
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+  
+override func userNotificationCenter(
+  _ center: UNUserNotificationCenter,
+  willPresent notification: UNNotification,
+  withCompletionHandler completionHandler:
+    @escaping (UNNotificationPresentationOptions) -> Void
+) {
+  completionHandler([.banner, .sound, .badge])
+}
+  override func application(
     _ application: UIApplication,
     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
   ) {
@@ -30,10 +42,11 @@ FirebaseApp.configure()
     super.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
   }
 
-  // FCM token callback
-  func messaging(_ messaging: Messaging,
-                 didReceiveRegistrationToken fcmToken: String?) {
+  // FCM token
+  func messaging(
+    _ messaging: Messaging,
+    didReceiveRegistrationToken fcmToken: String?
+  ) {
     print("🔥 FCM Token:", fcmToken ?? "nil")
   }
-
 }

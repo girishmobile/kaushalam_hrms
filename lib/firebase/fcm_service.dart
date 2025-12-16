@@ -21,19 +21,45 @@ class FirebaseMessagingService {
   }
 
   Future<void> initialize() async {
-    _messaging.requestPermission();
+    // 1️⃣ Request permission
+    _messaging.requestPermission(alert: true, badge: true, sound: true);
 
+    // 2️⃣ REQUIRED FOR iOS FOREGROUND
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+
+    // 3️⃣ Token refresh (safe)
+    FirebaseMessaging.instance.onTokenRefresh.listen((token) {
+      print('🔥 Refreshed Token: $token');
+    });
+    // 4️⃣ Foreground messages
     FirebaseMessaging.onMessage.listen(
       NotificationHandler.handleForegroundMessage,
     );
+
+    // 5️⃣ Opened from background
     FirebaseMessaging.onMessageOpenedApp.listen(
       NotificationHandler.handleMessageOpenedApp,
     );
+
+    // 6️⃣ Opened from terminated
     final initialMessage = await _messaging.getInitialMessage();
     if (initialMessage != null) {
       NotificationHandler.handleMessageOpenedApp(initialMessage);
     }
-    final token = await _messaging.getToken();
-    print("🔥 FCM Token: $token");
+  }
+
+  Future<void> fetchTokenSafely() async {
+    await Future.delayed(const Duration(seconds: 2));
+    try {
+      final token = await FirebaseMessaging.instance.getToken();
+      print('Delayed FCM token: $token');
+    } catch (_) {
+      // ignore
+    }
   }
 }

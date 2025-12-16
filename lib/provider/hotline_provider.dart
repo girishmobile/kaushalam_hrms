@@ -33,9 +33,8 @@ class HotlineProvider with ChangeNotifier {
   }
 
   Future<void> resetHotlineData() async {
-    _setLoading(true);
-
     // Clear all stored data
+    _isLoading = false;
     _hotlineCount = [];
     _departmentModel = null;
     _departments = [];
@@ -46,6 +45,25 @@ class HotlineProvider with ChangeNotifier {
     _hotlineListModel = null;
     _selectedHotlineIndex = 0;
     _title = "online";
+
+    notifyListeners();
+  }
+
+  void reset() {
+    _isLoading = false;
+    // Hotline
+    _hotlineCount.clear();
+    _selectedHotlineIndex = 0;
+    _title = "online";
+    _hotlineListModel = null;
+    // Departments
+    _departmentModel = null;
+    _departments.clear();
+    _selectedDepartment = null;
+    // Designations
+    _designationModel = null;
+    _designationList.clear();
+    _selectDesignation = null;
 
     notifyListeners();
   }

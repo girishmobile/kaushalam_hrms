@@ -191,6 +191,8 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                         imageUrl:
                                             "${ApiConfig.imageBaseUrl}${data?.profileImage}",
                                         radius: 18,
+                                        icon: Icons.person_outline,
+                                        text: data?.firstname ?? '',
                                       ),
 
                                       Expanded(
@@ -404,9 +406,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
 
                               onChanged: (value) {
                                 final text = value.trim();
-                                print(
-                                  "onChanged: '$value' ${value.length}",
-                                ); // changed >3 -> >=3
+
                                 if (text.length >= 4) {
                                   provider.getAllHotline(search: text);
                                 }

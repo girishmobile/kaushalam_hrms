@@ -52,7 +52,7 @@ class ManagerProvider extends ChangeNotifier {
       }
     } catch (e) {
       _setLoading(false);
-      print("error -$e");
+      debugPrint("error -$e");
     }
   }
 
@@ -133,7 +133,7 @@ class ManagerProvider extends ChangeNotifier {
                 .map((e) => MyLeave.fromApiJson(e))
                 .toList();
           } catch (e) {
-            print("error- $e");
+            debugPrint("error- $e");
           }
         }
       } else {
@@ -141,7 +141,7 @@ class ManagerProvider extends ChangeNotifier {
       }
     } catch (e) {
       _setLoading(false);
-      print("error -$e");
+      debugPrint("error -$e");
     }
   }
 
@@ -215,5 +215,17 @@ class ManagerProvider extends ChangeNotifier {
     } catch (e) {
       _setApiStatus(false);
     }
+  }
+
+  void reset() {
+    _isLoading = false;
+    _isSuccess = false;
+
+    recent_leaves.clear();
+    listOfLeave.clear();
+
+    errorMessage = null;
+
+    notifyListeners();
   }
 }

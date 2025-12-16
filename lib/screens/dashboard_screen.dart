@@ -31,8 +31,12 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<EmpProvider>().getUpcomingBirthHodliday();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final provider = Provider.of<EmpProvider>(context, listen: false);
+      await Future.wait([
+        provider.updateFCMToken(),
+        provider.getUpcomingBirthHodliday(),
+      ]);
     });
 
     super.initState();

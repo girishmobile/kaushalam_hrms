@@ -38,8 +38,14 @@ class AppProvider extends ChangeNotifier {
   }
 
   void resetApp() {
-    setIsManagerOrSelf(false);
-    setPageIndex(2);
+    _isManager = false;
+    _isEmployee = true;
+    _pageIndex = 2; // or your login/home index
+    _isLoading = false;
+    _isRole = "employee";
+    _employeeId = null;
+    _profileImage = null;
+    notifyListeners();
   }
 
   Future<void> loadAppDataFromStorage() async {
@@ -49,7 +55,7 @@ class AppProvider extends ChangeNotifier {
     if (user != null) {
       final roleStr = (user.role["name"] ?? "").toString().toLowerCase();
       _employeeId = "${user.id}";
-      print("user role: $roleStr");
+      debugPrint("user role: $roleStr");
       _profileImage = user.profile;
       if (roleStr == "employee") {
         _isRole = "employee";

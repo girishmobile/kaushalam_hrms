@@ -3,7 +3,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:neeknots_admin/models/user_model.dart';
 
 class SecureStorage {
-  static const FlutterSecureStorage _storage = FlutterSecureStorage();
+  static final FlutterSecureStorage _storage = FlutterSecureStorage(
+    iOptions: IOSOptions(
+      accessibility: KeychainAccessibility.first_unlock_this_device,
+      synchronizable: false,
+    ),
+  );
   static Future<void> saveUser(UserModel user) async {
     final String userJson = jsonEncode(user.toJson());
     // Save full user json

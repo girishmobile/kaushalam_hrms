@@ -2,8 +2,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin _plugin =
-  FlutterLocalNotificationsPlugin();
-
+      FlutterLocalNotificationsPlugin();
   static Future<void> init() async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -12,12 +11,7 @@ class LocalNotificationService {
       requestBadgePermission: true,
       requestSoundPermission: true,
     );
-
-    const settings = InitializationSettings(
-      android: android,
-      iOS: ios,
-    );
-
+    const settings = InitializationSettings(iOS: ios, android: android);
     await _plugin.initialize(settings);
   }
 
@@ -26,23 +20,21 @@ class LocalNotificationService {
     required String body,
     String? payload,
   }) async {
-    const androidDetails = AndroidNotificationDetails(
-      'default_channel',
-      'Default Notifications',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
-
-    const iosDetails = DarwinNotificationDetails(
+    const ios = DarwinNotificationDetails(
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
     );
 
-    const details = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
+    const android = AndroidNotificationDetails(
+      'default_channel', // id
+      'Default', // name
+      channelDescription: 'Default channel for notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: true,
     );
+    const details = NotificationDetails(iOS: ios, android: android);
 
     await _plugin.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,
