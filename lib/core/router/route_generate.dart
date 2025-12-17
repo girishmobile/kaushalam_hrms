@@ -23,6 +23,7 @@ import 'package:neeknots_admin/screens/dashboard_screen.dart';
 import 'package:neeknots_admin/screens/edit_leave_page.dart';
 import 'package:neeknots_admin/screens/employee_leave_balance.dart';
 import 'package:neeknots_admin/screens/holiday_page.dart';
+import 'package:neeknots_admin/screens/hotline/hotline_list_page.dart';
 import 'package:neeknots_admin/screens/hotline/hotline_page.dart';
 import 'package:neeknots_admin/screens/hotline/hotline_screen.dart';
 import 'package:neeknots_admin/screens/leave_summary_page.dart';
@@ -116,7 +117,8 @@ class RouteGenerate {
         screen = const AllEmplyeePage();
         break;
       case RouteName.employeeDetailPage:
-        screen = const EmployeeDetailPage();
+        final args = settings.arguments as String;
+        screen = EmployeeDetailPage(employeeId: args);
         break;
       case RouteName.holidayPage:
         screen = const HolidayPage();
@@ -139,6 +141,9 @@ class RouteGenerate {
         break;
       case RouteName.hotlineScreen:
         screen = const HotlineScreen();
+        break;
+      case RouteName.hotlineListPage:
+        screen = const HotlineListPage();
         break;
       case RouteName.hotlinePage:
         final args = settings.arguments as String;

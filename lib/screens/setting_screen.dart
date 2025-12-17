@@ -123,7 +123,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     title: "Hotline",
                     icon: icHotline,
                     onTap: () =>
-                        Navigator.pushNamed(context, RouteName.hotlineScreen),
+                        Navigator.pushNamed(context, RouteName.hotlineListPage),
                   ),
                   const SizedBox(height: 24),
                   gradientButton(

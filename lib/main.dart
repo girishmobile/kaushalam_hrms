@@ -11,8 +11,10 @@ import 'package:neeknots_admin/firebase/local_notification_service.dart';
 import 'package:neeknots_admin/provider/app_provider.dart';
 import 'package:neeknots_admin/provider/attendance_provider.dart';
 import 'package:neeknots_admin/provider/calendar_provider.dart';
+import 'package:neeknots_admin/provider/emp_detail_provider.dart';
 import 'package:neeknots_admin/provider/emp_notifi_provider.dart';
 import 'package:neeknots_admin/provider/emp_provider.dart';
+import 'package:neeknots_admin/provider/hotline_list_provider.dart';
 import 'package:neeknots_admin/provider/hotline_provider.dart';
 import 'package:neeknots_admin/provider/leave_balance_provider.dart';
 import 'package:neeknots_admin/provider/leave_provider.dart';
@@ -51,6 +53,10 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider<SettingProvider>(create: (_) => SettingProvider()),
   ChangeNotifierProvider<EmpNotifiProvider>(create: (_) => EmpNotifiProvider()),
   ChangeNotifierProvider<MyKpiProvider>(create: (_) => MyKpiProvider()),
+  ChangeNotifierProvider<EmpDetailProvider>(create: (_) => EmpDetailProvider()),
+  ChangeNotifierProvider<HotlineListProvider>(
+    create: (_) => HotlineListProvider(),
+  ),
   ChangeNotifierProvider<ManagerHotlineProvider>(
     create: (_) => ManagerHotlineProvider(),
   ),

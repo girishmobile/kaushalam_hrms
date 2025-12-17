@@ -702,7 +702,6 @@ Widget employeeCard(Employee employee) {
             ],
           ),
         ),
-
         SizedBox(width: 4),
         appForwardIcon(),
       ],
@@ -710,8 +709,13 @@ Widget employeeCard(Employee employee) {
   );
 }
 
-Widget hotlineCard(HotLineData employee) {
+Widget hotlineCard(
+  HotLineData employee, {
+  bool showArrow = true,
+  VoidCallback? onTaped,
+}) {
   return appViewEffect(
+    onTap: onTaped,
     child: Row(
       children: [
         appCircleImage(
@@ -745,9 +749,9 @@ Widget hotlineCard(HotLineData employee) {
             ],
           ),
         ),
+        statusChip(employee.workStatus ?? ''),
 
-        SizedBox(width: 4),
-        appForwardIcon(),
+        if (showArrow) ...[SizedBox(width: 4), appForwardIcon()],
       ],
     ),
   );
@@ -1138,6 +1142,55 @@ Widget orderCard(OrderModel order) {
 Widget appForwardIcon() {
   // Icon(Icons.chevron_right_rounded, color: Colors.white54, size: 24),
   return Icon(Icons.chevron_right_outlined, color: Colors.black26);
+}
+
+Widget statusChip(String status) {
+  final config = _statusConfig(status);
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+    decoration: BoxDecoration(
+      color: config.color.withOpacity(0.12),
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: config.color),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(config.icon, size: 14, color: config.color),
+        const SizedBox(width: 6),
+        Text(
+          config.label,
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w500,
+            color: config.color,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+StatusConfig _statusConfig(String status) {
+  switch (status.toLowerCase()) {
+    case 'online':
+      return StatusConfig(Colors.green, Icons.check_circle, 'Online');
+
+    case 'offline':
+      return StatusConfig(Colors.grey, Icons.cancel, 'Offline');
+
+    case 'on-break':
+      return StatusConfig(Colors.orange, Icons.pause_circle, 'On Break');
+
+    case 'wfh':
+      return StatusConfig(Colors.blue, Icons.home, 'WFH');
+
+    case 'on-leave':
+      return StatusConfig(Colors.red, Icons.event_busy, 'On Leave');
+
+    default:
+      return StatusConfig(Colors.grey, Icons.help, 'Unknown');
+  }
 }
 
 Widget loadTitleText({

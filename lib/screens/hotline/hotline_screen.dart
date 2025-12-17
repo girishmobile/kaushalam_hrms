@@ -82,7 +82,6 @@ class _HotlineScreenState extends State<HotlineScreen> {
                         bottom: 0,
                       ),
                       itemCount: provider.hotlineCount.length,
-
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3, // 2 columns
@@ -180,7 +179,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                   child: Row(
                                     spacing: 10,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
 
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [

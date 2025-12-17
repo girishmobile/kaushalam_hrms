@@ -69,12 +69,9 @@ class HotlineProvider with ChangeNotifier {
   }
 
   String? _title = "online";
-
   String? get title => _title;
-
   void setHeaderTitle(String title) {
     _title = title;
-
     notifyListeners();
   }
 
@@ -89,7 +86,6 @@ class HotlineProvider with ChangeNotifier {
 
       if (globalStatusCode == 200) {
         final decoded = json.decode(response);
-
         if (decoded is Map<String, dynamic>) {
           _hotlineCount = decoded.entries
               .map((e) => HotlineCountModel(title: e.key, count: e.value))

@@ -323,3 +323,32 @@ void showRejectLeaveDialog(
     },
   );
 }
+
+class StatusConfig {
+  final Color color;
+  final IconData icon;
+  final String label;
+  StatusConfig(this.color, this.icon, this.label);
+}
+
+// StatusConfig _statusConfig(String status) {
+//   switch (status.toLowerCase()) {
+//     case 'online':
+//       return StatusConfig(Colors.green, Icons.check_circle, 'Online');
+
+//     case 'offline':
+//       return StatusConfig(Colors.grey, Icons.cancel, 'Offline');
+
+//     case 'on-break':
+//       return StatusConfig(Colors.orange, Icons.pause_circle, 'On Break');
+
+//     case 'wfh':
+//       return StatusConfig(Colors.blue, Icons.home, 'WFH');
+
+//     case 'on-leave':
+//       return StatusConfig(Colors.red, Icons.event_busy, 'On Leave');
+
+//     default:
+//       return StatusConfig(Colors.grey, Icons.help, 'Unknown');
+//   }
+//}

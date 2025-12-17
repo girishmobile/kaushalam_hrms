@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
+import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/provider/manager_hotline_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +97,11 @@ class HotlinePage extends StatelessWidget {
         return RepaintBoundary(
           child: GestureDetector(
             onTap: () {
-              // Navigator.pushNamed(context, RouteName.employeeDetailPage);
+              Navigator.pushNamed(
+                context,
+                RouteName.employeeDetailPage,
+                arguments: "${employee.id}",
+              );
             },
             child: hotlineCard(employee),
           ),
