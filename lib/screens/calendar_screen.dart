@@ -158,10 +158,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 : Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.redAccent.withValues(alpha: 0.1),
+                      color:  event['type'] == "attendance"  ?Colors.green.withValues(alpha: 0.1):Colors.redAccent.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: Icon(Icons.pending_actions, color: Colors.redAccent),
+                    child: Icon(event['type'] == "attendance" ?Icons.access_time:Icons.pending_actions, color:  event['type'] == "attendance" ? Colors.green : Colors.redAccent),
                   ),
             Expanded(
               child: Column(

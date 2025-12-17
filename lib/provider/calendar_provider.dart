@@ -191,7 +191,7 @@ class CalendarProvider extends ChangeNotifier {
 
     for (var person in birthdays) {
       final dobStr = person["date_of_birth"]?["date"];
-      if (dobStr == null) continue;
+      if (dobStr == null) continue; 
 
       final dob = DateTime.parse(dobStr);
       final dateKey = DateTime(monthDate.year, dob.month, dob.day);
