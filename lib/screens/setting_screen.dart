@@ -64,6 +64,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   Consumer<ProfileProvider>(
                     builder: (_, profileProvider, _) {
                       return appProfileImage(
+                        text: provider.userModel?.firstname ?? '',
                         context: context,
                         imageUrl:
                             "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",

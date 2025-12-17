@@ -20,9 +20,12 @@ class EmployeeDetailPage extends StatelessWidget {
             ),
             children: [
               appProfileImage(
-                  isEdit: false,
-                  context: context,
-                  imageUrl: hostImage, radius: 60),
+                text: "John",
+                isEdit: false,
+                context: context,
+                imageUrl: hostImage,
+                radius: 60,
+              ),
               SizedBox(height: 16),
               loadTitleText(title: "John Smith", textAlign: TextAlign.center),
               loadSubText(

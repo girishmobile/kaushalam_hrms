@@ -53,7 +53,7 @@ class EmployeeLeaveBalance extends StatelessWidget {
     return appOrangeTextField(
       textController: provider.nameController,
       hintText: "search by employee name",
-      icon:Icon(Icons.search),
+      icon: Icon(Icons.search),
     );
   }
 
@@ -91,7 +91,7 @@ class EmployeeLeaveBalance extends StatelessWidget {
                 borderColor: btnColor2.shade200,
                 radius: 24,
                 imageUrl: fullImageUrl,
-                icon: Icons.person_outline,
+                text: item.firstname,
               ),
               const SizedBox(width: 12),
               Expanded(

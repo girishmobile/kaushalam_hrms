@@ -106,7 +106,7 @@ Widget appCircleIcon({
   );
 }
 
-Widget  appCircleImage({
+Widget appCircleImage({
   IconData? icon,
   double radius = 24,
   double? iconSize = 24,
@@ -185,7 +185,7 @@ Widget commonAssetImage(
 
 BoxDecoration commonBoxDecoration({
   Color color = Colors.transparent,
-  double borderRadius = 8.0,
+  double borderRadius = 4.0,
   Color borderColor = Colors.transparent,
   double borderWidth = 1.0,
 
@@ -265,7 +265,6 @@ Widget _buildImageOrFallback({
   String? text,
   double? iconSize = 24,
 }) {
-
   if (imageUrl != null && imageUrl.isNotEmpty) {
     if (imageUrl.startsWith("http")) {
       // Network image
@@ -301,12 +300,7 @@ Widget _buildImageOrFallback({
       );
     } else {
       // Invalid string (like "Girish") → fallback
-      return _fallBackContent(
-        Icons.image_outlined,
-        iconColor,
-        text ?? imageUrl,
-        iconSize,
-      );
+      return _fallBackContent(icon, iconColor, text ?? imageUrl, iconSize);
     }
   }
 
@@ -326,11 +320,16 @@ Widget _fallBackContent(
     return Center(
       child: Text(
         text.characters.first.toUpperCase(),
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          //color: textColor,
+          color: Colors.black87,
+        ),
       ),
     );
   } else {
-    return Icon(Icons.person_outline_rounded, size: 24, color: iconColor);
+    return Icon(Icons.image_outlined, size: 24, color: iconColor);
     //  return  loadAssetImage(name: errorImage);
   }
 }
@@ -662,7 +661,7 @@ Widget employeeCard(Employee employee) {
           text: employee.firstname,
           imageUrl: setImagePath(employee.profileImage),
           radius: 24,
-         // icon: Icons.person_outline,
+          // icon: Icons.person_outline,
           iconColor: color2,
           borderColor: color2,
         ),
@@ -718,7 +717,7 @@ Widget hotlineCard(HotLineData employee) {
         appCircleImage(
           imageUrl: setImagePath(employee.profileImage),
           radius: 24,
-          icon: Icons.person_outline,
+          text: employee.firstname,
           iconColor: color2,
           borderColor: color2,
         ),
@@ -743,14 +742,6 @@ Widget hotlineCard(HotLineData employee) {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              // Text(
-              //   employee.designation ?? '',
-              //   style: const TextStyle(
-              //     fontSize: 12,
-              //     color: Colors.black54,
-              //     fontWeight: FontWeight.w400,
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -1296,6 +1287,7 @@ Widget appProfileImage({
   double radius = 60,
   required BuildContext context,
   EdgeInsetsGeometry? padding,
+  String? text,
 }) {
   final provider = Provider.of<ProfileProvider>(context);
   return Stack(
@@ -1317,7 +1309,7 @@ Widget appProfileImage({
           ),
           child: appCircleImage(
             imageUrl: imageUrl,
-            icon: Icons.person_outline,
+            text: text,
             iconColor: color3,
             iconSize: radius / 1.5,
             radius: (radius - 2),
@@ -1825,6 +1817,7 @@ OutlineInputBorder commonTextFiledBorder({
     borderSide: BorderSide(width: 1.1, color: borderColor ?? color3),
   );
 }
+
 Center commonErrorView({String? text}) {
   return Center(
     child: Column(
