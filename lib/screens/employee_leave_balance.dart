@@ -76,10 +76,6 @@ class EmployeeLeaveBalance extends StatelessWidget {
   }
 
   Widget _leaveBalanceItem({required EmpLeaveBalance item}) {
-    final fullImageUrl =
-        (item.profile_image != null && item.profile_image!.isNotEmpty)
-        ? "${ApiConfig.imageBaseUrl}${item.profile_image}"
-        : null;
     return appViewEffect(
       child: Column(
         spacing: 16,
@@ -90,7 +86,7 @@ class EmployeeLeaveBalance extends StatelessWidget {
                 iconColor: btnColor2,
                 borderColor: btnColor2.shade200,
                 radius: 24,
-                imageUrl: fullImageUrl,
+                imageUrl: setImagePath(item.profile_image),
                 text: item.firstname,
               ),
               const SizedBox(width: 12),

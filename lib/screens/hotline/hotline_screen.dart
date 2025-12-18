@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
+import 'package:neeknots_admin/utility/utils.dart';
 
 import 'package:provider/provider.dart';
 
@@ -186,8 +187,9 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                       appCircleImage(
                                         text: data?.firstname,
                                         borderColor: color3,
-                                        imageUrl:
-                                            "${ApiConfig.imageBaseUrl}${data?.profileImage}",
+                                        imageUrl: setImagePath(
+                                          data?.profileImage,
+                                        ),
                                         radius: 18,
                                       ),
 

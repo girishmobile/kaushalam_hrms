@@ -66,8 +66,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       return appProfileImage(
                         text: provider.userModel?.firstname ?? '',
                         context: context,
-                        imageUrl:
-                            "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
+                        imageUrl: setImagePath(profileProvider.profileImage),
                         radius: 60,
                         isEdit: false,
                       );

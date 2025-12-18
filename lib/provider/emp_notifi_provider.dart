@@ -9,11 +9,6 @@ import 'package:neeknots_admin/models/emp_notification_model.dart';
 class EmpNotifiProvider extends ChangeNotifier {
   final nameController = TextEditingController();
 
-  // EmpNotifiProvider() {
-  //   nameController.addListener(() {
-  //     filterByName(nameController.text);
-  //   });
-  // }
   EmpNotifiProvider() {
     nameController.addListener(() {
       _onSearchChanged(nameController.text);
@@ -137,6 +132,7 @@ class EmpNotifiProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
+
   Future<void> readAllNotification() async {
     _setLoading(true);
     try {
@@ -146,7 +142,6 @@ class EmpNotifiProvider extends ChangeNotifier {
         headers: null,
       );
       if (globalStatusCode == 200) {
-
         _setLoading(false);
       } else {
         _setLoading(false);
@@ -155,6 +150,7 @@ class EmpNotifiProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
+
   int get unreadCount {
     return _notifications.where((n) => n.isRead == false).length;
   }

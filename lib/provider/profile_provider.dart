@@ -47,7 +47,7 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _setLoginSuccess(bool val) {
+  void _setSuccess(bool val) {
     _isLoading = false;
     _isSuccess = val;
     notifyListeners();
@@ -63,10 +63,9 @@ class ProfileProvider extends ChangeNotifier {
     required bool isCurrentUser,
   }) async {
     _profileModel = null;
+    _imageUrl = null; // reset the model
     _setLoading(true);
     // _profileModel = null;   // reset the model
-    _imageUrl = null; // reset the model
-    notifyListeners();
 
     try {
       final response = await callApi(
@@ -121,29 +120,25 @@ class ProfileProvider extends ChangeNotifier {
             Map<String, dynamic>.from(formattedJson),
           );
           await SecureStorage.saveUser(userModel);
-
           await loadProfileFromCache();
         } else {
           _imageUrl = _profileModel?.profileImage ?? '';
-          notifyListeners();
         }
-
-        _setLoginSuccess(true);
+        _setSuccess(true);
       } else {
-        _setLoginSuccess(false);
+        _setSuccess(false);
       }
     } catch (e) {
-      _setLoginSuccess(false);
+      _setSuccess(false);
     }
   }
 
   String? _profileImage;
-
   String? get profileImage => _profileImage;
+
   Future<void> loadProfileFromCache() async {
     UserModel? user = await SecureStorage.getUser();
     _profileImage = user?.profile ?? '';
-
     notifyListeners();
   }
 

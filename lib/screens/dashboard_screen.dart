@@ -23,7 +23,6 @@ import '../utility/secure_storage.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
-
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
@@ -33,32 +32,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<EmpProvider>(context, listen: false);
+
       await Future.wait([
         provider.updateFCMToken(),
         provider.getUpcomingBirthHodliday(),
+        context.read<EmpNotifiProvider>().getEmployeeNotification(),
       ]);
     });
-
     super.initState();
     _initdashboard();
-
-    setState(() {});
   }
 
   Future<void> _initdashboard() async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<ProfileProvider>(context, listen: false);
-      final empProvider = Provider.of<EmpNotifiProvider>(
-        context,
-        listen: false,
-      );
       final user = await SecureStorage.getUser();
       final body = {"employee_id": user?.id};
-
       await Future.wait([
         provider.getUserProfile(body: body, isCurrentUser: true),
-        provider.loadProfileFromCache(),
-        empProvider.getEmployeeNotification(),
       ]);
     });
   }
@@ -113,9 +104,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Consumer<ProfileProvider>(
                 builder: (_, profileProvider, _) {
                   return appCircleImage(
-                    borderColor: color3,
-                    imageUrl:
-                        "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
+                    borderColor: color2,
+                    text: profileProvider.profileModel?.firstname,
+                    imageUrl: setImagePath(profileProvider.profileImage),
                     radius: 18,
                     onTap: () {
                       Navigator.pushNamed(
@@ -174,9 +165,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               color: Colors.red,
                             ),
                             width: 18,
-
                             height: 18,
-
                             child: Center(
                               child: loadSubText(
                                 title: empProvider.unreadCount.toString(),

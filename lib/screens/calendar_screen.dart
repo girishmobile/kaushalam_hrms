@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
+import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -159,9 +160,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ? appCircleImage(
                     borderColor: color3,
                     iconColor: color3,
-                    imageUrl: "${ApiConfig.imageBaseUrl}${event['profile']}",
+                    imageUrl: setImagePath(event['profile']),
                     radius: 18,
-
                     icon: Icons.cake_outlined,
                   )
                 : Container(

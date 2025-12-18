@@ -70,8 +70,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           text: profileProvider.profileModel?.firstname ?? '',
                           context: context,
                           imageUrl: widget.isCurrentUser
-                              ? "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}"
-                              : "${ApiConfig.imageBaseUrl}${profileProvider.imageUrl}",
+                              ? setImagePath(profileProvider.profileImage)
+                              : setImagePath(profileProvider.imageUrl),
                           radius: 60,
                           isEdit: widget.isCurrentUser,
                         );
