@@ -221,11 +221,13 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
         _attendanceRecordModel = AttendaceRecordModel.fromJson(
           json.decode(response),
         );
+
         _setLoading(false);
       } else {
         _setLoading(false);
       }
     } catch (e) {
+
       _setLoading(false);
     }
   }

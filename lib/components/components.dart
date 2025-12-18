@@ -314,6 +314,7 @@ Widget _fallBackContent(
   String? text,
   double? iconSize,
 ) {
+  print('===${text}');
   if (icon != null) {
     return Icon(icon, color: iconColor, size: iconSize ?? 24);
   } else if (text != null && text.isNotEmpty) {
@@ -1354,15 +1355,7 @@ Widget appProfileImage({
   );
 }
 
-Widget appBackdropFilter({required Widget child, double borderRadius = 0}) {
-  return ClipRRect(
-    borderRadius: BorderRadius.circular(borderRadius),
-    child: BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-      child: child,
-    ),
-  );
-}
+
 
 Widget loadMultiLineTextField({
   Color? bgColor,
@@ -1404,50 +1397,7 @@ Widget loadMultiLineTextField({
   );
 }
 
-Widget leaveActionButton({
-  required String title,
-  required Color bgColor,
-  required Color textColor,
-  IconData? icon,
-  required VoidCallback onTap,
-}) {
-  return Material(
-    color: Colors.transparent,
-    borderRadius: BorderRadius.circular(4),
-    child: Ink(
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(4),
-        onTap: onTap,
-        child: Container(
-          height: 32,
-          padding: EdgeInsets.symmetric(horizontal: 12),
 
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (icon != null) ...[
-                Icon(icon, size: 18, color: textColor),
-                SizedBox(width: 6),
-              ],
-              Text(
-                title,
-                style: TextStyle(
-                  color: textColor,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
 
 Widget acceptOrRejectBtn({
   required Color bgColor,
@@ -1818,23 +1768,3 @@ OutlineInputBorder commonTextFiledBorder({
   );
 }
 
-Center commonErrorView({String? text}) {
-  return Center(
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      spacing: 20,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        //commonAssetImage(icNoData, width: 100, height: 100),
-        loadTitleText(
-          textAlign: TextAlign.center,
-          title: text ?? '',
-          fontSize: 16,
-          fontWight: FontWeight.w500,
-          fontColor: Colors.black.withValues(alpha: 0.8),
-        ),
-      ],
-    ),
-  );
-}

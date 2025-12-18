@@ -1,8 +1,8 @@
 class AttendaceRecordModel {
   Data? data;
-  int? draw;
-  int? recordsFiltered;
-  int? recordsTotal;
+  dynamic  draw;
+  dynamic recordsFiltered;
+  dynamic recordsTotal;
 
   AttendaceRecordModel(
       {this.data, this.draw, this.recordsFiltered, this.recordsTotal});
@@ -101,7 +101,7 @@ class DataItem {
 
 class Date {
   String? date;
-  int? timezoneType;
+  dynamic timezoneType;
   String? timezone;
 
   Date({this.date, this.timezoneType, this.timezone});
@@ -122,8 +122,8 @@ class Date {
 }
 
 class Staffing {
-  int? hours;
-  int? minutes;
+  dynamic hours;
+  dynamic  minutes;
   double? barData;
 
   Staffing({this.hours, this.minutes, this.barData});
@@ -144,16 +144,16 @@ class Staffing {
 }
 
 class LeaveData {
-  int? presentDays;
-  int? lateDays;
-  int? lateDaysRatio;
-  int? halfDays;
-  int? absentDays;
-  int? absentDaysRatio;
+  dynamic presentDays;
+  dynamic lateDays;
+  dynamic lateDaysRatio;
+  dynamic halfDays;
+  dynamic absentDays;
+  dynamic absentDaysRatio;
   RequiredStaffing? requiredStaffing;
   RequiredStaffing? empStaffing;
   String? productivityRatio;
-  int? officeStaffing;
+  dynamic officeStaffing;
 
   LeaveData(
       {this.presentDays,
@@ -205,8 +205,8 @@ class LeaveData {
 }
 
 class RequiredStaffing {
-  int? hours;
-  int? minutes;
+  dynamic hours;
+  dynamic minutes;
 
   RequiredStaffing({this.hours, this.minutes});
 

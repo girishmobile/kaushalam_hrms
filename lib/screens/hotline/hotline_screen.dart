@@ -180,7 +180,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                   child: Row(
                                     spacing: 10,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
 
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -220,6 +220,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                       ),
 
                                       appViewEffect(
+                                        borderRadius: 4,
                                         borderColor:
                                             data?.workStatus
                                                     .toString()
@@ -237,6 +238,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                                           vertical: 5,
                                         ),
                                         child: loadSubText(
+                                          fontWight: FontWeight.w600,
                                           title:
                                               '${data?.workStatus.toString().toCapitalize()}',
                                           fontSize: 10,
@@ -355,7 +357,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            loadTitleText(
+                            loadSubText(
                               title: "Designation",
                               fontWight: FontWeight.w600,
                             ),
@@ -387,7 +389,7 @@ class _HotlineScreenState extends State<HotlineScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            loadTitleText(
+                            loadSubText(
                               title: "Search Employee",
                               fontWight: FontWeight.w600,
                             ),
