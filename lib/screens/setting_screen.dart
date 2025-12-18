@@ -66,8 +66,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       return appProfileImage(
                         text: provider.userModel?.firstname ?? '',
                         context: context,
-                        imageUrl:
-                            "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
+                        imageUrl: setImagePath(profileProvider.profileImage),
                         radius: 60,
                         isEdit: false,
                       );
@@ -123,7 +122,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     title: "Hotline",
                     icon: icHotline,
                     onTap: () =>
-                        Navigator.pushNamed(context, RouteName.hotlineScreen),
+                        Navigator.pushNamed(context, RouteName.hotlineListPage),
                   ),
                   const SizedBox(height: 24),
                   gradientButton(

@@ -14,7 +14,6 @@ import 'package:neeknots_admin/pages/order/all_order_page.dart';
 import 'package:neeknots_admin/pages/order/order_detail_page.dart';
 import 'package:neeknots_admin/pages/product/all_product_page.dart';
 import 'package:neeknots_admin/pages/product/product_detail_page.dart';
-import 'package:neeknots_admin/pages/profile_page.dart';
 import 'package:neeknots_admin/pages/today_sale_page.dart';
 import 'package:neeknots_admin/screens/all_leave_page.dart';
 import 'package:neeknots_admin/screens/apply_leave_page.dart';
@@ -23,10 +22,12 @@ import 'package:neeknots_admin/screens/dashboard_screen.dart';
 import 'package:neeknots_admin/screens/edit_leave_page.dart';
 import 'package:neeknots_admin/screens/employee_leave_balance.dart';
 import 'package:neeknots_admin/screens/holiday_page.dart';
+import 'package:neeknots_admin/screens/hotline/hotline_list_page.dart';
 import 'package:neeknots_admin/screens/hotline/hotline_page.dart';
 import 'package:neeknots_admin/screens/hotline/hotline_screen.dart';
 import 'package:neeknots_admin/screens/leave_summary_page.dart';
 import 'package:neeknots_admin/screens/pending_leave_page.dart';
+import 'package:neeknots_admin/screens/profile_page.dart';
 import 'package:neeknots_admin/screens/profile_screen.dart';
 import 'package:neeknots_admin/screens/setting/all_emplyee_page.dart';
 import 'package:neeknots_admin/screens/setting/change_password_page.dart';
@@ -116,7 +117,8 @@ class RouteGenerate {
         screen = const AllEmplyeePage();
         break;
       case RouteName.employeeDetailPage:
-        screen = const EmployeeDetailPage();
+        final args = settings.arguments as String;
+        screen = EmployeeDetailPage(employeeId: args);
         break;
       case RouteName.holidayPage:
         screen = const HolidayPage();
@@ -139,6 +141,9 @@ class RouteGenerate {
         break;
       case RouteName.hotlineScreen:
         screen = const HotlineScreen();
+        break;
+      case RouteName.hotlineListPage:
+        screen = const HotlineListPage();
         break;
       case RouteName.hotlinePage:
         final args = settings.arguments as String;

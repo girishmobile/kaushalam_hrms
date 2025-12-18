@@ -5,7 +5,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:neeknots_admin/api/api_config.dart';
+import 'package:neeknots_admin/common/app_image_picker.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:neeknots_admin/core/constants/string_constant.dart';
 import 'package:neeknots_admin/models/all_leave_model.dart';
@@ -111,11 +113,12 @@ Widget appCircleImage({
   double radius = 24,
   double? iconSize = 24,
   VoidCallback? onTap,
-  Color? iconColor = Colors.white,
+  Color? iconColor = color3,
   String? text,
   Color? backgroundColor,
   String? imageUrl,
   Color? borderColor = Colors.white24,
+  double? fontSize = 16,
 }) {
   return Material(
     color: Colors.transparent,
@@ -136,6 +139,7 @@ Widget appCircleImage({
           iconColor: iconColor,
           text: text,
           iconSize: iconSize,
+          fontSize: fontSize,
         ),
       ),
     ),
@@ -215,6 +219,7 @@ Widget loadNetworkImage({
   String? text,
   BoxFit fit = BoxFit.contain,
   double iconSize = 24,
+  double? fontSize = 16,
 }) {
   if (imageUrl != null && imageUrl.isNotEmpty) {
     if (imageUrl.startsWith("http")) {
@@ -233,7 +238,7 @@ Widget loadNetworkImage({
         ),
         errorWidget: (_, __, ___) =>
             // loadAssetImage(name: errorImage)
-            _fallBackContent(icon, iconColor, text, iconSize),
+            _fallBackContent(icon, iconColor, text, iconSize, fontSize),
       );
     } else if (imageUrl.contains(".png") ||
         imageUrl.contains(".jpg") ||
@@ -248,13 +253,19 @@ Widget loadNetworkImage({
       );
     } else {
       // Invalid string (like "Girish") → fallback
-      return _fallBackContent(icon, iconColor, text ?? imageUrl, iconSize);
+      return _fallBackContent(
+        icon,
+        iconColor,
+        text ?? imageUrl,
+        iconSize,
+        fontSize,
+      );
       //return loadAssetImage(name: errorImage);
     }
   }
 
   // If no imageUrl, show fallback
-  return _fallBackContent(icon, iconColor, text, iconSize);
+  return _fallBackContent(icon, iconColor, text, iconSize, fontSize);
 }
 
 Widget _buildImageOrFallback({
@@ -264,6 +275,7 @@ Widget _buildImageOrFallback({
   Color? iconColor,
   String? text,
   double? iconSize = 24,
+  double? fontSize = 16,
 }) {
   if (imageUrl != null && imageUrl.isNotEmpty) {
     if (imageUrl.startsWith("http")) {
@@ -282,7 +294,7 @@ Widget _buildImageOrFallback({
             ),
           ),
           errorWidget: (_, __, ___) =>
-              _fallBackContent(icon, iconColor, text, iconSize),
+              _fallBackContent(icon, iconColor, text, iconSize, fontSize),
         ),
       );
     } else if (imageUrl.contains(".png") ||
@@ -300,12 +312,14 @@ Widget _buildImageOrFallback({
       );
     } else {
       // Invalid string (like "Girish") → fallback
-      return _fallBackContent(icon, iconColor, text ?? imageUrl, iconSize);
+
+      return _fallBackContent(icon, iconColor, text, iconSize, fontSize);
     }
+  } else {
+    return _fallBackContent(icon, iconColor, text, iconSize, fontSize);
   }
 
   // If no imageUrl, show fallback
-  return _fallBackContent(icon, iconColor, text, iconSize);
 }
 
 Widget _fallBackContent(
@@ -313,6 +327,7 @@ Widget _fallBackContent(
   Color? iconColor,
   String? text,
   double? iconSize,
+  double? fontSize,
 ) {
   print('===${text}');
   if (icon != null) {
@@ -321,17 +336,16 @@ Widget _fallBackContent(
     return Center(
       child: Text(
         text.characters.first.toUpperCase(),
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
+        style: TextStyle(
+          fontSize: fontSize ?? 16,
+          fontWeight: FontWeight.w500,
           //color: textColor,
           color: Colors.black87,
         ),
       ),
     );
   } else {
-    return Icon(Icons.image_outlined, size: 24, color: iconColor);
-    //  return  loadAssetImage(name: errorImage);
+    return Icon(Icons.image_outlined, size: 20, color: iconColor);
   }
 }
 
@@ -703,7 +717,6 @@ Widget employeeCard(Employee employee) {
             ],
           ),
         ),
-
         SizedBox(width: 4),
         appForwardIcon(),
       ],
@@ -711,8 +724,13 @@ Widget employeeCard(Employee employee) {
   );
 }
 
-Widget hotlineCard(HotLineData employee) {
+Widget hotlineCard(
+  HotLineData employee, {
+  bool showArrow = true,
+  VoidCallback? onTaped,
+}) {
   return appViewEffect(
+    onTap: onTaped,
     child: Row(
       children: [
         appCircleImage(
@@ -746,9 +764,9 @@ Widget hotlineCard(HotLineData employee) {
             ],
           ),
         ),
+        statusChip(employee.workStatus ?? ''),
 
-        SizedBox(width: 4),
-        appForwardIcon(),
+        if (showArrow) ...[SizedBox(width: 4), appForwardIcon()],
       ],
     ),
   );
@@ -890,11 +908,6 @@ Widget leaveCard({
 }
 
 Widget holidayCard({required Holiday item}) {
-  final fullImageUrl =
-      (item.holiday_image != null && item.holiday_image!.isNotEmpty)
-      ? "${ApiConfig.imageBaseUrl}${item.holiday_image}"
-      : null;
-
   return SizedBox(
     width: 300,
     child: appViewEffect(
@@ -905,10 +918,9 @@ Widget holidayCard({required Holiday item}) {
           appCircleImage(
             iconColor: btnColor2,
             borderColor: btnColor2.shade200,
-
             radius: 32,
             iconSize: 36,
-            imageUrl: fullImageUrl,
+            imageUrl: setImagePath(item.holiday_image),
             icon: Icons.festival_outlined,
           ),
           Column(
@@ -953,11 +965,6 @@ Widget holidayCard({required Holiday item}) {
 }
 
 Widget birthDayCard({required BirthDay item, double radius = 32}) {
-  final fullImageUrl =
-      (item.profile_image != null && item.profile_image!.isNotEmpty)
-      ? "${ApiConfig.imageBaseUrl}${item.profile_image}"
-      : null;
-
   return SizedBox(
     width: 300,
     child: appViewEffect(
@@ -968,10 +975,9 @@ Widget birthDayCard({required BirthDay item, double radius = 32}) {
           appCircleImage(
             iconColor: btnColor2,
             borderColor: btnColor2.shade200,
-
             radius: radius,
             iconSize: 36,
-            imageUrl: fullImageUrl,
+            imageUrl: setImagePath(item.profile_image),
             icon: Icons.cake_outlined,
           ),
           Column(
@@ -1139,6 +1145,55 @@ Widget orderCard(OrderModel order) {
 Widget appForwardIcon() {
   // Icon(Icons.chevron_right_rounded, color: Colors.white54, size: 24),
   return Icon(Icons.chevron_right_outlined, color: Colors.black26);
+}
+
+Widget statusChip(String status) {
+  final config = _statusConfig(status);
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+    decoration: BoxDecoration(
+      color: config.color.withOpacity(0.12),
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: config.color),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(config.icon, size: 14, color: config.color),
+        const SizedBox(width: 6),
+        Text(
+          config.label,
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w500,
+            color: config.color,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+StatusConfig _statusConfig(String status) {
+  switch (status.toLowerCase()) {
+    case 'online':
+      return StatusConfig(Colors.green, Icons.check_circle, 'Online');
+
+    case 'offline':
+      return StatusConfig(Colors.grey, Icons.cancel, 'Offline');
+
+    case 'on-break':
+      return StatusConfig(Colors.orange, Icons.pause_circle, 'On Break');
+
+    case 'wfh':
+      return StatusConfig(Colors.blue, Icons.home, 'WFH');
+
+    case 'on-leave':
+      return StatusConfig(Colors.red, Icons.event_busy, 'On Leave');
+
+    default:
+      return StatusConfig(Colors.grey, Icons.help, 'Unknown');
+  }
 }
 
 Widget loadTitleText({
@@ -1315,6 +1370,7 @@ Widget appProfileImage({
             iconSize: radius / 1.5,
             radius: (radius - 2),
             onTap: () {},
+            fontSize: 36,
           ),
         ),
       ),
@@ -1325,7 +1381,7 @@ Widget appProfileImage({
                 offset: Offset(40, 0), // 👈 left side me 20px shift
                 child: InkWell(
                   onTap: () async {
-                    final path = await CommonImagePicker.pickImage(
+                    final path = await AppImagePicker.pickImage(
                       context: context,
                     );
                     if (path != null) {
@@ -1474,13 +1530,13 @@ Future<LeaveDropdownItem?> appBottomSheet(
     context: context,
     backgroundColor: Colors.white,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
     ),
     builder: (context) => Container(
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1537,6 +1593,122 @@ Future<LeaveDropdownItem?> appBottomSheet(
   );
 }
 
+Future<void> appCameraOrLibary(BuildContext context) async {
+  return await showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.white,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+    ),
+    builder: (ctx) => Container(
+      padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      child: Column(
+        spacing: 4,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          appGradientText(
+            text: "Choose from camera or Library",
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+            gradient: appGradient(),
+          ),
+          SizedBox(height: 4),
+          loadSubText(
+            fontSize: 12,
+            title:
+                "Choose an option below to set your profile picture from camera or Library.",
+          ),
+          SizedBox(height: 12),
+          appViewEffect(
+            child: Row(
+              spacing: 4,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                appCircleIcon(
+                  icon: Icons.camera_alt_outlined,
+                  iconSize: 24,
+                  gradient: appGradient(),
+                ),
+                appGradientText(
+                  text: "From camera",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                  gradient: appGradient(),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 12),
+          appViewEffect(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 4,
+              children: [
+                appCircleIcon(
+                  icon: Icons.photo_outlined,
+                  iconSize: 24,
+                  gradient: appGradient(),
+                ),
+                appGradientText(
+                  text: "From Library",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                  gradient: appGradient(),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 12),
+          appViewEffect(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Row(
+              spacing: 4,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                appCircleIcon(
+                  icon: Icons.close,
+                  iconSize: 24,
+                  gradient: appGradient(),
+                ),
+                appGradientText(
+                  text: "CANCEL",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  gradient: appGradient(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+final ImagePicker _picker = ImagePicker();
+
+Future<void> _pickImage({
+  required ImageSource source,
+  required BuildContext context,
+}) async {
+  try {
+    final XFile? image = await _picker.pickImage(
+      source: source,
+      imageQuality: 80,
+    );
+
+    if (image != null) {}
+  } catch (e) {
+    debugPrint("Image pick error: $e");
+  }
+}
+
 Future<String?> appSimpleBottomSheet(
   BuildContext context, {
   String? selected,
@@ -1547,13 +1719,13 @@ Future<String?> appSimpleBottomSheet(
     context: context,
     backgroundColor: Colors.white,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
     ),
     builder: (context) => Container(
       padding: EdgeInsets.only(top: 4, left: 16, right: 8, bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
       child: SingleChildScrollView(
         child: Column(

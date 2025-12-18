@@ -314,6 +314,7 @@ class EmpProvider extends ChangeNotifier {
   }
 
   Future<void> getAllEmployees() async {
+    filteredList = [];
     _setLoading(true);
     Map<String, dynamic> body = {
       "draw": 1,

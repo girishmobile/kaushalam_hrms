@@ -22,8 +22,10 @@ class AppProvider extends ChangeNotifier {
   //Data binding..
   String _isRole = "employee";
   String get isRole => _isRole;
+
   String? _employeeId;
   String? get employeeId => _employeeId;
+
   String? _profileImage;
   String? get profileImage => _profileImage;
 

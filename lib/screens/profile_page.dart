@@ -9,6 +9,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
     return AppScaffold(
       child: Stack(
         children: [

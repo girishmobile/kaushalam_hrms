@@ -74,7 +74,7 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
     }
     return SizedBox(
       width: double.infinity,
-      height: 36,
+      height: 40,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
@@ -93,7 +93,7 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
             },
             child: AnimatedContainer(
               duration: Duration(microseconds: 200),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
                 // color: isSelected ? Colors.orange.shade50 : Colors.white,
                 borderRadius: BorderRadius.circular(8),
@@ -145,7 +145,7 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
       padding: EdgeInsets.only(
         left: 24,
         right: 24,
-        top: listTop(context, extra: 44),
+        top: listTop(context, extra: 52),
         bottom: listBottom(context),
       ),
       addAutomaticKeepAlives: false,
@@ -156,14 +156,10 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
         return RepaintBoundary(
           child: GestureDetector(
             onTap: () {
-              // Navigator.pushNamed(context, RouteName.employeeDetailPage);
               Navigator.pushNamed(
                 context,
-                RouteName.profileScreen,
-                arguments: {
-                  "employeeId": '${employee.id}',
-                  "isCurrentUser": false,
-                },
+                RouteName.employeeDetailPage,
+                arguments: "${employee.id}",
               );
             },
             child: employeeCard(employee),

@@ -23,7 +23,6 @@ import '../utility/secure_storage.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
-
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
@@ -33,32 +32,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<EmpProvider>(context, listen: false);
+
       await Future.wait([
         provider.updateFCMToken(),
         provider.getUpcomingBirthHodliday(),
+        context.read<EmpNotifiProvider>().getEmployeeNotification(),
       ]);
     });
-
     super.initState();
     _initdashboard();
-
-    setState(() {});
   }
 
   Future<void> _initdashboard() async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<ProfileProvider>(context, listen: false);
-      final empProvider = Provider.of<EmpNotifiProvider>(
-        context,
-        listen: false,
-      );
       final user = await SecureStorage.getUser();
       final body = {"employee_id": user?.id};
-
       await Future.wait([
         provider.getUserProfile(body: body, isCurrentUser: true),
-        provider.loadProfileFromCache(),
-        empProvider.getEmployeeNotification(),
       ]);
     });
   }
@@ -103,95 +94,96 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required AppProvider provider,
     required String title,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Consumer<ProfileProvider>(
-            builder: (_, profileProvider, _) {
-              return appCircleImage(
-                borderColor: color3,
-                text: profileProvider.profileModel?.firstname??'',
-                imageUrl:
-                "${ApiConfig.imageBaseUrl}${profileProvider.profileImage}",
-                radius: 18,
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    RouteName.profileScreen,
-                    arguments: {
-                      "employeeId": provider.employeeId,
-                      "isCurrentUser": true,
+    return Consumer<AppProvider>(
+      builder: (context, provider, child) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Consumer<ProfileProvider>(
+                builder: (_, profileProvider, _) {
+                  return appCircleImage(
+                    borderColor: color2,
+                    text: profileProvider.profileModel?.firstname,
+                    imageUrl: setImagePath(profileProvider.profileImage),
+                    radius: 18,
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        RouteName.profileScreen,
+                        arguments: {
+                          "employeeId": provider.employeeId,
+                          "isCurrentUser": true,
+                        },
+                        //arguments: provider.employeeId,
+                      );
                     },
-                    //arguments: provider.employeeId,
                   );
                 },
-              );
-            },
-          ),
+              ),
 
-          // ✅ Show logo only for Home, otherwise show title
-          provider.pageIndex == 2
-              ? appGradientText(
-            text: "KAUSHALAM",
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-            ),
-            gradient: appGradient(),
-          ) //loadAssetImage(name: headerlogo, height: 26)
-              : appGradientText(
-            text: title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-            gradient: appGradient(),
-          ), //loadAssetImage(name: headerlogo, height: 26)
-
-          Consumer<EmpNotifiProvider>(
-            builder: (context, empProvider, _) {
-              return InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, RouteName.notificationPage);
-                },
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    appGradientImage(
-                      imagePath: icNotification,
-                      size: 24,
+              // ✅ Show logo only for Home, otherwise show title
+              provider.pageIndex == 2
+                  ? appGradientText(
+                      text: "KAUSHALAM",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                      ),
                       gradient: appGradient(),
-                    ),
-                    Positioned(
-                      right: -2,
-                      top: -3,
-                      child: Container(
-                        decoration: commonBoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.red,
+                    ) //loadAssetImage(name: headerlogo, height: 26)
+                  : appGradientText(
+                      text: title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      gradient: appGradient(),
+                    ), //loadAssetImage(name: headerlogo, height: 26)
+
+              Consumer<EmpNotifiProvider>(
+                builder: (context, empProvider, _) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, RouteName.notificationPage);
+                    },
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        appGradientImage(
+                          imagePath: icNotification,
+                          size: 24,
+                          gradient: appGradient(),
                         ),
-                        width: 18,
-
-                        height: 18,
-
-                        child: Center(
-                          child: loadSubText(
-                            title: empProvider.unreadCount.toString(),
-                            fontColor: Colors.white,
-                            fontSize: 10,
+                        Positioned(
+                          right: -2,
+                          top: -3,
+                          child: Container(
+                            decoration: commonBoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                            width: 18,
+                            height: 18,
+                            child: Center(
+                              child: loadSubText(
+                                title: empProvider.unreadCount.toString(),
+                                fontColor: Colors.white,
+                                fontSize: 10,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            },
+                  );
+                },
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 

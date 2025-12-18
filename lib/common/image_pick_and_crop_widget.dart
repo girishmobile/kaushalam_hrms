@@ -11,61 +11,62 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../main.dart';
 import '../core/constants/colors.dart';
 
-
 class CommonImagePicker {
   static Future<String?> pickImage({required BuildContext context}) async {
-    final source = await showDialog<ImageSource>(
+    final source = await showModalBottomSheet<ImageSource>(
       context: context,
-      builder: (_) => CupertinoActionSheet(
-        message: loadTitleText(
-          title:
-              "Choose an option below to upload your image from camera or gallery.",
-          textAlign: TextAlign.center,
-          fontWight: FontWeight.w400,
-          fontSize: 14,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      builder: (ctx) => Container(
+        padding: const EdgeInsets.only(
+          left: 24,
+          right: 24,
+          top: 16,
+          bottom: 24,
         ),
-        title: loadSubText(
-          title: "Upload Your Image",
-          textAlign: TextAlign.center,
-          fontWight: FontWeight.w500,
-          fontSize: 16,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
         ),
-        cancelButton: CupertinoActionSheetAction(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: loadSubText(
-            title: "Cancel",
-            fontColor: Colors.redAccent,
-            fontWight: FontWeight.w600,
-          ),
-        ),
-        actions: [
-          CupertinoActionSheetAction(
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-            child: Row(
-              spacing: 10,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(Icons.camera_alt_outlined),
-                loadSubText(fontWight: FontWeight.w600, title: 'Camera'),
-              ],
+        child: Column(
+          spacing: 4,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            appGradientText(
+              text: "Choose from camera or Library",
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+              gradient: appGradient(),
             ),
-          ),
-          CupertinoActionSheetAction(
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-            child: Row(
-              spacing: 10,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(Icons.photo_library_outlined),
-                loadSubText(fontWight: FontWeight.w600, title: 'Gallery'),
-              ],
+            SizedBox(height: 4),
+            loadSubText(
+              fontSize: 12,
+              title:
+                  "Choose an option below to set your profile picture from camera or Library.",
             ),
-          ),
-        ],
+            SizedBox(height: 12),
+            _buidRowItem(
+              icon: Icons.camera_alt_outlined,
+              title: "From camera",
+              onTapped: () => Navigator.pop(context, ImageSource.camera),
+            ),
+            SizedBox(height: 12),
+            _buidRowItem(
+              icon: Icons.photo_outlined,
+              title: "From Library",
+              onTapped: () => Navigator.pop(context, ImageSource.gallery),
+            ),
+            SizedBox(height: 12),
+            _buidRowItem(
+              icon: Icons.close,
+              title: "CANCEL",
+              fontWeight: FontWeight.w600,
+              onTapped: () => Navigator.pop(context),
+            ),
+          ],
+        ),
       ),
     );
 
@@ -93,7 +94,6 @@ class CommonImagePicker {
     } else if (Platform.isIOS) {
       final cameraStatus = await Permission.camera.request();
       final photosStatus = await Permission.photos.request();
-
       if (cameraStatus.isGranted || photosStatus.isGranted) {
         permissionGranted = true;
       }
@@ -108,6 +108,8 @@ class CommonImagePicker {
         //  await openAppSettings();
         permissionGranted = true;
       }
+    } else if (Platform.isIOS) {
+      permissionGranted = true;
     }
 
     if (!permissionGranted) {
@@ -128,7 +130,7 @@ class CommonImagePicker {
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'Crop Image',
-          toolbarColor:color3,
+          toolbarColor: color3,
           toolbarWidgetColor: Colors.white,
           activeControlsWidgetColor: Colors.blue,
 
@@ -143,6 +145,30 @@ class CommonImagePicker {
   }
 
   //openImageDialog(context, onImageSelected);
+}
+
+Widget _buidRowItem({
+  required IconData icon,
+  required String title,
+  required VoidCallback onTapped,
+  FontWeight? fontWeight = FontWeight.w400,
+}) {
+  return appViewEffect(
+    onTap: onTapped,
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 4,
+      children: [
+        appCircleIcon(icon: icon, iconSize: 24, gradient: appGradient()),
+        appGradientText(
+          text: title, //"From Library",
+          style: TextStyle(fontSize: 14, fontWeight: fontWeight),
+          gradient: appGradient(),
+        ),
+      ],
+    ),
+  );
 }
 
 Future<void> _showPermissionDialog({bool isPermanent = false}) async {
@@ -181,3 +207,58 @@ Future<void> _showPermissionDialog({bool isPermanent = false}) async {
     },
   );
 }
+
+// final source = await showDialog<ImageSource>(
+    //   context: context,
+    //   builder: (_) => CupertinoActionSheet(
+    //     message: loadTitleText(
+    //       title:
+    //           "Choose an option below to upload your image from camera or gallery.",
+    //       textAlign: TextAlign.center,
+    //       fontWight: FontWeight.w400,
+    //       fontSize: 14,
+    //     ),
+    //     title: loadSubText(
+    //       title: "Upload Your Image",
+    //       textAlign: TextAlign.center,
+    //       fontWight: FontWeight.w500,
+    //       fontSize: 16,
+    //     ),
+    //     cancelButton: CupertinoActionSheetAction(
+    //       onPressed: () {
+    //         Navigator.pop(context);
+    //       },
+    //       child: loadSubText(
+    //         title: "Cancel",
+    //         fontColor: Colors.redAccent,
+    //         fontWight: FontWeight.w600,
+    //       ),
+    //     ),
+    //     actions: [
+    //       CupertinoActionSheetAction(
+    //         onPressed: () => Navigator.pop(context, ImageSource.camera),
+    //         child: Row(
+    //           spacing: 10,
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           crossAxisAlignment: CrossAxisAlignment.center,
+    //           children: [
+    //             Icon(Icons.camera_alt_outlined),
+    //             loadSubText(fontWight: FontWeight.w600, title: 'Camera'),
+    //           ],
+    //         ),
+    //       ),
+    //       CupertinoActionSheetAction(
+    //         onPressed: () => Navigator.pop(context, ImageSource.gallery),
+    //         child: Row(
+    //           spacing: 10,
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           crossAxisAlignment: CrossAxisAlignment.center,
+    //           children: [
+    //             Icon(Icons.photo_library_outlined),
+    //             loadSubText(fontWight: FontWeight.w600, title: 'Gallery'),
+    //           ],
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
