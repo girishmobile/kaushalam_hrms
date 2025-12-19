@@ -2,19 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/models/all_leave_model.dart';
-import 'package:neeknots_admin/pages/customer/customer_detail_page.dart';
-import 'package:neeknots_admin/pages/customer/customer_orders_page.dart';
-import 'package:neeknots_admin/pages/customer/customer_spent_page.dart';
-import 'package:neeknots_admin/pages/dashboard_page.dart';
 import 'package:neeknots_admin/pages/login/forgot_password_page.dart';
 import 'package:neeknots_admin/pages/login/login_page.dart';
 import 'package:neeknots_admin/pages/login/signup_page.dart';
 import 'package:neeknots_admin/pages/notification_page.dart';
-import 'package:neeknots_admin/pages/order/all_order_page.dart';
-import 'package:neeknots_admin/pages/order/order_detail_page.dart';
-import 'package:neeknots_admin/pages/product/all_product_page.dart';
-import 'package:neeknots_admin/pages/product/product_detail_page.dart';
-import 'package:neeknots_admin/pages/today_sale_page.dart';
 import 'package:neeknots_admin/screens/all_leave_page.dart';
 import 'package:neeknots_admin/screens/apply_leave_page.dart';
 import 'package:neeknots_admin/screens/birthday_list.dart';
@@ -24,7 +15,6 @@ import 'package:neeknots_admin/screens/employee_leave_balance.dart';
 import 'package:neeknots_admin/screens/holiday_page.dart';
 import 'package:neeknots_admin/screens/hotline/hotline_list_page.dart';
 import 'package:neeknots_admin/screens/hotline/hotline_page.dart';
-import 'package:neeknots_admin/screens/hotline/hotline_screen.dart';
 import 'package:neeknots_admin/screens/leave_summary_page.dart';
 import 'package:neeknots_admin/screens/pending_leave_page.dart';
 import 'package:neeknots_admin/screens/profile_page.dart';
@@ -52,38 +42,11 @@ class RouteGenerate {
       case RouteName.forgotPasswordPage:
         screen = const ForgotPasswordPage();
         break;
-      case RouteName.todaySalesPage:
-        screen = TodaySalePage();
-        break;
-      case RouteName.dashBoardPage:
-        screen = DashboardPage();
-        break;
       case RouteName.profilePage:
         screen = const ProfilePage();
         break;
       case RouteName.notificationPage:
         screen = const NotificationPage();
-        break;
-      case RouteName.allProductPage:
-        screen = const AllProductPage();
-        break;
-      case RouteName.productDetailPage:
-        screen = const ProductDetailPage();
-        break;
-      case RouteName.allOrderPage:
-        screen = const AllOrderPage();
-        break;
-      case RouteName.orderDetailPage:
-        screen = const OrderDetailPage();
-        break;
-      case RouteName.customerDetailPage:
-        screen = const CustomerDetailPage();
-        break;
-      case RouteName.customerOrdersPage:
-        screen = const CustomerOrdersPage();
-        break;
-      case RouteName.customerSpentPage:
-        screen = const CustomerSpentPage();
         break;
       //Orange theme
       case RouteName.dashboardScreen:
@@ -138,9 +101,6 @@ class RouteGenerate {
       case RouteName.editLeavePage:
         final args = settings.arguments as MyLeave;
         screen = EditLeavePage(item: args);
-        break;
-      case RouteName.hotlineScreen:
-        screen = const HotlineScreen();
         break;
       case RouteName.hotlineListPage:
         screen = const HotlineListPage();

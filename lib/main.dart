@@ -124,7 +124,6 @@ class _MyAppState extends State<MyApp> {
         initialRoute: RouteName.splashScreen,
         onGenerateRoute: RouteGenerate.onGenerateRoute,
         debugShowCheckedModeBanner: false,
-        // home: DashboardPage(),
       ),
     );
   }
