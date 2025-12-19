@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/models/my_kpi_model.dart';
@@ -53,7 +51,6 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
                 children: [
                   topBar(context, provider: provider),
                   Expanded(child: _kpiGridView(context, provider)),
-
                 ],
               ),
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
@@ -62,7 +59,6 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
         );
       },
     );
-
   }
 
   Widget _kpiGridView(BuildContext context, MyKpiProvider provider) {
@@ -71,7 +67,7 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
       padding: EdgeInsets.only(
         left: 24,
         right: 24,
-        top:12,
+        top: 12,
         bottom: listBottom(context),
       ),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -152,9 +148,6 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
   }
 
   Widget topBar(BuildContext context, {required MyKpiProvider provider}) {
-    final safeTop = MediaQuery.of(context).padding.top;
-    const topBarHeight = 48.0; // your Dashboard SafeArea Row
-    final listTop = safeTop + topBarHeight + 16; // search bar height + spacing
     return Container(
       padding: EdgeInsets.only(top: 0),
       margin: const EdgeInsets.symmetric(horizontal: 24),

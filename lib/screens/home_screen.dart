@@ -38,17 +38,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Stack(
           children: [
-
             Column(
+              spacing: 8,
               children: [
                 if (provider.isRole != "employee") topBar(context),
                 provider.isManager
                     ? Expanded(child: ManagerScreen())
-                    : Expanded(child: EmployeeScreen(employeeId: provider.employeeId ?? '')),
+                    : Expanded(
+                        child: EmployeeScreen(
+                          employeeId: provider.employeeId ?? '',
+                        ),
+                      ),
               ],
             ),
 
-           // if (provider.isRole != "employee") topBar(context),
+            // if (provider.isRole != "employee") topBar(context),
           ],
         );
       },

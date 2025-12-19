@@ -330,7 +330,6 @@ Widget _fallBackContent(
   double? iconSize,
   double? fontSize,
 ) {
-
   if (icon != null) {
     return Icon(icon, color: iconColor, size: iconSize ?? 24);
   } else if (text != null && text.isNotEmpty) {
@@ -1404,8 +1403,6 @@ Widget appProfileImage({
   );
 }
 
-
-
 Widget loadMultiLineTextField({
   Color? bgColor,
   String? hintText,
@@ -1445,8 +1442,6 @@ Widget loadMultiLineTextField({
     ),
   );
 }
-
-
 
 Widget acceptOrRejectBtn({
   required Color bgColor,
@@ -1932,8 +1927,6 @@ OutlineInputBorder commonTextFiledBorder({
     borderSide: BorderSide(width: 1.1, color: borderColor ?? color3),
   );
 }
-
-
 
 String maskShow(String pan) {
   if (pan.isEmpty) return pan;
