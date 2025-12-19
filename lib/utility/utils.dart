@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/core/constants/string_constant.dart';
@@ -328,6 +329,19 @@ class StatusConfig {
   final IconData icon;
   final String label;
   StatusConfig(this.color, this.icon, this.label);
+}
+
+class LowerCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    return newValue.copyWith(
+      text: newValue.text.toLowerCase().trim(),
+      selection: newValue.selection,
+    );
+  }
 }
 
 // StatusConfig _statusConfig(String status) {
