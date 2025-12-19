@@ -85,6 +85,7 @@ class _ApplyLeavePageState extends State<ApplyLeavePage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      appTitle: "LEAVE REQUEST",
       child: Consumer<LeaveProvider>(
         builder: (context, provider, child) {
           return Stack(
@@ -93,7 +94,7 @@ class _ApplyLeavePageState extends State<ApplyLeavePage> {
                 padding: EdgeInsets.only(
                   left: 24,
                   right: 24,
-                  top: appTopPadding(context),
+                  top: 0,
                 ),
                 children: [
                   // FROM DATE
@@ -220,10 +221,7 @@ class _ApplyLeavePageState extends State<ApplyLeavePage> {
                 ],
               ),
 
-              appNavigationBar(
-                title: "LEAVE REQUEST",
-                onTap: () => Navigator.pop(context),
-              ),
+
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
           );

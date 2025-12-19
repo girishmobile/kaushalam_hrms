@@ -42,25 +42,33 @@ class HotlinePage extends StatelessWidget {
       context.read<ManagerHotlineProvider>().getAllHotline(status: statusCode);
     });
     return AppScaffold(
+      appTitle:  getStatus(status)["text"] ?? "ALL EMPLOYEES",
       child: Consumer<ManagerHotlineProvider>(
         builder: (context, provider, child) {
           return Stack(
             children: [
-              provider.hotlineDataList.isEmpty && !provider.isLoading
-                  ? Center(child: Text("You don’t have any records yet."))
-                  : _listOfEmployee(context, provider),
-              Positioned(
-                top: appTopPadding(context),
-                left: 24,
-                right: 24,
-                child: _searchBar(context, provider),
+
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                  top: 0,
+                  bottom: appBottomPadding(context)
+
+                ),
+                child: Column(
+                  spacing: 10,
+                  children: [
+                    _searchBar(context, provider),
+                    provider.hotlineDataList.isEmpty && !provider.isLoading
+                        ? Center(child: Text("You don’t have any records yet."))
+                        : Expanded(child: _listOfEmployee(context, provider)),
+                  ],
+                ),
               ),
-              appNavigationBar(
-                title: getStatus(status)["text"] ?? "ALL EMPLOYEES",
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
+
+
+
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
           );
@@ -83,12 +91,7 @@ class HotlinePage extends StatelessWidget {
     ManagerHotlineProvider provider,
   ) {
     return ListView.separated(
-      padding: EdgeInsets.only(
-        left: 24,
-        right: 24,
-        top: listTop(context),
-        bottom: listBottom(context),
-      ),
+      padding: EdgeInsets.zero,
       addAutomaticKeepAlives: false,
       addRepaintBoundaries: true,
       cacheExtent: 500,

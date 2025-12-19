@@ -19,6 +19,7 @@ class ChangePasswordPage extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
 
     return AppScaffold(
+      appTitle: "CHANGE PASSWORD",
       child: Consumer<LoginProvider>(
         builder: (context, provider, child) {
           return Stack(
@@ -29,7 +30,7 @@ class ChangePasswordPage extends StatelessWidget {
                   padding: EdgeInsets.only(
                     left: 24,
                     right: 24,
-                    top: appTopPadding(context),
+                    top:0,
                     bottom: appBottomPadding(context),
                   ),
                   children: [
@@ -117,12 +118,7 @@ class ChangePasswordPage extends StatelessWidget {
                   ],
                 ),
               ),
-              appNavigationBar(
-                title: "CHANGE PASSWORD",
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
+
 
               provider.isLoading?showProgressIndicator():SizedBox.shrink()
             ],

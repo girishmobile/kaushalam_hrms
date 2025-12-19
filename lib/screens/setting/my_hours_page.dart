@@ -48,6 +48,7 @@ class _MyHoursPageState extends State<MyHoursPage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      appTitle: "MY HOURS",
       child: Stack(
         children: [
           Padding(
@@ -130,7 +131,7 @@ class _MyHoursPageState extends State<MyHoursPage> {
                       children: [
                         Column(
                           children: [
-                            SizedBox(height: 56),
+                            SizedBox(height: 0),
                             commonView(
                               colorIcon: Colors.green,
                               spentValue:
@@ -388,12 +389,7 @@ class _MyHoursPageState extends State<MyHoursPage> {
               },
             ),
           ),
-          appNavigationBar(
-            title: "MY HOURS",
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
+
         ],
       ),
     );

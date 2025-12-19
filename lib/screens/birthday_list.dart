@@ -14,6 +14,7 @@ class BirthdayList extends StatelessWidget {
       context.read<EmpProvider>().getUpcomingBirthHodliday();
     });
     return AppScaffold(
+      appTitle: "BIRTHDAY LIST",
       child: Consumer<EmpProvider>(
         builder: (context, provider, child) {
           return Stack(
@@ -25,12 +26,12 @@ class BirthdayList extends StatelessWidget {
               //   right: 24,
               //   child: _searchBar(context),
               // ),
-              appNavigationBar(
+              /*appNavigationBar(
                 title: "BIRTHDAY LIST",
                 onTap: () {
                   Navigator.pop(context);
                 },
-              ),
+              ),*/
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
           );
@@ -44,7 +45,7 @@ class BirthdayList extends StatelessWidget {
       padding: EdgeInsets.only(
         left: 24,
         right: 24,
-        top: appTopPadding(context),
+        top: 0,
         bottom: listBottom(context),
       ),
       addAutomaticKeepAlives: false,

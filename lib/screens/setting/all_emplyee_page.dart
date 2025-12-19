@@ -32,12 +32,13 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      appTitle: "EMPLOYEES",
       child: Consumer<EmpProvider>(
         builder: (context, provider, child) {
           return Stack(
             children: [
-              _listOfEmployee(context, provider),
-              Positioned(
+
+              /*Positioned(
                 top: appTopPadding(context),
                 left: 24,
                 right: 24,
@@ -49,11 +50,18 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
                 right: 24,
                 child: _filterOption(provider: provider),
               ),
-              appNavigationBar(
-                title: "EMPLOYEES",
-                onTap: () {
-                  Navigator.pop(context);
-                },
+*/
+
+              Padding(
+                padding:  EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  spacing: 10,
+                  children: [
+                    _searchBar(context, provider),
+                    _filterOption(provider: provider),
+                    Expanded(child: _listOfEmployee(context, provider)),
+                  ],
+                ),
               ),
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
@@ -142,10 +150,11 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
 
   Widget _listOfEmployee(BuildContext context, EmpProvider provider) {
     return ListView.separated(
+      shrinkWrap: true,
       padding: EdgeInsets.only(
-        left: 24,
-        right: 24,
-        top: listTop(context, extra: 52),
+        left: 0,
+        right: 0,
+        top: 0,
         bottom: listBottom(context),
       ),
       addAutomaticKeepAlives: false,

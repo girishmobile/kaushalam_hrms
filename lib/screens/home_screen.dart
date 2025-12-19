@@ -38,10 +38,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Stack(
           children: [
-            provider.isManager
-                ? ManagerScreen()
-                : EmployeeScreen(employeeId: provider.employeeId ?? ''),
-            if (provider.isRole != "employee") topBar(context),
+
+            Column(
+              children: [
+                if (provider.isRole != "employee") topBar(context),
+                provider.isManager
+                    ? Expanded(child: ManagerScreen())
+                    : Expanded(child: EmployeeScreen(employeeId: provider.employeeId ?? '')),
+              ],
+            ),
+
+           // if (provider.isRole != "employee") topBar(context),
           ],
         );
       },
@@ -54,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final listTop = safeTop + topBarHeight + 8; // search bar height + spacing
     final provider = context.watch<AppProvider>();
     return Container(
-      padding: EdgeInsets.only(top: listTop),
+      padding: EdgeInsets.only(top: 8),
       margin: const EdgeInsets.symmetric(horizontal: 48),
       child: appViewEffect(
         padding: const EdgeInsets.symmetric(vertical: 12),

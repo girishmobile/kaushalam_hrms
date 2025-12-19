@@ -19,23 +19,39 @@ class EmployeeLeaveBalance extends StatelessWidget {
     });
 
     return AppScaffold(
+      appTitle: "LEAVE BALANCE",
       child: Consumer<EmpProvider>(
         builder: (context, provider, chld) {
           return Consumer<LeaveBalanceProvider>(
             builder: (context, provider, child) {
               return Stack(
                 children: [
-                  _listOfEmployee(context, provider),
-                  Positioned(
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 24,
+                      right: 24,
+                      top:0,
+
+                    ),
+                    child: Column(
+                      spacing: 10,
+                      children: [
+                        _searchBar(context, provider),
+                        Expanded(child: _listOfEmployee(context, provider)),
+                      ],
+                    ),
+                  ),
+
+                 /* Positioned(
                     top: appTopPadding(context),
                     left: 24,
                     right: 24,
                     child: _searchBar(context, provider),
-                  ),
-                  appNavigationBar(
+                  ),*/
+                /*  appNavigationBar(
                     title: "LEAVE BALANCE",
                     onTap: () => Navigator.pop(context),
-                  ),
+                  ),*/
                   provider.isLoading
                       ? showProgressIndicator()
                       : SizedBox.shrink(),
@@ -59,9 +75,9 @@ class EmployeeLeaveBalance extends StatelessWidget {
   Widget _listOfEmployee(BuildContext context, LeaveBalanceProvider provider) {
     return ListView.separated(
       padding: EdgeInsets.only(
-        left: 24,
-        right: 24,
-        top: listTop(context),
+        left: 0,
+        right: 0,
+        top:0,
         bottom: appBottomPadding(context),
       ),
       itemBuilder: (context, index) {

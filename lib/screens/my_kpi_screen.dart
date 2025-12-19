@@ -49,22 +49,29 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
           },
           child: Stack(
             children: [
-              _kpiGridView(context, provider),
-              topBar(context, provider: provider),
+              Column(
+                children: [
+                  topBar(context, provider: provider),
+                  Expanded(child: _kpiGridView(context, provider)),
+
+                ],
+              ),
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
           ),
         );
       },
     );
+
   }
 
   Widget _kpiGridView(BuildContext context, MyKpiProvider provider) {
     return GridView.builder(
+      shrinkWrap: true,
       padding: EdgeInsets.only(
         left: 24,
         right: 24,
-        top: listTop(context),
+        top:12,
         bottom: listBottom(context),
       ),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -149,7 +156,7 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
     const topBarHeight = 48.0; // your Dashboard SafeArea Row
     final listTop = safeTop + topBarHeight + 16; // search bar height + spacing
     return Container(
-      padding: EdgeInsets.only(top: listTop),
+      padding: EdgeInsets.only(top: 0),
       margin: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

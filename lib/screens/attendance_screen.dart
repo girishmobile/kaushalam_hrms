@@ -16,30 +16,33 @@ class AttendanceScreen extends StatelessWidget {
       builder: (context, provider, child) {
         return Stack(
           children: [
-            ListView(
-              padding: EdgeInsets.only(
-                left: 24,
-                right: 24,
-                top: listTop(context, extra: 80),
-                bottom: listBottom(context),
+            Padding(
+
+              padding:  EdgeInsets.only(left: 24.0,right: 24,bottom: appBottomPadding(context,extra: 36)),
+              child: Column(
+
+
+                spacing: 10,
+                children: [
+                  _headerView(context, provider),
+                  _filterOption(provider),
+                  /*loadSubText(
+                    title: '${provider.selectedDateRange} Details',
+                    fontSize: 14,
+                    fontWight: FontWeight.w500,
+                  ),*/
+
+                  Expanded(child: _buildDetailListView(provider)),
+                ],
               ),
-              children: [
-                loadSubText(
-                  title: '${provider.selectedDateRange} Details',
-                  fontSize: 14,
-                  fontWight: FontWeight.w500,
-                ),
-                SizedBox(height: 8),
-                _buildDetailListView(provider),
-              ],
             ),
-            _headerView(context, provider),
-            Positioned(
+
+            /*Positioned(
               top: appTopPadding(context, extra: 64),
               left: 24,
               right: 24,
               child: _filterOption(provider),
-            ),
+            ),*/
             provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
           ],
         );
@@ -50,7 +53,7 @@ class AttendanceScreen extends StatelessWidget {
   Widget _buildDetailListView(AttendanceProvider provider) {
     return ListView.separated(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         var data = provider.attendanceRecordModel?.data?.data?[index];
         return appViewEffect(
@@ -90,9 +93,9 @@ class AttendanceScreen extends StatelessWidget {
   Widget _headerView(BuildContext context, AttendanceProvider provider) {
     return Padding(
       padding: EdgeInsets.only(
-        left: 24,
-        right: 24,
-        top: appTopPadding(context, extra: 8),
+        left: 0,
+        right: 0,
+        top: 0,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

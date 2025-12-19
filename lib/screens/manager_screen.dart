@@ -20,7 +20,7 @@ class ManagerScreen extends StatelessWidget {
           padding: EdgeInsets.only(
             left: 24,
             right: 24,
-            top: listTop(context),
+            top: 8,
             bottom: listBottom(context),
           ),
           children: [

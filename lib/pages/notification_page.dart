@@ -14,42 +14,50 @@ class NotificationPage extends StatelessWidget {
       context.read<EmpNotifiProvider>().getEmployeeNotification();
     });
     return AppScaffold(
+      appTitle: "NOTIFICATION",
       child: Consumer<EmpNotifiProvider>(
         builder: (context, provider, child) {
           return Stack(
             children: [
-              provider.filteredList.isEmpty && !provider.isLoading
-                  ? Center(child: Text("You don’t have any notification yet."))
-                  : ListView.separated(
-                padding: EdgeInsets.only(
+              Padding(
+                padding:EdgeInsets.only(
                   left: 24,
                   right: 24,
-                  top: listTop(context),
+                  top: 0,
                   bottom: appBottomPadding(context),
                 ),
-                addAutomaticKeepAlives: false,
-                addRepaintBoundaries: true,
-                cacheExtent: 500,
-                itemBuilder: (context, index) {
-                  final dataModel = provider.filteredList[index];
-                  return RepaintBoundary(
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: notificationCard(dataModel),
+                child: Column(
+                  spacing: 10,
+                  children: [
+                    _searchBar(context, provider),
+                    Expanded(
+                      child: provider.filteredList.isEmpty && !provider.isLoading
+                          ? Center(
+                              child: Text("You don’t have any notification yet."),
+                            )
+                          : ListView.separated(
+                              padding: EdgeInsets.zero,
+                              addAutomaticKeepAlives: false,
+                              addRepaintBoundaries: true,
+                              cacheExtent: 500,
+                              itemBuilder: (context, index) {
+                                final dataModel = provider.filteredList[index];
+                                return RepaintBoundary(
+                                  child: GestureDetector(
+                                    onTap: () {},
+                                    child: notificationCard(dataModel),
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 8),
+                              itemCount: provider.filteredList.length,
+                            ),
                     ),
-                  );
-                },
-                separatorBuilder: (context, index) =>
-                const SizedBox(height: 8),
-                itemCount: provider.filteredList.length,
+                  ],
+                ),
               ),
-              _searchBar(context, provider),
-              appNavigationBar(
-                title: "NOTIFICATION",
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
+
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
           );

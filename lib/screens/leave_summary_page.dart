@@ -38,6 +38,7 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
     /// Fetch API only once when page opens
 
     return AppScaffold(
+      appTitle: "${widget.pageTitle.toUpperCase()} LEAVES",
       child: Consumer<LeaveProvider>(
         builder: (context, provider, child) {
           return appRefreshIndicator(
@@ -54,7 +55,7 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
                         padding: EdgeInsets.only(
                           left: 24,
                           right: 24,
-                          top: appTopPadding(context),
+                          top: 0,
                         ),
                         itemBuilder: (context, index) {
                           final leave = provider.listOfLeave[index];
@@ -67,12 +68,7 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
                         separatorBuilder: (_, _) => SizedBox(height: 8),
                         itemCount: provider.listOfLeave.length,
                       ),
-                appNavigationBar(
-                  title: "${widget.pageTitle.toUpperCase()} LEAVES",
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
+
                 provider.isLoading
                     ? showProgressIndicator()
                     : SizedBox.shrink(),

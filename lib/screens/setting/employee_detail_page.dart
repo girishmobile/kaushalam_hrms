@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
-import 'package:neeknots_admin/core/constants/string_constant.dart';
 import 'package:neeknots_admin/provider/emp_detail_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +18,8 @@ class EmployeeDetailPage extends StatelessWidget {
     });
 
     return AppScaffold(
+
+      appTitle: "Employee Details" ,
       child: Consumer<EmpDetailProvider>(
         builder: (context, provider, child) {
           return Stack(
@@ -27,10 +28,21 @@ class EmployeeDetailPage extends StatelessWidget {
                 padding: EdgeInsets.only(
                   left: 24,
                   right: 24,
-                  top: appTopPadding(context),
+                  top: 0,
                 ),
                 children: [
                   appProfileImage(
+                    onTap: () {
+                      print('---assassa');
+                      openProfileDialog(
+                        context: context,
+                        imageUrl: '${ setImagePath(
+                          provider.employeeModel?.profileImage,
+                        )}',
+                        name: provider.employeeModel?.firstname ?? '',
+                      );
+                    },
+
                     text: provider.employeeModel?.firstname ?? '',
                     isEdit: false,
                     context: context,
@@ -84,12 +96,12 @@ class EmployeeDetailPage extends StatelessWidget {
                   SizedBox(height: 24),
                 ],
               ),
-              appNavigationBar(
+             /* appNavigationBar(
                 title: "Employee Details",
                 onTap: () {
                   Navigator.pop(context);
                 },
-              ),
+              ),*/
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
           );
@@ -261,31 +273,33 @@ class EmployeeDetailPage extends StatelessWidget {
         children: [
           _builBasicRowInfo(
             label: "Driving License",
-            titleText: provider.employeeModel?.drivingLicenseNumber ?? '-',
+            titleText: maskShow(
+              provider.employeeModel?.drivingLicenseNumber ?? '-',
+            ),
           ),
           _builBasicRowInfo(
             label: "PAN Number",
-            titleText: provider.employeeModel?.panNumber ?? '-',
+            titleText: maskShow(provider.employeeModel?.panNumber ?? '-'),
           ),
           _builBasicRowInfo(
             label: "Aadhar Number",
-            titleText: provider.employeeModel?.aadharNumber ?? '-',
+            titleText: maskShow(provider.employeeModel?.aadharNumber ?? '-'),
           ),
           _builBasicRowInfo(
             label: "Voter ID Number",
-            titleText: provider.employeeModel?.voterIdNumber ?? '-',
+            titleText: maskShow(provider.employeeModel?.voterIdNumber ?? '-'),
           ),
           _builBasicRowInfo(
             label: "UAN Number",
-            titleText: provider.employeeModel?.uanNumber ?? '-',
+            titleText: maskShow(provider.employeeModel?.uanNumber ?? '-'),
           ),
           _builBasicRowInfo(
             label: "PF Number",
-            titleText: provider.employeeModel?.pfNumber ?? '-',
+            titleText: maskShow(provider.employeeModel?.pfNumber ?? '-'),
           ),
           _builBasicRowInfo(
             label: "ESIC Number",
-            titleText: provider.employeeModel?.esicNumber ?? '-',
+            titleText: maskShow(provider.employeeModel?.esicNumber ?? '-'),
           ),
         ],
       ),

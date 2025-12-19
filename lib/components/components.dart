@@ -1341,6 +1341,7 @@ Widget appProfileImage({
   String? imageUrl,
   required bool isEdit,
   double radius = 60,
+  void Function()? onTap,
   required BuildContext context,
   EdgeInsetsGeometry? padding,
   String? text,
@@ -1369,7 +1370,7 @@ Widget appProfileImage({
             iconColor: color3,
             iconSize: radius / 1.5,
             radius: (radius - 2),
-            onTap: () {},
+            onTap:onTap,
             fontSize: 36,
           ),
         ),
@@ -1940,57 +1941,132 @@ OutlineInputBorder commonTextFiledBorder({
   );
 }
 
-String maskAadhaar(String aadhaar) {
-  aadhaar = aadhaar.replaceAll(' ', '');
 
-  if (aadhaar.length != 12) return aadhaar;
 
-  String first = aadhaar.substring(0, 2);
-  String last = aadhaar.substring(10, 12);
-
-  return '$first********$last';
+String maskShow(String pan) {
+  if (pan.isEmpty) return pan;
+  return '******';
 }
 
-String maskVoterId(String voterId) {
-  voterId = voterId.replaceAll(' ', '');
+/*
+void openProfileDialog({ required BuildContext context,
+  required String imageUrl,
+  required String name,}
+    ) {
+  showDialog(
+    context: context,
 
-  if (voterId.length < 6) return voterId;
+    barrierDismissible: true,
+    builder: (_) {
+      return Dialog.fullscreen(
+        insetPadding: EdgeInsets.zero, // 🔥 MOST IMPORTANT
+        //insetPadding: EdgeInsets.zero,
+        backgroundColor: Colors.black,
+        child: Stack(
+          children: [
+            /// Profile Image Full Screen
+            Center(
+              child: InteractiveViewer(
+                child: CachedNetworkImage(
+                 imageUrl:  imageUrl,
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.contain,
 
-  String first = voterId.substring(0, 2);
-  String last = voterId.substring(voterId.length - 2);
 
-  return '$first******$last';
+                ),
+              ),
+            ),
+
+            /// Close Button
+            Positioned(
+              top: 40,
+              right: 20,
+              child: IconButton(
+                icon: const Icon(Icons.close,
+
+                    color: Colors.white, size: 30),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+
+
+          ],
+        ),
+      );
+    },
+
+  );
 }
+*/
 
-String maskUan(String uan) {
-  uan = uan.replaceAll(' ', '');
+void openProfileDialog({
+  required BuildContext context,
+  required String imageUrl,
+  required String name,
+}) {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: "Profile",
+    barrierColor: Colors.black,
+    transitionDuration: const Duration(milliseconds: 200),
+    pageBuilder: (_, __, ___) {
+      return Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          children: [
+            /// FULL SCREEN IMAGE
+            Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                height: 300,
+                width: double.infinity,
+                child: InteractiveViewer(
+                  minScale: 0.8,
+                  maxScale: 4.0,
+                  constrained: true,
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    fit: BoxFit.cover,
 
-  if (uan.length != 12) return uan;
+                    /// 🔄 LOADING
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    ),
 
-  String first = uan.substring(0, 2);
-  String last = uan.substring(10, 12);
+                    /// ❌ ERROR IMAGE
+                    errorWidget: (context, url, error) => const Center(
+                      child: Icon(
+                        Icons.err,
+                        color: Colors.white,
+                        size: 80,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
 
-  return '$first********$last';
-}
-
-String maskPfNumber(String pf) {
-  pf = pf.replaceAll(' ', '');
-
-  if (pf.length < 6) return pf;
-
-  String first = pf.substring(0, 2);
-  String last = pf.substring(pf.length - 2);
-
-  return '$first********$last';
-}
-
-String maskEsic(String esic) {
-  esic = esic.replaceAll(' ', '');
-
-  if (esic.length != 17) return esic;
-
-  String first = esic.substring(0, 2);
-  String last = esic.substring(15, 17);
-
-  return '$first*************$last';
+            /// CLOSE BUTTON
+            SafeArea(
+              child: Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

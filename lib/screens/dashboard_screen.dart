@@ -71,15 +71,89 @@ class _DashboardScreenState extends State<DashboardScreen> {
       "SETTINGS",
     ];
     return AppScaffold(
+
+      leadingWidth: 80,
+      appTitle:   provider.pageIndex == 2?"KAUSHALAM":titles[provider.pageIndex],
       isTopSafeArea: true,
+      actions: [
+        Consumer<EmpNotifiProvider>(
+          builder: (context, empProvider, _) {
+            return InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, RouteName.notificationPage);
+              },
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  appGradientImage(
+                    imagePath: icNotification,
+                    size: 24,
+                    gradient: appGradient(),
+                  ),
+                  Positioned(
+                    right: -2,
+                    top: -3,
+                    child: Container(
+                      decoration: commonBoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.red,
+                      ),
+                      width: 18,
+                      height: 18,
+                      child: Center(
+                        child: loadSubText(
+                          title: empProvider.unreadCount.toString(),
+                          fontColor: Colors.white,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        SizedBox(width: 24,),
+      ],
+      leading:  Container(
+        margin: const EdgeInsets.only(left: 24.0),
+        child: Consumer<ProfileProvider>(
+          builder: (_, profileProvider, _) {
+            return SizedBox(
+              width: 45,
+              height: 45,
+              child: Center(
+                child: appCircleImage(
+                  borderColor: color2,
+                  text: profileProvider.profileModel?.firstname,
+                  imageUrl: setImagePath(profileProvider.profileImage),
+                  radius: 21, // 👈 40 / 2
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RouteName.profileScreen,
+                      arguments: {
+                        "employeeId": provider.employeeId,
+                        "isCurrentUser": true,
+                      },
+                      //arguments: provider.employeeId,
+                    );
+                  },
+                ),
+              ),
+            );
+          },
+        ),
+      ),
       child: Stack(
         children: [
           hrmsScreens[provider.pageIndex],
-          topBar(
+         /* topBar(
             context,
             provider: provider,
             title: titles[provider.pageIndex],
-          ),
+          ),*/
           bottomBar(context),
           if (provider.pageIndex == 2 && !provider.isManager)
             _leaveRequest(context),

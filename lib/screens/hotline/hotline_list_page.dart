@@ -33,23 +33,27 @@ class _HotlineListPageState extends State<HotlineListPage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      appTitle: "HOTLINE",
       child: Consumer<HotlineListProvider>(
         builder: (context, provider, child) {
           return Stack(
             children: [
-              provider.hotline_employees.isEmpty && !provider.isLoading
-                  ? Center(child: Text("You don’t have any records yet."))
-                  : _listOfHotline(context, provider),
-              Positioned(
-                top: appTopPadding(context),
-                left: 24,
-                right: 24,
-                child: _hotlineOption(provider),
+
+              Padding(
+                padding:  EdgeInsets.only(left: 24.0,right: 24,bottom: appBottomPadding(context)),
+                child: Column(
+                  spacing: 10,
+                  children: [
+                    _hotlineOption(provider),
+
+                    provider.hotline_employees.isEmpty && !provider.isLoading
+                        ? Center(child: Text("You don’t have any records yet."))
+                        : Expanded(child: _listOfHotline(context, provider)),
+
+                  ],
+                ),
               ),
-              appNavigationBar(
-                title: "HOTLINE",
-                onTap: () => Navigator.pop(context),
-              ),
+
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
           );
@@ -60,11 +64,8 @@ class _HotlineListPageState extends State<HotlineListPage> {
 
   Widget _listOfHotline(BuildContext context, HotlineListProvider provider) {
     return ListView.separated(
-      padding: EdgeInsets.only(
-        left: 24,
-        right: 24,
-        top: appTopPadding(context, extra: 52),
-      ),
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
       itemBuilder: (ctx, idx) {
         final item = provider.hotline_employees[idx];
         return hotlineCard(

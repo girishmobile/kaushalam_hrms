@@ -52,9 +52,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                 padding: EdgeInsets.only(
                   left: 24,
                   right: 24,
-                  top: isRole
-                      ? listTop(context)
-                      : appTopPadding(context, extra: 8),
+                  top: 8,
                   bottom: listBottom(context, extra: 44),
                 ),
                 children: [

@@ -51,7 +51,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               padding: EdgeInsetsGeometry.only(
                 left: 16,
                 right: 16,
-                top: listTop,
+                top: 0,
                 bottom: listBottom,
               ),
 
@@ -143,8 +143,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
       onTap: () {
         Navigator.pushNamed(
           context,
-          RouteName.profileScreen,
-          arguments: {"employeeId": '${event['id']}', "isCurrentUser": false},
+          RouteName.employeeDetailPage,
+          arguments: "${event['id']}",
+         // arguments: {"employeeId": '${event['id']}', "isCurrentUser": false},
           //arguments: provider.employeeId,
         );
       },

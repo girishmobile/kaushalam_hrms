@@ -47,6 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     });
     return AppScaffold(
+      appTitle:"PROFILE" ,
       child: appRefreshIndicator(
         onRefresh: () async {
           init();
@@ -59,20 +60,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: EdgeInsets.only(
                     left: 20,
                     right: 20,
-                    top: appTopPadding(context),
+                    top: 0,
                     bottom: appBottomPadding(context),
                   ),
                   children: [
                     Consumer<ProfileProvider>(
                       builder: (_, profileProvider, _) {
-                        return appProfileImage(
-                          text: profileProvider.profileModel?.firstname ?? '',
-                          context: context,
-                          imageUrl: widget.isCurrentUser
-                              ? setImagePath(profileProvider.profileImage)
-                              : setImagePath(profileProvider.imageUrl),
-                          radius: 60,
-                          isEdit: widget.isCurrentUser,
+                        return GestureDetector(
+                          onTap: (){
+                            print('---assassa');
+                            openProfileDialog(
+                              context: context,imageUrl: '${ widget.isCurrentUser
+                                ? setImagePath(profileProvider.profileImage)
+                                : setImagePath(profileProvider.imageUrl)}',
+                              name: profileProvider.profileModel?.firstname ?? ''
+
+                            );
+                          },
+
+                          child: appProfileImage(
+                            text: profileProvider.profileModel?.firstname ?? '',
+                            context: context,
+                            imageUrl: widget.isCurrentUser
+                                ? setImagePath(profileProvider.profileImage)
+                                : setImagePath(profileProvider.imageUrl),
+                            radius: 60,
+                            isEdit: widget.isCurrentUser,
+                          ),
                         );
                       },
                     ),
@@ -122,12 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     gradientButton(title: "LOGOUT", onPressed: () {}),
                   ],
                 ),
-                appNavigationBar(
-                  title: "PROFILE",
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
+
                 provider.isLoading
                     ? showProgressIndicator()
                     : SizedBox.shrink(),
@@ -310,23 +319,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           _builBasicRowInfo(
             label: "Aadhar Number",
-            titleText:maskAadhaar( provider.profileModel?.aadharNumber??'-' ),
+            titleText: provider.profileModel?.aadharNumber??'-',
           ),
           _builBasicRowInfo(
             label: "Voter ID Number",
-            titleText: maskVoterId(provider.profileModel?.voterIdNumber??'-') ,
+            titleText: provider.profileModel?.voterIdNumber??'-',
           ),
           _builBasicRowInfo(
             label: "UAN Number",
-            titleText: maskUan(provider.profileModel?.uanNumber ?? '-'),
+            titleText:provider.profileModel?.uanNumber ?? '-',
           ),
           _builBasicRowInfo(
             label: "PF Number",
-            titleText: maskPfNumber(provider.profileModel?.pfNumber ?? '-'),
+            titleText: provider.profileModel?.pfNumber ?? '-',
           ),
           _builBasicRowInfo(
             label: "ESIC Number",
-            titleText: maskEsic(provider.profileModel?.esicNumber ?? '-'),
+            titleText: provider.profileModel?.esicNumber ?? '-',
           ),
         ],
       ),

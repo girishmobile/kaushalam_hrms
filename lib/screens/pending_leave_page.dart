@@ -47,7 +47,9 @@ class _PendingLeavePageState extends State<PendingLeavePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return AppScaffold(
+      appTitle: "LEAVES REQUEST",
       child: Consumer<ManagerProvider>(
         builder: (context, provider, child) {
           return Stack(
@@ -58,7 +60,7 @@ class _PendingLeavePageState extends State<PendingLeavePage> {
                       padding: EdgeInsets.only(
                         left: 24,
                         right: 24,
-                        top: appTopPadding(context),
+                        top: 0,
                         bottom: appBottomPadding(context),
                       ),
                       addAutomaticKeepAlives: false,
@@ -140,10 +142,7 @@ class _PendingLeavePageState extends State<PendingLeavePage> {
                           const SizedBox(height: 8),
                       itemCount: provider.listOfLeave.length,
                     ),
-              appNavigationBar(
-                title: "LEAVES REQUEST",
-                onTap: () => Navigator.pop(context),
-              ),
+
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
           );

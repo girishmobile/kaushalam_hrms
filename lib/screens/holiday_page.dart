@@ -16,6 +16,7 @@ class HolidayPage extends StatelessWidget {
     });
 
     return AppScaffold(
+      appTitle: "HOLIDAY LIST",
       child: Consumer<EmpProvider>(
         builder: (context, provider, child) {
           return Stack(
@@ -24,7 +25,7 @@ class HolidayPage extends StatelessWidget {
                 padding: EdgeInsets.only(
                   left: 24,
                   right: 24,
-                  top: appTopPadding(context),
+                  top: 0,
                   bottom: appBottomPadding(context),
                 ),
                 itemBuilder: (context, index) {
@@ -34,12 +35,7 @@ class HolidayPage extends StatelessWidget {
                 separatorBuilder: (context, index) => SizedBox(height: 8),
                 itemCount: provider.holidays.length,
               ),
-              appNavigationBar(
-                title: "HOLIDAY LIST",
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
+
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
           );

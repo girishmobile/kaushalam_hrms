@@ -45,6 +45,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      appBar:PreferredSize(preferredSize: Size.zero, child: SizedBox.shrink()),
       child: Consumer<SettingProvider>(
         builder: (context, provider, child) {
           final username =
@@ -57,7 +58,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 padding: EdgeInsets.only(
                   left: 24,
                   right: 24,
-                  top: appTopPadding(context),
+                  top: 20,
                 ),
                 children: [
                   Consumer<ProfileProvider>(
