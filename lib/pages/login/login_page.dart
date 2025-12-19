@@ -58,6 +58,7 @@ class LoginPage extends StatelessWidget {
                                     textController: provider.emailController,
                                     keyboardType: TextInputType.emailAddress,
                                     validator: validateEmail,
+                                    inputFormatters: [LowerCaseTextFormatter()],
                                   ),
                                   const SizedBox(height: 16),
                                   appOrangeTextField(
