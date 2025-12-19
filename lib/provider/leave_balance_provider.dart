@@ -24,7 +24,6 @@ class LeaveBalanceProvider extends ChangeNotifier {
   }
 
   List<EmpLeaveBalance> emp_leave_balance = [];
-
   List<EmpLeaveBalance> filteredList = [];
 
   void filterByName(String query) {

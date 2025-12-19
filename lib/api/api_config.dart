@@ -62,7 +62,8 @@ class ApiConfig {
   static String getDepartmentURL = "$BaseUrl/department/get_all_department";
 
   static String getAllEmployeeUrl = "$BaseUrl/datatable/getDatatableUsers";
-  static String realAllNotification = "$BaseUrl/activity_box/readAllNotificationsEmp";
+  static String realAllNotification =
+      "$BaseUrl/activity_box/readAllNotificationsEmp";
 
   //FCM update
   static String updateFCMTokenUrl = "$BaseUrl/user/update-fcm-token";

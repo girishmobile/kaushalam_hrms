@@ -9,6 +9,19 @@ import 'package:neeknots_admin/models/hotline_count_model.dart';
 import 'package:neeknots_admin/models/hotline_list_model.dart';
 
 class HotlineListProvider extends ChangeNotifier {
+  final nameController = TextEditingController();
+  final searchFocus = FocusNode();
+
+  HotlineListProvider() {
+    nameController.addListener(() {
+      // if (searchFocus.hasFocus) {
+      //   setSelectedIndex(0); // reset department selection
+      //   filterByDepartment("All"); // filter all employees
+      // }
+      searchByName(nameController.text);
+    });
+  }
+
   bool _isLoading = false;
   String? _error;
   bool get isLoading => _isLoading;
@@ -22,6 +35,24 @@ class HotlineListProvider extends ChangeNotifier {
 
   List<HotLineData> _hotline_employees = [];
   List<HotLineData> get hotline_employees => _hotline_employees;
+  List<HotLineData> filteredList = [];
+
+  void searchByName(String query) {
+    if (query.isEmpty) {
+      filteredList = hotline_employees;
+    } else {
+      filteredList = hotline_employees
+          .where(
+            (e) =>
+                (e.firstname?.toLowerCase() ?? '').contains(
+                  query.toLowerCase(),
+                ) ||
+                (e.lastname?.toLowerCase() ?? '').contains(query.toLowerCase()),
+          )
+          .toList();
+    }
+    notifyListeners();
+  }
 
   void _setLoading(bool val) {
     _isLoading = val;
@@ -59,6 +90,8 @@ class HotlineListProvider extends ChangeNotifier {
 
   Future<void> getHotlineCountData() async {
     _hotline_employees = [];
+    _hotlineCount = [];
+    filteredList = [];
     _setLoading(true);
     try {
       final response = await callApi(
@@ -103,6 +136,7 @@ class HotlineListProvider extends ChangeNotifier {
       "dep_id": depId ?? "",
       "des_id": desId ?? "",
     };
+    filteredList = [];
     _hotline_employees = [];
     _setLoading(true);
     try {
@@ -119,7 +153,7 @@ class HotlineListProvider extends ChangeNotifier {
         _hotline_employees = (json as List<dynamic>)
             .map((e) => HotLineData.fromJson(e))
             .toList();
-
+        filteredList = _hotline_employees;
         _setLoading(false);
       } else {
         _setLoading(false);

@@ -36,11 +36,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final safeTop = MediaQuery.of(context).padding.top;
-    final safeBottom = MediaQuery.of(context).padding.bottom;
-    const topBarHeight = 48.0; // your Dashboard SafeArea Row
-    final listTop = safeTop + topBarHeight; // search bar height + spacing
-    final listBottom = safeBottom + topBarHeight + 16;
     return Consumer<CalendarProvider>(
       builder: (context, provider, child) {
         final selectedEvents = provider.getEventsForDay(_selectedDay);
@@ -52,14 +47,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 left: 16,
                 right: 16,
                 top: 0,
-                bottom: listBottom,
+                bottom: appBottomPadding(context),
               ),
 
               children: [
-
                 _buildTableCalendar(provider: provider),
                 _buildHeader(),
-
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount: selectedEvents.length,
@@ -87,7 +80,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }) {
     return InkWell(
       onTap: () {
-        if(event['type'] != "attendance"){
+        print("$event");
+        if (event['type'] != "attendance") {
           Navigator.pushNamed(
             context,
             RouteName.employeeDetailPage,
@@ -96,7 +90,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
             //arguments: provider.employeeId,
           );
         }
-
       },
       child: appViewEffect(
         borderRadius: 4,
@@ -158,12 +151,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
       calendarFormat: provider.calendarFormat,
       // calendarFormat: CalendarFormat.month,
       headerStyle: HeaderStyle(
-        leftChevronIcon: Icon(Icons.chevron_left, color: color3),
+        leftChevronIcon: Icon(Icons.chevron_left, size: 28, color: color3),
         rightChevronIcon:
             _focusedDay.year == lastDay.year &&
                 _focusedDay.month == lastDay.month
             ? SizedBox()
-            : Icon(Icons.chevron_right, color: color3),
+            : Icon(Icons.chevron_right, size: 28, color: color3),
         formatButtonVisible: false,
         titleCentered: true,
         titleTextStyle: TextStyle(

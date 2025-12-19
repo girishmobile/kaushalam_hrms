@@ -4,7 +4,9 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../api/api_config.dart';
 import '../api/network_repository.dart';
+
 enum CalendarViewType { month, week, twoWeeks }
+
 class CalendarProvider extends ChangeNotifier {
   final Map<DateTime, List<Map<String, dynamic>>> _events = {};
 
@@ -73,7 +75,7 @@ class CalendarProvider extends ChangeNotifier {
     }
   }
 
- /* /// Parse response into calendar events
+  /* /// Parse response into calendar events
   void _parseEvents(Map<String, dynamic> data, DateTime monthDate) {
     _events.clear();
 
@@ -123,12 +125,10 @@ class CalendarProvider extends ChangeNotifier {
 
     final teamMembers = data["leader"] ?? [];
 
-
     /// 🔹 LEAVES
     for (var member in teamMembers) {
       final leaveData = member["0"];
       if (leaveData == null) continue;
-
 
       final startDateStr = leaveData["leave_date"]?["date"];
       final endDateStr = leaveData["leave_end_date"]?["date"];
@@ -139,9 +139,9 @@ class CalendarProvider extends ChangeNotifier {
       final end = DateTime.parse(endDateStr);
 
       for (
-      DateTime d = start;
-      !d.isAfter(end);
-      d = d.add(const Duration(days: 1))
+        DateTime d = start;
+        !d.isAfter(end);
+        d = d.add(const Duration(days: 1))
       ) {
         if (!isSameMonth(d, monthDate)) continue;
 
@@ -149,7 +149,7 @@ class CalendarProvider extends ChangeNotifier {
 
         _events.putIfAbsent(dateKey, () => []).add({
           "title":
-          "${member["firstname"] ?? ''} ${member["lastname"] ?? ''} (${member["leavetype"]})",
+              "${member["firstname"] ?? ''} ${member["lastname"] ?? ''} (${member["leavetype"]})",
           "type": "leave",
           "id": leaveData['id'],
           "status": leaveData["status"],
@@ -177,21 +177,19 @@ class CalendarProvider extends ChangeNotifier {
 
       _events.putIfAbsent(dateKey, () => []).add({
         "type": "attendance",
-        "title":
-        "Working: ${staffing["hours"]}h ${staffing["minutes"]}m",
+        "title": "Working: ${staffing["hours"]}h ${staffing["minutes"]}m",
         "hours": staffing["hours"],
         "minutes": staffing["minutes"],
         "bar_data": staffing["bar_data"],
       });
     }
 
-
     /// 🎂 BIRTHDAYS
     final birthdays = data["month_bday_data"] ?? [];
 
     for (var person in birthdays) {
       final dobStr = person["date_of_birth"]?["date"];
-      if (dobStr == null) continue; 
+      if (dobStr == null) continue;
 
       final dob = DateTime.parse(dobStr);
       final dateKey = DateTime(monthDate.year, dob.month, dob.day);
@@ -213,7 +211,6 @@ class CalendarProvider extends ChangeNotifier {
   bool isSameMonth(DateTime d1, DateTime d2) {
     return d1.year == d2.year && d1.month == d2.month;
   }
-
 
   /// Return events for a specific day
   List<Map<String, dynamic>> getEventsForDay(DateTime day) {
