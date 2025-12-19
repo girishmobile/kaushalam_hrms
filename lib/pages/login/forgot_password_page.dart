@@ -15,13 +15,14 @@ class ForgotPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final formLoginKey = GlobalKey<FormState>();
     return AppScaffold(
+      appTitle: "FORGOT PASSWORD",
       child: Consumer<LoginProvider>(
         builder: (context, provider, child) {
           return Stack(
             children: [
-              Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
+              SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Center(
                   child: Column(
                     children: [
                       loadAssetImage(name: applogo, height: 128),
@@ -99,12 +100,6 @@ class ForgotPasswordPage extends StatelessWidget {
                 ),
               ),
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
-              appNavigationBar(
-                title: "FORGOT PASSWORD",
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
             ],
           );
         },

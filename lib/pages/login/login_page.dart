@@ -18,6 +18,7 @@ class LoginPage extends StatelessWidget {
     final formLoginKey = GlobalKey<FormState>();
 
     return AppScaffold(
+      appBar: PreferredSize(preferredSize: Size.zero, child: SizedBox.shrink()),
       child: Consumer<LoginProvider>(
         builder: (context, provider, child) {
           return Stack(
@@ -57,6 +58,7 @@ class LoginPage extends StatelessWidget {
                                     textController: provider.emailController,
                                     keyboardType: TextInputType.emailAddress,
                                     validator: validateEmail,
+                                    inputFormatters: [LowerCaseTextFormatter()],
                                   ),
                                   const SizedBox(height: 16),
                                   appOrangeTextField(
