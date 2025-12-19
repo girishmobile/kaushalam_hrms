@@ -72,6 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ];
     return AppScaffold(
 
+
       leadingWidth: 80,
       appTitle:   provider.pageIndex == 2?"KAUSHALAM":titles[provider.pageIndex],
       isTopSafeArea: true,
@@ -86,6 +87,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 clipBehavior: Clip.none,
                 children: [
                   appGradientImage(
+
                     imagePath: icNotification,
                     size: 24,
                     gradient: appGradient(),
@@ -125,6 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               height: 45,
               child: Center(
                 child: appCircleImage(
+
                   borderColor: color2,
                   text: profileProvider.profileModel?.firstname,
                   imageUrl: setImagePath(profileProvider.profileImage),

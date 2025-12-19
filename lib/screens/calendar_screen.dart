@@ -56,61 +56,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
 
               children: [
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     appGradientText(
-                //       text: "Calendar View",
-                //       style: TextStyle(
-                //         fontSize: 14,
-                //         fontWeight: FontWeight.w500,
-                //       ),
-                //       gradient: appGradient(),
-                //     ),
 
-                //     Container(
-                //       height: 35,
-                //       padding: const EdgeInsets.symmetric(horizontal: 12),
-                //       decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(10),
-                //         border: Border.all(
-                //           color: Colors.black.withValues(alpha: 0.5),
-                //         ),
-                //       ),
-                //       child: DropdownButtonHideUnderline(
-                //         child: DropdownButton<CalendarViewType>(
-                //           value: provider.selectedType,
-                //           icon: Icon(
-                //             Icons.keyboard_arrow_down,
-                //             color: Colors.black.withValues(alpha: 0.5),
-                //           ),
-                //           items: [
-                //             DropdownMenuItem(
-                //               value: CalendarViewType.month,
-                //               child: loadSubText(title: "Month", fontSize: 12),
-                //             ),
-                //             DropdownMenuItem(
-                //               value: CalendarViewType.week,
-                //               child: loadSubText(title: "Week", fontSize: 12),
-                //             ),
-                //             DropdownMenuItem(
-                //               value: CalendarViewType.twoWeeks,
-                //               child: loadSubText(
-                //                 title: "2 Weeks",
-                //                 fontSize: 12,
-                //               ),
-                //             ),
-                //           ],
-                //           onChanged: (value) {
-                //             if (value != null) {
-                //               provider.changeCalendarType(value);
-                //             }
-                //           },
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
                 _buildTableCalendar(provider: provider),
                 _buildHeader(),
 

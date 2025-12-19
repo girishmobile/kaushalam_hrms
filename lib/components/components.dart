@@ -450,6 +450,7 @@ Widget appViewEffect({
 Widget appGradientText({
   required String text,
   required TextStyle style,
+  TextAlign? textAlign,
   required Gradient gradient,
 }) {
   return ShaderMask(
@@ -460,6 +461,7 @@ Widget appGradientText({
     },
     child: Text(
       text,
+      textAlign: textAlign,
       style: style.copyWith(
         color: Colors.white,
       ), // color must be white to apply shader
@@ -2021,18 +2023,19 @@ void openProfileDialog({
                     fit: BoxFit.cover,
 
                     /// 🔄 LOADING
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
+                    placeholder: (context, url) =>  Center(
+                      child: showProgressIndicator(),
                     ),
 
                     /// ❌ ERROR IMAGE
-                    errorWidget: (context, url, error) => const Center(
-                      child: Icon(
-                        Icons.broken_image,
+                    errorWidget: (context, url, error) =>  Center(
+                      child: Container(
                         color: Colors.white,
-                        size: 80,
+                        height: 300,
+                        width: double.infinity,
+                        child: Center(
+                          child: loadTitleText(title: "Profile photo not available.",fontSize: 24),
+                        ),
                       ),
                     ),
                   ),

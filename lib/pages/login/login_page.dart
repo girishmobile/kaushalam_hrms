@@ -18,6 +18,7 @@ class LoginPage extends StatelessWidget {
     final formLoginKey = GlobalKey<FormState>();
 
     return AppScaffold(
+      appBar: PreferredSize(preferredSize: Size.zero, child: SizedBox.shrink()),
       child: Consumer<LoginProvider>(
         builder: (context, provider, child) {
           return Stack(

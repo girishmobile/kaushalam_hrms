@@ -66,27 +66,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Consumer<ProfileProvider>(
                       builder: (_, profileProvider, _) {
-                        return GestureDetector(
+                        return appProfileImage(
                           onTap: (){
-                            print('---assassa');
+
                             openProfileDialog(
-                              context: context,imageUrl: '${ widget.isCurrentUser
+                                context: context,imageUrl: '${ widget.isCurrentUser
                                 ? setImagePath(profileProvider.profileImage)
                                 : setImagePath(profileProvider.imageUrl)}',
-                              name: profileProvider.profileModel?.firstname ?? ''
+                                name: profileProvider.profileModel?.firstname ?? ''
 
                             );
                           },
-
-                          child: appProfileImage(
-                            text: profileProvider.profileModel?.firstname ?? '',
-                            context: context,
-                            imageUrl: widget.isCurrentUser
-                                ? setImagePath(profileProvider.profileImage)
-                                : setImagePath(profileProvider.imageUrl),
-                            radius: 60,
-                            isEdit: widget.isCurrentUser,
-                          ),
+                          text: profileProvider.profileModel?.firstname ?? '',
+                          context: context,
+                          imageUrl: widget.isCurrentUser
+                              ? setImagePath(profileProvider.profileImage)
+                              : setImagePath(profileProvider.imageUrl),
+                          radius: 60,
+                          isEdit: widget.isCurrentUser,
                         );
                       },
                     ),

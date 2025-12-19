@@ -64,6 +64,13 @@ class _SettingScreenState extends State<SettingScreen> {
                   Consumer<ProfileProvider>(
                     builder: (_, profileProvider, _) {
                       return appProfileImage(
+                        onTap: (){
+                          openProfileDialog(
+                              context: context,imageUrl: '${setImagePath(profileProvider.profileImage)}',
+                              name: provider.userModel?.firstname ?? ''
+
+                          );
+                        },
                         text: provider.userModel?.firstname ?? '',
                         context: context,
                         imageUrl: setImagePath(profileProvider.profileImage),

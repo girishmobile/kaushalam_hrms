@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    initApp();
+   initApp();
   }
 
   Future<void> initApp() async {
@@ -47,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      appBar: PreferredSize(preferredSize: Size.zero, child: SizedBox.shrink()),
       child: Center(child: loadAssetImage(name: applogo, height: 124)),
     );
   }
