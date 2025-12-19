@@ -61,7 +61,6 @@ class AppScaffold extends StatelessWidget {
               //   end: Alignment.bottomCenter,
               //   colors: [color1, color2, color3],
               // ),
-              //gradient: appOrangeGradient(),
               color: Colors.white,
             ),
           ),

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:neeknots_admin/api/api_config.dart';
@@ -564,6 +565,7 @@ Widget appOrangeTextField({
   VoidCallback? onTogglePassword,
   String? Function(String?)? validator,
   FocusNode? focusNode,
+  List<TextInputFormatter>? inputFormatters,
 }) {
   return TextFormField(
     validator: validator,
@@ -574,24 +576,11 @@ Widget appOrangeTextField({
     autocorrect: false,
     enableSuggestions: false,
     onChanged: onChanged,
+    inputFormatters: inputFormatters,
     decoration: InputDecoration(
       hintText: hintText,
-
       hintStyle: const TextStyle(color: Colors.black54, fontSize: 14),
-
-      // LEFT ICON
-      prefixIcon: Container(
-        margin: EdgeInsets.only(left: 10),
-        child: icon,
-      ) /* != null
-          ? Padding(
-              padding: const EdgeInsets.only(left: 12, right: 8),
-              child: Icon(icon, color: Colors.black54, size: 20),
-            )
-          : null*/,
-      //prefixIconConstraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-
-      // RIGHT ICON (Password)
+      prefixIcon: Container(margin: EdgeInsets.only(left: 10), child: icon),
       suffixIcon: isPassword
           ? IconButton(
               icon: Icon(
@@ -1247,6 +1236,7 @@ Widget appNavigationBar({
 }) {
   return SafeArea(
     child: Container(
+      color: Colors.white,
       height: 48,
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20),

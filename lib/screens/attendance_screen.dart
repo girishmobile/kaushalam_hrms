@@ -142,7 +142,6 @@ class AttendanceScreen extends StatelessWidget {
   Widget _filterOption(AttendanceProvider provider) {
     return SizedBox(
       height: 68,
-
       child: ListView.separated(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,

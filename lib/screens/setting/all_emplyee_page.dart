@@ -25,6 +25,7 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
   Future<void> initEmployee() async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<EmpProvider>(context, listen: false);
+      provider.nameController.clear();
       await Future.wait([provider.getDepartment(), provider.getAllEmployees()]);
     });
   }

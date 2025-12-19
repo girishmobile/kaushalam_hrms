@@ -55,6 +55,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   top: 8,
                   bottom: listBottom(context, extra: 44),
                 ),
+                //padding: EdgeInsets.zero, // 👈 important
+                primary: false,
                 children: [
                   appGradientText(
                     text: "Your Attendance",

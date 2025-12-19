@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:neeknots_admin/api/api_config.dart';
 import 'package:uuid/uuid.dart';
@@ -51,7 +52,6 @@ double listBottom(BuildContext context, {double extra = 0}) {
 double appTopPadding(BuildContext context, {double extra = 0}) {
   final safeTop = MediaQuery.of(context).padding.top;
   const topBarHeight = 48.0; // your Dashboard SafeArea Row
-
   final listTop =
       safeTop + topBarHeight + 8 + extra; // search bar height + spacing
 
@@ -328,6 +328,19 @@ class StatusConfig {
   final IconData icon;
   final String label;
   StatusConfig(this.color, this.icon, this.label);
+}
+
+class LowerCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    return newValue.copyWith(
+      text: newValue.text.toLowerCase().trim(),
+      selection: newValue.selection,
+    );
+  }
 }
 
 // StatusConfig _statusConfig(String status) {
