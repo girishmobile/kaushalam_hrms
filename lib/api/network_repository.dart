@@ -73,7 +73,6 @@ Future callApi({
 
     return {'status': false, 'message': errorMessage};
   } catch (e) {
-    print("error from API ${e.toString()}");
     errorMessage = "Something went wrong. Please try again.";
     return {'status': false, 'message': errorMessage};
   }

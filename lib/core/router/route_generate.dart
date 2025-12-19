@@ -163,7 +163,7 @@ class RouteGenerate {
   ) {
     return PageRouteBuilder(
       opaque: false,
-      settings: settings, //Girish 27-oct-2025
+      settings: settings,
       pageBuilder: (context, animation, secondaryAnimation) => screen,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(opacity: animation, child: child);

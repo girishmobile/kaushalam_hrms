@@ -136,7 +136,7 @@ class EmpNotifiProvider extends ChangeNotifier {
   Future<void> readAllNotification() async {
     _setLoading(true);
     try {
-      final response = await callApi(
+        await callApi(
         url: ApiConfig.realAllNotification,
         method: HttpMethod.get,
         headers: null,

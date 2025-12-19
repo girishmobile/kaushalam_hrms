@@ -1940,3 +1940,57 @@ OutlineInputBorder commonTextFiledBorder({
   );
 }
 
+String maskAadhaar(String aadhaar) {
+  aadhaar = aadhaar.replaceAll(' ', '');
+
+  if (aadhaar.length != 12) return aadhaar;
+
+  String first = aadhaar.substring(0, 2);
+  String last = aadhaar.substring(10, 12);
+
+  return '$first********$last';
+}
+
+String maskVoterId(String voterId) {
+  voterId = voterId.replaceAll(' ', '');
+
+  if (voterId.length < 6) return voterId;
+
+  String first = voterId.substring(0, 2);
+  String last = voterId.substring(voterId.length - 2);
+
+  return '$first******$last';
+}
+
+String maskUan(String uan) {
+  uan = uan.replaceAll(' ', '');
+
+  if (uan.length != 12) return uan;
+
+  String first = uan.substring(0, 2);
+  String last = uan.substring(10, 12);
+
+  return '$first********$last';
+}
+
+String maskPfNumber(String pf) {
+  pf = pf.replaceAll(' ', '');
+
+  if (pf.length < 6) return pf;
+
+  String first = pf.substring(0, 2);
+  String last = pf.substring(pf.length - 2);
+
+  return '$first********$last';
+}
+
+String maskEsic(String esic) {
+  esic = esic.replaceAll(' ', '');
+
+  if (esic.length != 17) return esic;
+
+  String first = esic.substring(0, 2);
+  String last = esic.substring(15, 17);
+
+  return '$first*************$last';
+}

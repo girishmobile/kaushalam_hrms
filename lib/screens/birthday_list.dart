@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
-import 'package:neeknots_admin/models/customer_model.dart';
 import 'package:neeknots_admin/provider/emp_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
@@ -68,7 +67,5 @@ class BirthdayList extends StatelessWidget {
     );
   }
 
-  Widget _searchBar(BuildContext context) {
-    return appOrangeTextField(hintText: "search", icon:Icon(Icons.search));
-  }
+
 }

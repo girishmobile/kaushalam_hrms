@@ -20,7 +20,6 @@ import 'package:neeknots_admin/utility/secure_storage.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../api/api_config.dart';
 import '../provider/profile_provider.dart';
 
 class SettingScreen extends StatefulWidget {

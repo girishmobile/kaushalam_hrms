@@ -121,10 +121,10 @@ class DashboardPage extends StatelessWidget {
         child: Container(
           padding: padding ?? const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: overlayColor.withOpacity(opacity),
+            color: overlayColor.withValues(alpha:  opacity),
             borderRadius: BorderRadius.circular(borderRadius),
             border: Border.all(
-              color: borderColor.withOpacity(0.4),
+              color: borderColor.withValues(alpha: 0.4),
               width: borderWidth,
             ),
           ),

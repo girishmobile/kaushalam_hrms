@@ -5,7 +5,6 @@ import 'package:neeknots_admin/provider/profile_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../api/api_config.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String employeeId;
@@ -311,23 +310,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           _builBasicRowInfo(
             label: "Aadhar Number",
-            titleText: provider.profileModel?.aadharNumber ?? '-',
+            titleText:maskAadhaar( provider.profileModel?.aadharNumber??'-' ),
           ),
           _builBasicRowInfo(
             label: "Voter ID Number",
-            titleText: provider.profileModel?.voterIdNumber ?? '-',
+            titleText: maskVoterId(provider.profileModel?.voterIdNumber??'-') ,
           ),
           _builBasicRowInfo(
             label: "UAN Number",
-            titleText: provider.profileModel?.uanNumber ?? '-',
+            titleText: maskUan(provider.profileModel?.uanNumber ?? '-'),
           ),
           _builBasicRowInfo(
             label: "PF Number",
-            titleText: provider.profileModel?.pfNumber ?? '-',
+            titleText: maskPfNumber(provider.profileModel?.pfNumber ?? '-'),
           ),
           _builBasicRowInfo(
             label: "ESIC Number",
-            titleText: provider.profileModel?.esicNumber ?? '-',
+            titleText: maskEsic(provider.profileModel?.esicNumber ?? '-'),
           ),
         ],
       ),

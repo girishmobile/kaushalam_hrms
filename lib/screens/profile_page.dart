@@ -43,19 +43,4 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Widget _buildProfileImage() {
-  //   return Container(
-  //     padding: const EdgeInsets.all(4), // thickness of border
-  //     decoration: BoxDecoration(
-  //       shape: BoxShape.circle,
-  //       gradient: appGradient(),
-  //     ),
-  //     child: Container(
-  //       height: 120,
-  //       width: 120,
-  //       decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-  //       child: appCircleImage(imageUrl: hostImage, radius: 58, onTap: () {}),
-  //     ),
-  //   );
-  // }
 }

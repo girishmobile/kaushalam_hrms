@@ -5,7 +5,6 @@ import 'package:neeknots_admin/utility/utils.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../api/api_config.dart';
 import '../../common/app_scaffold.dart';
 import '../../components/common_dropdown.dart';
 import '../../core/constants/context_extension.dart';

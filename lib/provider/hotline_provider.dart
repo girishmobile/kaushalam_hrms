@@ -192,7 +192,7 @@ class HotlineProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  clearDesignation() {
+  void clearDesignation() {
     _selectDesignation = null; // assign null
     _selectedDepartment = null; // assign null
 
