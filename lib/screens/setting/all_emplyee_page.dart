@@ -38,23 +38,8 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
         builder: (context, provider, child) {
           return Stack(
             children: [
-
-              /*Positioned(
-                top: appTopPadding(context),
-                left: 24,
-                right: 24,
-                child: _searchBar(context, provider),
-              ),
-              Positioned(
-                top: appTopPadding(context, extra: 64),
-                left: 24,
-                right: 24,
-                child: _filterOption(provider: provider),
-              ),
-*/
-
               Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 24.0),
+                padding: EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
                   spacing: 10,
                   children: [

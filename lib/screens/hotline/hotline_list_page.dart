@@ -27,6 +27,8 @@ class _HotlineListPageState extends State<HotlineListPage> {
 
   Future<void> initilized() async {
     final provider = context.read<HotlineListProvider>();
+    provider.nameController.clear();
+
     await Future.wait([provider.getHotlineCountData()]);
   }
 
@@ -38,20 +40,15 @@ class _HotlineListPageState extends State<HotlineListPage> {
         builder: (context, provider, child) {
           return Stack(
             children: [
-
-              Padding(
-                padding:  EdgeInsets.only(left: 24.0,right: 24,bottom: appBottomPadding(context)),
-                child: Column(
-                  spacing: 10,
-                  children: [
-                    _hotlineOption(provider),
-
-                    provider.hotline_employees.isEmpty && !provider.isLoading
-                        ? Center(child: Text("You don’t have any records yet."))
-                        : Expanded(child: _listOfHotline(context, provider)),
-
-                  ],
-                ),
+              Column(
+                spacing: 10,
+                children: [
+                  _searchBar(context, provider),
+                  _hotlineOption(provider),
+                  provider.hotline_employees.isEmpty && !provider.isLoading
+                      ? Center(child: Text("You don’t have any records yet."))
+                      : Expanded(child: _listOfHotline(context, provider)),
+                ],
               ),
 
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
@@ -62,12 +59,28 @@ class _HotlineListPageState extends State<HotlineListPage> {
     );
   }
 
+  Widget _searchBar(BuildContext context, HotlineListProvider provider) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 24, right: 24),
+      child: appOrangeTextField(
+        textController: provider.nameController,
+        hintText: "search by employee name",
+        icon: Icon(Icons.search),
+        focusNode: provider.searchFocus,
+      ),
+    );
+  }
+
   Widget _listOfHotline(BuildContext context, HotlineListProvider provider) {
     return ListView.separated(
       shrinkWrap: true,
-      padding: EdgeInsets.zero,
+      padding: EdgeInsets.only(
+        left: 24,
+        right: 24,
+        bottom: appBottomPadding(context),
+      ),
       itemBuilder: (ctx, idx) {
-        final item = provider.hotline_employees[idx];
+        final item = provider.filteredList[idx];
         return hotlineCard(
           item,
           showArrow: false,
@@ -81,7 +94,7 @@ class _HotlineListPageState extends State<HotlineListPage> {
         );
       },
       separatorBuilder: (_, _) => SizedBox(height: 8),
-      itemCount: provider.hotline_employees.length,
+      itemCount: provider.filteredList.length,
     );
   }
 
@@ -106,7 +119,8 @@ class _HotlineListPageState extends State<HotlineListPage> {
   }
 
   Widget _hotlineOption(HotlineListProvider provider) {
-    return SizedBox(
+    return Container(
+      padding: const EdgeInsets.only(left: 24, right: 24),
       width: double.infinity,
       height: 40,
       child: ListView.separated(
@@ -119,6 +133,8 @@ class _HotlineListPageState extends State<HotlineListPage> {
             item,
             isSelected,
             onTap: () {
+              hideKeyboard(context);
+              provider.nameController.clear();
               provider.selectHotline(item.title);
             },
           );
