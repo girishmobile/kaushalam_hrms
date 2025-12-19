@@ -2040,7 +2040,7 @@ void openProfileDialog({
                     /// ❌ ERROR IMAGE
                     errorWidget: (context, url, error) => const Center(
                       child: Icon(
-                        Icons.err,
+                        Icons.broken_image,
                         color: Colors.white,
                         size: 80,
                       ),
