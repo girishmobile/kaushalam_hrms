@@ -71,10 +71,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       "SETTINGS",
     ];
     return AppScaffold(
-
-
       leadingWidth: 80,
-      appTitle:   provider.pageIndex == 2?"KAUSHALAM":titles[provider.pageIndex],
+      appTitle: provider.pageIndex == 2
+          ? "KAUSHALAM"
+          : titles[provider.pageIndex],
       isTopSafeArea: true,
       actions: [
         Consumer<EmpNotifiProvider>(
@@ -87,7 +87,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 clipBehavior: Clip.none,
                 children: [
                   appGradientImage(
-
                     imagePath: icNotification,
                     size: 24,
                     gradient: appGradient(),
@@ -116,9 +115,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             );
           },
         ),
-        SizedBox(width: 24,),
+        SizedBox(width: 24),
       ],
-      leading:  Container(
+      leading: Container(
         margin: const EdgeInsets.only(left: 24.0),
         child: Consumer<ProfileProvider>(
           builder: (_, profileProvider, _) {
@@ -127,7 +126,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               height: 45,
               child: Center(
                 child: appCircleImage(
-
                   borderColor: color2,
                   text: profileProvider.profileModel?.firstname,
                   imageUrl: setImagePath(profileProvider.profileImage),
@@ -152,7 +150,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Stack(
         children: [
           hrmsScreens[provider.pageIndex],
-         /* topBar(
+          /* topBar(
             context,
             provider: provider,
             title: titles[provider.pageIndex],
@@ -264,64 +262,62 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget bottomBar(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: SafeArea(
-        bottom: true,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 24),
+    final bottomInset = MediaQuery.of(context).viewPadding.bottom;
 
-          child: _buildGlassEffect(
-            // overlayColor: Colors.white,
-            borderRadius: 45,
-            borderColor: Colors.orange,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildBottomIcon(
-                  context,
-                  index: 0,
-
-                  icon: Icons.calendar_month_outlined,
-                  title: "Calendar",
-                  imagePath: icMenuCalender,
-                  size: 24,
-                ),
-                _buildBottomIcon(
-                  context,
-                  index: 1,
-                  icon: Icons.grade_outlined,
-                  title: "My KPI",
-                  imagePath: icMenuKPI,
-                  size: 20,
-                ),
-                _buildBottomIcon(
-                  context,
-                  index: 2,
-                  icon: Icons.home_outlined,
-                  title: "Home",
-                  imagePath: icMenuHome,
-                  size: 20,
-                ),
-                _buildBottomIcon(
-                  context,
-                  index: 3,
-                  icon: Icons.perm_contact_cal_outlined,
-                  title: "Attendance",
-                  imagePath: icMenuAttendance,
-                  size: 20,
-                ),
-                _buildBottomIcon(
-                  context,
-                  index: 4,
-                  icon: Icons.settings_outlined,
-                  title: "Setting",
-                  imagePath: icSetting,
-                  size: 20,
-                ),
-              ],
-            ),
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 8 + bottomInset, // 🔑 consistent spacing
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: _buildGlassEffect(
+          borderRadius: 45,
+          borderColor: Colors.orange,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildBottomIcon(
+                context,
+                index: 0,
+                icon: Icons.calendar_month_outlined,
+                title: "Calendar",
+                imagePath: icMenuCalender,
+                size: 24,
+              ),
+              _buildBottomIcon(
+                context,
+                index: 1,
+                icon: Icons.grade_outlined,
+                title: "My KPI",
+                imagePath: icMenuKPI,
+                size: 20,
+              ),
+              _buildBottomIcon(
+                context,
+                index: 2,
+                icon: Icons.home_outlined,
+                title: "Home",
+                imagePath: icMenuHome,
+                size: 20,
+              ),
+              _buildBottomIcon(
+                context,
+                index: 3,
+                icon: Icons.perm_contact_cal_outlined,
+                title: "Attendance",
+                imagePath: icMenuAttendance,
+                size: 20,
+              ),
+              _buildBottomIcon(
+                context,
+                index: 4,
+                icon: Icons.settings_outlined,
+                title: "Setting",
+                imagePath: icSetting,
+                size: 20,
+              ),
+            ],
           ),
         ),
       ),

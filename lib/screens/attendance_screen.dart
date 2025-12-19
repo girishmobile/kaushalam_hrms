@@ -16,25 +16,13 @@ class AttendanceScreen extends StatelessWidget {
       builder: (context, provider, child) {
         return Stack(
           children: [
-            Padding(
-
-              padding:  EdgeInsets.only(left: 24.0,right: 24,bottom: appBottomPadding(context,extra: 36)),
-              child: Column(
-
-
-                spacing: 10,
-                children: [
-                  _headerView(context, provider),
-                  _filterOption(provider),
-                  /*loadSubText(
-                    title: '${provider.selectedDateRange} Details',
-                    fontSize: 14,
-                    fontWight: FontWeight.w500,
-                  ),*/
-
-                  Expanded(child: _buildDetailListView(provider)),
-                ],
-              ),
+            Column(
+              spacing: 10,
+              children: [
+                _headerView(context, provider),
+                _filterOption(provider),
+                Expanded(child: _buildDetailListView(context, provider)),
+              ],
             ),
 
             /*Positioned(
@@ -50,8 +38,16 @@ class AttendanceScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailListView(AttendanceProvider provider) {
+  Widget _buildDetailListView(
+    BuildContext context,
+    AttendanceProvider provider,
+  ) {
     return ListView.separated(
+      padding: EdgeInsets.only(
+        left: 24.0,
+        right: 24,
+        bottom: appBottomPadding(context, extra: 64),
+      ),
       shrinkWrap: true,
       physics: BouncingScrollPhysics(),
       itemBuilder: (context, index) {
@@ -92,11 +88,7 @@ class AttendanceScreen extends StatelessWidget {
 
   Widget _headerView(BuildContext context, AttendanceProvider provider) {
     return Padding(
-      padding: EdgeInsets.only(
-        left: 0,
-        right: 0,
-        top: 0,
-      ),
+      padding: EdgeInsets.only(left: 24, right: 24, top: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -140,7 +132,8 @@ class AttendanceScreen extends StatelessWidget {
   }
 
   Widget _filterOption(AttendanceProvider provider) {
-    return SizedBox(
+    return Container(
+      padding: EdgeInsets.only(left: 24, right: 24),
       height: 68,
       child: ListView.separated(
         shrinkWrap: true,
@@ -222,7 +215,4 @@ class AttendanceScreen extends StatelessWidget {
       ],
     );
   }
-
-
-
 }

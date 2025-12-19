@@ -330,7 +330,6 @@ Widget _fallBackContent(
   double? iconSize,
   double? fontSize,
 ) {
-  print('===${text}');
   if (icon != null) {
     return Icon(icon, color: iconColor, size: iconSize ?? 24);
   } else if (text != null && text.isNotEmpty) {
@@ -1362,7 +1361,7 @@ Widget appProfileImage({
             iconColor: color3,
             iconSize: radius / 1.5,
             radius: (radius - 2),
-            onTap:onTap,
+            onTap: onTap,
             fontSize: 36,
           ),
         ),
@@ -1404,8 +1403,6 @@ Widget appProfileImage({
   );
 }
 
-
-
 Widget loadMultiLineTextField({
   Color? bgColor,
   String? hintText,
@@ -1445,8 +1442,6 @@ Widget loadMultiLineTextField({
     ),
   );
 }
-
-
 
 Widget acceptOrRejectBtn({
   required Color bgColor,
@@ -1933,8 +1928,6 @@ OutlineInputBorder commonTextFiledBorder({
   );
 }
 
-
-
 String maskShow(String pan) {
   if (pan.isEmpty) return pan;
   return '******';
@@ -2012,7 +2005,7 @@ void openProfileDialog({
             Align(
               alignment: Alignment.center,
               child: SizedBox(
-                height: 300,
+                height: MediaQuery.sizeOf(context).width,
                 width: double.infinity,
                 child: InteractiveViewer(
                   minScale: 0.8,
@@ -2023,18 +2016,20 @@ void openProfileDialog({
                     fit: BoxFit.cover,
 
                     /// 🔄 LOADING
-                    placeholder: (context, url) =>  Center(
-                      child: showProgressIndicator(),
-                    ),
+                    placeholder: (context, url) =>
+                        Center(child: showProgressIndicator()),
 
                     /// ❌ ERROR IMAGE
-                    errorWidget: (context, url, error) =>  Center(
+                    errorWidget: (context, url, error) => Center(
                       child: Container(
                         color: Colors.white,
                         height: 300,
                         width: double.infinity,
                         child: Center(
-                          child: loadTitleText(title: "Profile photo not available.",fontSize: 24),
+                          child: loadTitleText(
+                            title: "Profile photo not available.",
+                            fontSize: 24,
+                          ),
                         ),
                       ),
                     ),
@@ -2048,11 +2043,7 @@ void openProfileDialog({
               child: Align(
                 alignment: Alignment.topRight,
                 child: IconButton(
-                  icon: const Icon(
-                    Icons.close,
-                    color: Colors.white,
-                    size: 30,
-                  ),
+                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),

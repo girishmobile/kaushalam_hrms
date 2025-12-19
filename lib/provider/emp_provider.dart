@@ -176,7 +176,6 @@ class EmpProvider extends ChangeNotifier {
       );
       if (globalStatusCode == 200) {
         final decoded = jsonDecode(response);
-        print("decode:- $decoded");
 
         if (decoded is List && decoded.isNotEmpty) {
           _leaveBalance = LeaveBalance.fromApiJson(decoded[0]);

@@ -352,7 +352,6 @@ class ProfileProvider extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      debugPrint('===$e');
       _setLoading(false);
     }
   }
