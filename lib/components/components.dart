@@ -330,7 +330,7 @@ Widget _fallBackContent(
   double? iconSize,
   double? fontSize,
 ) {
-  print('===${text}');
+
   if (icon != null) {
     return Icon(icon, color: iconColor, size: iconSize ?? 24);
   } else if (text != null && text.isNotEmpty) {
@@ -2012,7 +2012,7 @@ void openProfileDialog({
             Align(
               alignment: Alignment.center,
               child: SizedBox(
-                height: 300,
+                height: MediaQuery.sizeOf(context).width,
                 width: double.infinity,
                 child: InteractiveViewer(
                   minScale: 0.8,
@@ -2020,7 +2020,7 @@ void openProfileDialog({
                   constrained: true,
                   child: CachedNetworkImage(
                     imageUrl: imageUrl,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
 
                     /// 🔄 LOADING
                     placeholder: (context, url) =>  Center(

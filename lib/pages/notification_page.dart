@@ -12,6 +12,7 @@ class NotificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       context.read<EmpNotifiProvider>().getEmployeeNotification();
+       context.read<EmpNotifiProvider>().readAllNotification();
     });
     return AppScaffold(
       appTitle: "NOTIFICATION",
@@ -67,17 +68,11 @@ class NotificationPage extends StatelessWidget {
   }
 
   Widget _searchBar(BuildContext context, EmpNotifiProvider provider) {
-    final safeTop = MediaQuery.of(context).padding.top;
-    final topBarHeight = 48.0; // from Dashboard SafeArea Row
-    return Positioned(
-      top: safeTop + topBarHeight + 8,
-      left: 24,
-      right: 24,
-      child: appOrangeTextField(
-        textController: provider.nameController,
-        hintText: "search",
-        icon: Icon(Icons.search),
-      ),
+    return appOrangeTextField(
+      textController: provider.nameController,
+      hintText: "search",
+      icon: const Icon(Icons.search),
     );
   }
+
 }

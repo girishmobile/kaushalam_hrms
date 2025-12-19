@@ -87,13 +87,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          RouteName.employeeDetailPage,
-          arguments: "${event['id']}",
-         // arguments: {"employeeId": '${event['id']}', "isCurrentUser": false},
-          //arguments: provider.employeeId,
-        );
+        if(event['type'] != "attendance"){
+          Navigator.pushNamed(
+            context,
+            RouteName.employeeDetailPage,
+            arguments: "${event['id']}",
+            // arguments: {"employeeId": '${event['id']}', "isCurrentUser": false},
+            //arguments: provider.employeeId,
+          );
+        }
+
       },
       child: appViewEffect(
         borderRadius: 4,

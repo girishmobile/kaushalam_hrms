@@ -97,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       title: provider.profileModel?.designation?.name ?? '',
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 32),
+                    SizedBox(height: 24),
                     _builRowTitle(
                       icon: Icons.person_outline_outlined,
                       label: "Basic Information",
