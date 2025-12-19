@@ -1246,6 +1246,7 @@ Widget appNavigationBar({
 }) {
   return SafeArea(
     child: Container(
+      color: Colors.white,
       height: 48,
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -52,7 +52,6 @@ double listBottom(BuildContext context, {double extra = 0}) {
 double appTopPadding(BuildContext context, {double extra = 0}) {
   final safeTop = MediaQuery.of(context).padding.top;
   const topBarHeight = 48.0; // your Dashboard SafeArea Row
-
   final listTop =
       safeTop + topBarHeight + 8 + extra; // search bar height + spacing
 

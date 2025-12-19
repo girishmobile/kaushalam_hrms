@@ -25,6 +25,7 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
   Future<void> initEmployee() async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<EmpProvider>(context, listen: false);
+      provider.nameController.clear();
       await Future.wait([provider.getDepartment(), provider.getAllEmployees()]);
     });
   }
@@ -38,17 +39,41 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
             children: [
               _listOfEmployee(context, provider),
               Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 228,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withValues(alpha: 0.2),
+                        Colors.white.withValues(alpha: 0.4),
+                        Colors.white,
+                        Colors.white,
+                        Colors.white,
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
                 top: appTopPadding(context),
                 left: 24,
                 right: 24,
-                child: _searchBar(context, provider),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 8,
+                  children: [
+                    _searchBar(context, provider),
+                    _filterOption(provider: provider),
+                  ],
+                ),
               ),
-              Positioned(
-                top: appTopPadding(context, extra: 64),
-                left: 24,
-                right: 24,
-                child: _filterOption(provider: provider),
-              ),
+
               appNavigationBar(
                 title: "EMPLOYEES",
                 onTap: () {

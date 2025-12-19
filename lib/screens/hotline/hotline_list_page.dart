@@ -37,14 +37,29 @@ class _HotlineListPageState extends State<HotlineListPage> {
         builder: (context, provider, child) {
           return Stack(
             children: [
-              provider.hotline_employees.isEmpty && !provider.isLoading
-                  ? Center(child: Text("You don’t have any records yet."))
-                  : _listOfHotline(context, provider),
-              Positioned(
-                top: appTopPadding(context),
-                left: 24,
-                right: 24,
-                child: _hotlineOption(provider),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                  top: appTopPadding(context),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  spacing: 4,
+                  children: [
+                    _hotlineOption(provider),
+                    Expanded(
+                      child:
+                          provider.hotline_employees.isEmpty &&
+                              !provider.isLoading
+                          ? Center(
+                              child: Text("You don’t have any records yet."),
+                            )
+                          : _listOfHotline(context, provider),
+                    ),
+                  ],
+                ),
               ),
               appNavigationBar(
                 title: "HOTLINE",
@@ -61,10 +76,12 @@ class _HotlineListPageState extends State<HotlineListPage> {
   Widget _listOfHotline(BuildContext context, HotlineListProvider provider) {
     return ListView.separated(
       padding: EdgeInsets.only(
-        left: 24,
-        right: 24,
-        top: appTopPadding(context, extra: 52),
+        left: 0,
+        bottom: appBottomPadding(context),
+        right: 0,
+        top: 12,
       ),
+      primary: false,
       itemBuilder: (ctx, idx) {
         final item = provider.hotline_employees[idx];
         return hotlineCard(
