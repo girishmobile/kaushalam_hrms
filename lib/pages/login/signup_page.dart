@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
-import 'package:neeknots_admin/core/constants/string_constant.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 
 class SignupPage extends StatelessWidget {
@@ -36,17 +35,17 @@ class SignupPage extends StatelessWidget {
               const SizedBox(height: 16),
               appOrangeTextField(
                 hintText: "Username",
-             //   icon: commonPrefixIcon(image: icPassword),
+                //   icon: commonPrefixIcon(image: icPassword),
               ),
               const SizedBox(height: 16),
               appOrangeTextField(
                 hintText: "Employee ID or Email",
-               // icon: Icons.email_outlined,
+                // icon: Icons.email_outlined,
               ),
               const SizedBox(height: 16),
               appOrangeTextField(
                 hintText: "Mobile Number",
-              //  icon: Icons.phone_iphone_outlined,
+                //  icon: Icons.phone_iphone_outlined,
               ),
               const SizedBox(height: 16),
               appOrangeTextField(
@@ -57,20 +56,11 @@ class SignupPage extends StatelessWidget {
 
               appOrangeTextField(
                 hintText: "Confirm Password",
-               // icon: Icons.lock_outline,
+                // icon: Icons.lock_outline,
               ),
               const SizedBox(height: 32),
               // SignUp Button
-              gradientButton(
-                title: "SIGN UP",
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    RouteName.dashBoardPage,
-                    (route) => false,
-                  );
-                },
-              ),
+              gradientButton(title: "SIGN UP", onPressed: () {}),
             ],
           ),
           appNavigationBar(
