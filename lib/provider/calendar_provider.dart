@@ -151,6 +151,11 @@ class CalendarProvider extends ChangeNotifier {
           "title":
           "${member["firstname"] ?? ''} ${member["lastname"] ?? ''} (${member["leavetype"]})",
           "type": "leave",
+          "leave": "leave",
+          "date": startDateStr,
+          "leave_type":"${member["leavetype"]}",
+          "leave_count": "${leaveData["leave_count"]}",
+          "reason": "${leaveData["reason"]}",
           "id": leaveData['id'],
           "status": leaveData["status"],
         });

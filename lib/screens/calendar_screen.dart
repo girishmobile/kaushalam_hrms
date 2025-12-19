@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:neeknots_admin/components/components.dart';
+import 'package:neeknots_admin/components/components.dart'
+    hide getFormattedDate;
 import 'package:neeknots_admin/core/constants/colors.dart';
-import 'package:neeknots_admin/utility/utils.dart';
+import 'package:neeknots_admin/utility/utils.dart' hide getFormattedDate;
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+
 import '../core/router/route_name.dart';
 import '../provider/calendar_provider.dart';
+import '../utility/utils.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -56,7 +59,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
 
               children: [
-
                 _buildTableCalendar(provider: provider),
                 _buildHeader(),
 
@@ -66,6 +68,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     final event = selectedEvents[index];
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       child: _buildItem(provider: provider, event: event),
@@ -81,13 +84,35 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 
+  Widget _builBasicRowInfo({required String label, required String titleText,Color ?colorText }) {
+    return appViewEffect(
+      child: Row(
+        spacing: 8,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          loadTitleText(title: label, fontWight: FontWeight.w500, fontSize: 12),
+          Expanded(
+            child: loadSubText(
+              title: titleText,
+              fontColor: colorText,
+              textAlign: TextAlign.end,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildItem({
     required CalendarProvider provider,
     required Map<String, dynamic> event,
   }) {
     return InkWell(
       onTap: () {
-        if(event['type'] != "attendance"){
+
+        if (event['type'] == "birthday") {
           Navigator.pushNamed(
             context,
             RouteName.employeeDetailPage,
@@ -96,7 +121,66 @@ class _CalendarScreenState extends State<CalendarScreen> {
             //arguments: provider.employeeId,
           );
         }
+        if (event['type'] == "leave") {
+          showCommonBottomSheet(
+            context: context,
+            content: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                spacing: 10,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
 
+                      Expanded(
+                        child: appGradientText(
+                          text: "Leave Details",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          gradient: appGradient(),
+                        ),
+                      ),
+                      appCircleIcon(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          icon: Icons.close, gradient: appGradient()),
+                    ],
+                  ),
+                  SizedBox(height: 5,),
+                  _builBasicRowInfo(
+                    label: "Leave Type : ",
+                    titleText: event['leave_type'].toString().toUpperCase(),
+                  ),
+                  _builBasicRowInfo(
+                    label: "Date : ",
+                    titleText: formatDate(event['date']),
+                  ),
+                  _builBasicRowInfo(
+                    label: "Days : ",
+                    titleText: event['leave_count'].toString().toUpperCase(),
+                  ),
+                  _builBasicRowInfo(
+                    label: "Half Day : ",
+                    titleText: event['leave_type'].toString().toUpperCase(),
+                  ),
+                  _builBasicRowInfo(
+                    label: "Reason : ",
+                    titleText: event['reason'].toString().toUpperCase(),
+                  ),
+                  _builBasicRowInfo(
+                    colorText: event['status'].toString().toLowerCase()=="accept"?Colors.green:Colors.red,
+                    label: "Status By HR : ",
+                    titleText: event['status'].toString().toUpperCase(),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
       },
       child: appViewEffect(
         borderRadius: 4,
