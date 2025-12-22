@@ -159,7 +159,7 @@ class _LeaveSummaryPageState extends State<LeaveSummaryPage> {
             child: Center(
               child: appGradientText(
                 text:
-                    "Leave: ${comrateStartEndate(item.leaveDate?.date, item.leaveEndDate?.date)}",
+                    "Leave: ${compareStartEndDate(item.leaveDate?.date, item.leaveEndDate?.date)}",
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 14,

@@ -149,13 +149,18 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
         return RepaintBoundary(
           child: GestureDetector(
             onTap: () {
-              if (userRole == "hr" || userRole == "super admin") {
+              Navigator.pushNamed(
+                context,
+                RouteName.employeeDetailPage,
+                arguments: "${employee.id}",
+              );
+              /*if (userRole == "hr" || userRole == "super admin") {
                 Navigator.pushNamed(
                   context,
                   RouteName.employeeDetailPage,
                   arguments: "${employee.id}",
                 );
-              }
+              }*/
             },
             child: employeeCard(employee),
           ),

@@ -67,6 +67,7 @@ class ApiConfig {
 
   //FCM update
   static String updateFCMTokenUrl = "$BaseUrl/user/update-fcm-token";
+  static String kpiDetailsUrl = "$BaseUrl/kra-kpi/month-details";
 
   //API header
   static Future<Map<String, String>> getApiHeaders() async {

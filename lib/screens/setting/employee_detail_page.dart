@@ -33,7 +33,7 @@ class EmployeeDetailPage extends StatelessWidget {
                 children: [
                   appProfileImage(
                     onTap: () {
-                      print('---assassa');
+
                       openProfileDialog(
                         context: context,
                         imageUrl: '${ setImagePath(
@@ -68,24 +68,25 @@ class EmployeeDetailPage extends StatelessWidget {
                   ),
                   SizedBox(height: 12),
                   _buildPersonalInfo(provider: provider),
-                  SizedBox(height: 24),
+                 /* SizedBox(height: 24),
                   _builRowTitle(
                     icon: Icons.account_balance_outlined,
                     label: "Company Relations",
                   ),
+
                   SizedBox(height: 12),
-                  _buildCompnayInfo(provider: provider),
-                  SizedBox(height: 24),
-                  _builRowTitle(
+                  _buildCompnayInfo(provider: provider),*/
+                 // SizedBox(height: 24),
+                /*  _builRowTitle(
                     icon: Icons.call_outlined,
                     label: "Contact Information",
                   ),
                   SizedBox(height: 12),
-                  _buildContactInfo(provider: provider),
-                  SizedBox(height: 24),
-                  _builRowTitle(icon: Icons.book_outlined, label: "Document"),
+                  _buildContactInfo(provider: provider),*/
+                 // SizedBox(height: 24),
+                 /* _builRowTitle(icon: Icons.book_outlined, label: "Document"),
                   SizedBox(height: 12),
-                  _buildDocuments(provider: provider),
+                  _buildDocuments(provider: provider),*/
                   SizedBox(height: 24),
                   _builRowTitle(
                     icon: Icons.share_outlined,
@@ -141,10 +142,10 @@ class EmployeeDetailPage extends StatelessWidget {
                 ? "${provider.employeeModel?.employeeId}"
                 : '',
           ),
-          _builBasicRowInfo(
+        /*  _builBasicRowInfo(
             label: "Per Email",
             titleText: provider.employeeModel?.email ?? '-',
-          ),
+          ),*/
           _builBasicRowInfo(
             label: "Com Email",
             titleText: provider.employeeModel?.companyEmail ?? '-',

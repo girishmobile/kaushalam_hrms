@@ -24,4 +24,5 @@ class RouteName {
   static const String editLeavePage = "/EditLeavePage";
   static const String hotlinePage = "/HotlinePage";
   static const String hotlineListPage = '/HotlineListPage';
+  static const String kpiDetailsScreen = '/KpiDetailsScreen';
 }

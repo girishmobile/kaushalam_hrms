@@ -169,7 +169,7 @@ String convertDate(String? date, {String format = "dd-MMM-yy"}) {
   }
 }
 
-String comrateStartEndate(dynamic startDate, dynamic endDate) {
+String compareStartEndDate(dynamic startDate, dynamic endDate) {
   String formattedDate;
 
   if (startDate == endDate) {

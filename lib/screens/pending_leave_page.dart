@@ -217,28 +217,28 @@ class _PendingLeavePageState extends State<PendingLeavePage> {
                         ),
                       ],
                     ),
-                    _buidRowItem(
+                    _buildRowItem(
                       label: "Leave Type",
                       titleText: getLeaveTypeName(
                         leave.leaveType?.leavetype ?? '',
                       ),
                     ),
-                    _buidRowItem(
+                    _buildRowItem(
                       label: "Date",
-                      titleText: comrateStartEndate(
+                      titleText: compareStartEndDate(
                         leave.leaveDate?.date.toString(),
                         leave.leaveEndDate?.date.toString(),
                       ),
                     ),
-                    _buidRowItem(
+                    _buildRowItem(
                       label: "Days",
                       titleText: leave.leaveCount ?? '',
                     ),
-                    _buidRowItem(
+                    _buildRowItem(
                       label: "Half Day",
                       titleText: leave.halfDay == true ? "Yes" : "No",
                     ),
-                    _buidRowItem(
+                    _buildRowItem(
                       label: "Location",
                       titleText: leave.location ?? '',
                     ),
@@ -293,7 +293,7 @@ class _PendingLeavePageState extends State<PendingLeavePage> {
     );
   }
 
-  Widget _buidRowItem({required String label, required String titleText}) {
+  Widget _buildRowItem({required String label, required String titleText}) {
     return Row(
       spacing: 8,
       crossAxisAlignment: CrossAxisAlignment.start,

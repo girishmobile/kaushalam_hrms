@@ -1,4 +1,4 @@
-const String basePath = "assets/dashboard";
+  const String basePath = "assets/dashboard";
 const String iconDashboardPath = basePath;
 const String icEmail = "$iconDashboardPath/mail.png";
 const String icPassword = "$iconDashboardPath/padlock.png";

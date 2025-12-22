@@ -119,16 +119,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
 /*        String userId = await getUserId();
         print(userId );*/
         if (event['type'] == "birthday") {
-          UserModel? user = await SecureStorage.getUser();
 
-          if (user?.role['name'].toString().toLowerCase() == "hr" ||
-              user?.role['name'].toString().toLowerCase() == "super admin") {
-            Navigator.pushNamed(
-              context,
-              RouteName.employeeDetailPage,
-              arguments: "${event['id']}",
-            );
-          }
+          Navigator.pushNamed(
+            context,
+            RouteName.employeeDetailPage,
+            arguments: "${event['id']}",
+          );
+          // UserModel? user = await SecureStorage.getUser();
+          //
+          // if (user?.role['name'].toString().toLowerCase() == "hr" ||
+          //     user?.role['name'].toString().toLowerCase() == "super admin") {
+          //   Navigator.pushNamed(
+          //     context,
+          //     RouteName.employeeDetailPage,
+          //     arguments: "${event['id']}",
+          //   );
+          // }
         }
         if (event['type'] == "leave") {
           UserModel? user = await SecureStorage.getUser();

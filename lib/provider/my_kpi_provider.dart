@@ -6,6 +6,8 @@ import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/api/network_repository.dart';
 import 'package:neeknots_admin/models/my_kpi_model.dart';
 
+import '../models/kpi_details_model.dart';
+
 class MyKpiProvider extends ChangeNotifier {
   late List<String> years;
   late String selectedYear;
@@ -17,6 +19,7 @@ class MyKpiProvider extends ChangeNotifier {
   }
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   void _setLoading(bool val) {
@@ -53,6 +56,43 @@ class MyKpiProvider extends ChangeNotifier {
           //_kpiList.sort((a, b) => (b.month ?? 0).compareTo(a.month ?? 0));
         } else {
           _kpiList = [];
+        }
+
+        _setLoading(false);
+        notifyListeners(); // ★ IMPORTANT ★
+      } else {
+        _setLoading(false);
+      }
+    } catch (e) {
+      _setLoading(false);
+    }
+  }
+
+  List<KpiDetailsModel> _kpiDetailsList = [];
+
+  List<KpiDetailsModel> get kpiDetailsList => _kpiDetailsList;
+
+  Future<void> getKPIDetailsList({
+    required String year,
+    required String month,
+  }) async {
+    _kpiDetailsList.clear();
+    _setLoading(true);
+    try {
+      final response = await callApi(
+        url: '${ApiConfig.kpiDetailsUrl}?year=$year&month=$month',
+        method: HttpMethod.get,
+        headers: null,
+      );
+
+      if (globalStatusCode == 200) {
+        final decoded = json.decode(response);
+        if (decoded is List) {
+          _kpiDetailsList = decoded
+              .map((e) => KpiDetailsModel.fromJson(e))
+              .toList();
+        } else {
+          _kpiDetailsList = [];
         }
 
         _setLoading(false);

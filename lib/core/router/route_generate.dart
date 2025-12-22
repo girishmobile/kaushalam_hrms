@@ -16,6 +16,7 @@ import 'package:neeknots_admin/screens/employee_leave_balance.dart';
 import 'package:neeknots_admin/screens/holiday_page.dart';
 import 'package:neeknots_admin/screens/hotline/hotline_list_page.dart';
 import 'package:neeknots_admin/screens/hotline/hotline_page.dart';
+import 'package:neeknots_admin/screens/kpi_details/kpi_details_screen.dart';
 import 'package:neeknots_admin/screens/leave_summary_page.dart';
 import 'package:neeknots_admin/screens/pending_leave_page.dart';
 import 'package:neeknots_admin/screens/profile_page.dart';
@@ -109,6 +110,11 @@ class RouteGenerate {
       case RouteName.hotlinePage:
         final args = settings.arguments as HotlineCountModel;
         screen = HotlinePage(status: args);
+        break;
+      case RouteName.kpiDetailsScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+
+        screen = KpiDetailsScreen(year: args["year"],month: args["month"]);
         break;
       default:
         screen = AppScaffold(

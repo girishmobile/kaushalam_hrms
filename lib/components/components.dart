@@ -764,7 +764,7 @@ Widget leaveCard({
   required VoidCallback onReject,
   required VoidCallback onAccept,
 }) {
-  final leaveDate = comrateStartEndate(
+  final leaveDate = compareStartEndDate(
     item.leaveDate?.date.toString(),
     item.leaveEndDate?.date.toString(),
   );

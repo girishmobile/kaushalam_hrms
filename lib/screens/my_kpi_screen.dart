@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/components/components.dart';
+import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/models/my_kpi_model.dart';
 import 'package:neeknots_admin/provider/my_kpi_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
@@ -79,8 +80,18 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
       itemBuilder: (context, index) {
         final item = provider.kpiList[index];
 
+
+
         return GestureDetector(
-          onTap: () {},
+          onTap: () {
+
+            Navigator.pushNamed(context, RouteName.kpiDetailsScreen,arguments: {
+
+              "month": '${item.month}',
+              "year": provider.selectedYear.toString(),
+            },);
+
+          },
           child: _buildGridItem(index: index, item: item),
         );
       },
