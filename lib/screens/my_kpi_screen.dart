@@ -28,7 +28,6 @@ class _MyKpiScreenState extends State<MyKpiScreen> {
     final provider = Provider.of<MyKpiProvider>(context, listen: false);
     // Get current year dynamically
     final currentYear = DateTime.now().year.toString();
-
     // If selectedYear is empty or null, set it to current year
     if (provider.selectedYear.isEmpty) {
       provider.selectedYear = currentYear;
