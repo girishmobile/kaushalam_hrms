@@ -3,22 +3,22 @@ import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
+import 'package:neeknots_admin/provider/app_provider.dart';
 import 'package:neeknots_admin/provider/emp_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 
 class AllEmplyeePage extends StatefulWidget {
   const AllEmplyeePage({super.key});
-
   @override
   State<AllEmplyeePage> createState() => _AllEmplyeePageState();
 }
 
 class _AllEmplyeePageState extends State<AllEmplyeePage> {
+  String userRole = "employee";
   @override
   void initState() {
     super.initState();
-
     initEmployee();
   }
 
@@ -26,6 +26,7 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<EmpProvider>(context, listen: false);
       provider.nameController.clear();
+      userRole = await getUserRole();
       await Future.wait([provider.getDepartment(), provider.getAllEmployees()]);
     });
   }
@@ -151,11 +152,13 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
         return RepaintBoundary(
           child: GestureDetector(
             onTap: () {
-              Navigator.pushNamed(
-                context,
-                RouteName.employeeDetailPage,
-                arguments: "${employee.id}",
-              );
+              if (userRole == "hr" || userRole == "super admin") {
+                Navigator.pushNamed(
+                  context,
+                  RouteName.employeeDetailPage,
+                  arguments: "${employee.id}",
+                );
+              }
             },
             child: employeeCard(employee),
           ),

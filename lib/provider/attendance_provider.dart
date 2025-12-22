@@ -43,9 +43,6 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
   void setCustomDateRange(DateTimeRange range) {
     _customDateRange = range;
 
-
-
-
     notifyListeners();
   }
 
@@ -216,7 +213,6 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
         body: body,
         headers: null,
       );
-
       if (globalStatusCode == 200) {
         _attendanceRecordModel = AttendaceRecordModel.fromJson(
           json.decode(response),
@@ -227,7 +223,6 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
         _setLoading(false);
       }
     } catch (e) {
-
       _setLoading(false);
     }
   }

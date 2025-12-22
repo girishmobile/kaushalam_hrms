@@ -57,7 +57,6 @@ class AppProvider extends ChangeNotifier {
     if (user != null) {
       final roleStr = (user.role["name"] ?? "").toString().toLowerCase();
       _employeeId = "${user.id}";
-   //   debugPrint("user role: $roleStr");
       _profileImage = user.profile;
       if (roleStr == "employee") {
         _isRole = "employee";
@@ -68,4 +67,13 @@ class AppProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+}
+
+Future<String> getUserRole() async {
+  UserModel? user = await SecureStorage.getUser();
+  if (user != null) {
+    final roleStr = (user.role["name"] ?? "").toString().toLowerCase();
+    return roleStr;
+  }
+  return "employee";
 }

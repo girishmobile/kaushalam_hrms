@@ -19,7 +19,6 @@ class SecureStorage {
 
   static Future<UserModel?> getUser() async {
     final jsonStr = await _storage.read(key: "user");
-
     if (jsonStr == null) return null;
     return UserModel.fromLocalJson(jsonDecode(jsonStr));
   }

@@ -60,9 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget topBar(BuildContext context) {
-    final safeTop = MediaQuery.of(context).padding.top;
-    const topBarHeight = 56.0; // your Dashboard SafeArea Row
-    final listTop = safeTop + topBarHeight + 8; // search bar height + spacing
     final provider = context.watch<AppProvider>();
     return Container(
       padding: EdgeInsets.only(top: 8),
