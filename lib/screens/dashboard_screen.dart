@@ -35,6 +35,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       await Future.wait([
         provider.updateFCMToken(),
         provider.getUpcomingBirthHodliday(),
+        provider.getAllHolidays(),
         context.read<EmpNotifiProvider>().getEmployeeNotification(),
       ]);
     });
@@ -150,11 +151,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Stack(
         children: [
           hrmsScreens[provider.pageIndex],
-          /* topBar(
-            context,
-            provider: provider,
-            title: titles[provider.pageIndex],
-          ),*/
           bottomBar(context),
           if (provider.pageIndex == 2 && !provider.isManager)
             _leaveRequest(context),
@@ -370,11 +366,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // appCircleIcon(
-          //   icon: icon,
-          //   iconSize: size, // ✅ selected = gradient, unselected = grey
-          //   gradient: isSelected ? appGradient() : appOrangeOffGradient(),
-          // ),
           appGradientImage(
             imagePath: imagePath,
             size: 24,
@@ -416,6 +407,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                 if (refresh == true) {
                   // user is employee
+                  if (!context.mounted) return;
                   final emp = context.read<EmpProvider>();
                   final app = context.read<AppProvider>();
                   await Future.wait([

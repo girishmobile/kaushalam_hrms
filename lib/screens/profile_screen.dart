@@ -5,7 +5,6 @@ import 'package:neeknots_admin/provider/profile_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   final String employeeId;
   final bool isCurrentUser;
@@ -47,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     });
     return AppScaffold(
-      appTitle:"PROFILE" ,
+      appTitle: "PROFILE",
       child: appRefreshIndicator(
         onRefresh: () async {
           init();
@@ -67,14 +66,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Consumer<ProfileProvider>(
                       builder: (_, profileProvider, _) {
                         return appProfileImage(
-                          onTap: (){
-
+                          onTap: () {
                             openProfileDialog(
-                                context: context,imageUrl: '${ widget.isCurrentUser
-                                ? setImagePath(profileProvider.profileImage)
-                                : setImagePath(profileProvider.imageUrl)}',
-                                name: profileProvider.profileModel?.firstname ?? ''
-
+                              context: context,
+                              imageUrl:
+                                  '${widget.isCurrentUser ? setImagePath(profileProvider.profileImage) : setImagePath(profileProvider.imageUrl)}',
+                              name:
+                                  profileProvider.profileModel?.firstname ?? '',
                             );
                           },
                           text: profileProvider.profileModel?.firstname ?? '',
@@ -129,8 +127,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     SizedBox(height: 12),
                     _buildSocial(provider: provider),
-                    SizedBox(height: 24),
-                    gradientButton(title: "LOGOUT", onPressed: () {}),
                   ],
                 ),
 
@@ -316,15 +312,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           _builBasicRowInfo(
             label: "Aadhar Number",
-            titleText: provider.profileModel?.aadharNumber??'-',
+            titleText: provider.profileModel?.aadharNumber ?? '-',
           ),
           _builBasicRowInfo(
             label: "Voter ID Number",
-            titleText: provider.profileModel?.voterIdNumber??'-',
+            titleText: provider.profileModel?.voterIdNumber ?? '-',
           ),
           _builBasicRowInfo(
             label: "UAN Number",
-            titleText:provider.profileModel?.uanNumber ?? '-',
+            titleText: provider.profileModel?.uanNumber ?? '-',
           ),
           _builBasicRowInfo(
             label: "PF Number",

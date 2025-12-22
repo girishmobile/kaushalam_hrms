@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "neeknots_admin",
-      "version": "1.0.0+3",
+      "version": "1.0.3+1",
       "dependencies": [
         "app_settings",
         "cached_network_image",

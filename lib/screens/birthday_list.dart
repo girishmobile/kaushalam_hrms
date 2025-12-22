@@ -20,18 +20,7 @@ class BirthdayList extends StatelessWidget {
           return Stack(
             children: [
               _listOfEmployee(context, provider),
-              // Positioned(
-              //   top: appTopPadding(context),
-              //   left: 24,
-              //   right: 24,
-              //   child: _searchBar(context),
-              // ),
-              /*appNavigationBar(
-                title: "BIRTHDAY LIST",
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),*/
+
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],
           );
@@ -67,6 +56,4 @@ class BirthdayList extends StatelessWidget {
       itemCount: provider.birthdays.length,
     );
   }
-
-
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:neeknots_admin/api/api_config.dart';
+import 'package:neeknots_admin/models/birth_holiday_model.dart';
 import 'package:uuid/uuid.dart';
 
 class Utils {
@@ -341,6 +342,42 @@ class LowerCaseTextFormatter extends TextInputFormatter {
       selection: newValue.selection,
     );
   }
+}
+
+//************************** HOLIDAY AND WEEKEND VALIDATION ******************************* */
+List<DateTime> holidayDateList = [];
+
+List<DateTime> buildHolidayDateList(List<Holiday> holidays) {
+  final List<DateTime> dates = [];
+
+  for (final holiday in holidays) {
+    DateTime start = holiday.start_date.date;
+    DateTime end = holiday.end_date.date;
+
+    // Normalize time (important)
+    start = DateTime(start.year, start.month, start.day);
+    end = DateTime(end.year, end.month, end.day);
+
+    for (
+      DateTime d = start;
+      !d.isAfter(end);
+      d = d.add(const Duration(days: 1))
+    ) {
+      dates.add(d);
+    }
+  }
+
+  return dates;
+}
+
+bool isHoliday(DateTime date) {
+  return holidayDateList.any(
+    (h) => h.year == date.year && h.month == date.month && h.day == date.day,
+  );
+}
+
+bool isWeekend(DateTime date) {
+  return date.weekday == DateTime.saturday || date.weekday == DateTime.sunday;
 }
 
 // StatusConfig _statusConfig(String status) {
