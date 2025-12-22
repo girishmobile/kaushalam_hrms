@@ -50,6 +50,7 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
   }
 
   Future<void> initializeTodayAttendance() async {
+
     DateTime now = DateTime.now();
     //  DateTime start = DateTime(now.year, now.month, now.day);
     DateTime end = DateTime(now.year, now.month, now.day, 23, 59, 59);
@@ -217,6 +218,8 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
         headers: null,
       );
 
+      print('======$globalStatusCode');
+      print('======${ json.decode(response)}');
       if (globalStatusCode == 200) {
         _attendanceRecordModel = AttendaceRecordModel.fromJson(
           json.decode(response),

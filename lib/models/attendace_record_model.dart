@@ -124,7 +124,7 @@ class Date {
 class Staffing {
   dynamic hours;
   dynamic  minutes;
-  double? barData;
+  dynamic barData;
 
   Staffing({this.hours, this.minutes, this.barData});
 

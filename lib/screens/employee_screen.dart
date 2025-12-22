@@ -221,7 +221,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   ),
                   SizedBox(height: 4),
                   SizedBox(
-                    height: 110,
+                    height: 100,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {

@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../core/router/route_name.dart';
+import '../models/user_model.dart';
 import '../provider/calendar_provider.dart';
+import '../utility/secure_storage.dart';
 import '../utility/utils.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -84,7 +86,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 
-  Widget _builBasicRowInfo({required String label, required String titleText,Color ?colorText }) {
+  Widget _builBasicRowInfo({
+    required String label,
+    required String titleText,
+    Color? colorText,
+  }) {
     return appViewEffect(
       child: Row(
         spacing: 8,
@@ -110,76 +116,87 @@ class _CalendarScreenState extends State<CalendarScreen> {
     required Map<String, dynamic> event,
   }) {
     return InkWell(
-      onTap: () {
-
+      onTap: () async {
         if (event['type'] == "birthday") {
-          Navigator.pushNamed(
-            context,
-            RouteName.employeeDetailPage,
-            arguments: "${event['id']}",
-            // arguments: {"employeeId": '${event['id']}', "isCurrentUser": false},
-            //arguments: provider.employeeId,
-          );
+          UserModel? user = await SecureStorage.getUser();
+
+          if (user?.role['name'].toString().toLowerCase() == "hr" ||
+              user?.role['name'].toString().toLowerCase() == "super admin") {
+            Navigator.pushNamed(
+              context,
+              RouteName.employeeDetailPage,
+              arguments: "${event['id']}",
+            );
+          }
         }
         if (event['type'] == "leave") {
-          showCommonBottomSheet(
-            context: context,
-            content: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Column(
-                spacing: 10,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
+          UserModel? user = await SecureStorage.getUser();
 
-                      Expanded(
-                        child: appGradientText(
-                          text: "Leave Details",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+          if (user?.role['name'].toString().toLowerCase() == "hr" ||
+              user?.role['name'].toString().toLowerCase() == "super admin") {
+            showCommonBottomSheet(
+              context: context,
+              content: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
+                  spacing: 10,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: appGradientText(
+                            text: "Leave Details",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            gradient: appGradient(),
                           ),
-                          gradient: appGradient(),
                         ),
-                      ),
-                      appCircleIcon(
-                          onTap: (){
+                        appCircleIcon(
+                          onTap: () {
                             Navigator.pop(context);
                           },
-                          icon: Icons.close, gradient: appGradient()),
-                    ],
-                  ),
-                  SizedBox(height: 5,),
-                  _builBasicRowInfo(
-                    label: "Leave Type : ",
-                    titleText: event['leave_type'].toString().toUpperCase(),
-                  ),
-                  _builBasicRowInfo(
-                    label: "Date : ",
-                    titleText: formatDate(event['date']),
-                  ),
-                  _builBasicRowInfo(
-                    label: "Days : ",
-                    titleText: event['leave_count'].toString().toUpperCase(),
-                  ),
-                  _builBasicRowInfo(
-                    label: "Half Day : ",
-                    titleText: event['leave_type'].toString().toUpperCase(),
-                  ),
-                  _builBasicRowInfo(
-                    label: "Reason : ",
-                    titleText: event['reason'].toString().toUpperCase(),
-                  ),
-                  _builBasicRowInfo(
-                    colorText: event['status'].toString().toLowerCase()=="accept"?Colors.green:Colors.red,
-                    label: "Status By HR : ",
-                    titleText: event['status'].toString().toUpperCase(),
-                  ),
-                ],
+                          icon: Icons.close,
+                          gradient: appGradient(),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5),
+                    _builBasicRowInfo(
+                      label: "Leave Type : ",
+                      titleText: event['leave_type'].toString().toUpperCase(),
+                    ),
+                    _builBasicRowInfo(
+                      label: "Date : ",
+                      titleText: formatDate(event['date']),
+                    ),
+                    _builBasicRowInfo(
+                      label: "Days : ",
+                      titleText: event['leave_count'].toString().toUpperCase(),
+                    ),
+                    _builBasicRowInfo(
+                      label: "Half Day : ",
+                      titleText: event['leave_type'].toString().toUpperCase(),
+                    ),
+                    _builBasicRowInfo(
+                      label: "Reason : ",
+                      titleText: event['reason'].toString().toUpperCase(),
+                    ),
+                    _builBasicRowInfo(
+                      colorText:
+                          event['status'].toString().toLowerCase() == "accept"
+                          ? Colors.green
+                          : Colors.red,
+                      label: "Status By HR : ",
+                      titleText: event['status'].toString().toUpperCase(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
+            );
+          }
         }
       },
       child: appViewEffect(
