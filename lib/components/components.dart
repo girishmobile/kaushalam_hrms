@@ -24,7 +24,9 @@ import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../common/image_pick_and_crop_widget.dart';
+import '../models/user_model.dart';
 import '../provider/profile_provider.dart';
+import '../utility/secure_storage.dart';
 
 double leftPadding = 16;
 double rightPadding = 16;
@@ -2058,3 +2060,10 @@ void openProfileDialog({
   );
 }
 
+Future<String> getUserId() async {
+  UserModel? user = await SecureStorage.getUser();
+  if (user != null && user.id != null) {
+    return "${user.id}";
+  }
+  return "0"; // default user id
+}

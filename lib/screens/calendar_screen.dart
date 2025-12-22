@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:neeknots_admin/components/components.dart'
-    hide getFormattedDate;
+import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:neeknots_admin/utility/utils.dart' hide getFormattedDate;
 import 'package:provider/provider.dart';
@@ -117,6 +116,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }) {
     return InkWell(
       onTap: () async {
+/*        String userId = await getUserId();
+        print(userId );*/
         if (event['type'] == "birthday") {
           UserModel? user = await SecureStorage.getUser();
 
@@ -133,7 +134,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           UserModel? user = await SecureStorage.getUser();
 
           if (user?.role['name'].toString().toLowerCase() == "hr" ||
-              user?.role['name'].toString().toLowerCase() == "super admin") {
+              user?.role['name'].toString().toLowerCase() == "super admin" /*|| userId == event['id']*/) {
             showCommonBottomSheet(
               context: context,
               content: Padding(
