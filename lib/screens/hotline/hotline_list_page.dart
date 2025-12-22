@@ -46,7 +46,11 @@ class _HotlineListPageState extends State<HotlineListPage> {
                   _searchBar(context, provider),
                   _hotlineOption(provider),
                   provider.hotline_employees.isEmpty && !provider.isLoading
-                      ? Center(child: Text("You don’t have any records yet."))
+                      ? Expanded(
+                          child: Center(
+                            child: Text("You don’t have any records yet."),
+                          ),
+                        )
                       : Expanded(child: _listOfHotline(context, provider)),
                 ],
               ),

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/api/network_repository.dart';
 import 'package:neeknots_admin/models/all_leave_model.dart';
+import 'package:neeknots_admin/models/hotline_count_model.dart';
 import 'package:neeknots_admin/models/manager_leave_model.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 
@@ -20,6 +21,9 @@ class ManagerProvider extends ChangeNotifier {
   bool get isSuccess => _isSuccess; // getter
 
   List<MyLeave> listOfLeave = [];
+
+  List<HotlineCountModel> _hotlineCount = [];
+  List<HotlineCountModel> get hotlineCount => _hotlineCount;
 
   void _setLoading(bool val) {
     _isLoading = val;
@@ -214,6 +218,83 @@ class ManagerProvider extends ChangeNotifier {
       }
     } catch (e) {
       _setApiStatus(false);
+    }
+  }
+
+  Future<void> getHotlineCountData() async {
+    _hotlineCount = [];
+    _setLoading(true);
+    try {
+      final response = await callApi(
+        url: ApiConfig.hotlineCountUrl,
+        method: HttpMethod.get,
+        headers: null,
+      );
+
+      if (globalStatusCode == 200) {
+        final decoded = json.decode(response);
+        if (decoded is Map<String, dynamic>) {
+          _hotlineCount = decoded.entries
+              .map((e) => HotlineCountModel(title: e.key, count: e.value))
+              .toList();
+        } else {
+          _hotlineCount = [];
+        }
+      } else {}
+      _setLoading(false);
+    } catch (e) {
+      debugPrint('Error: $e');
+      _setLoading(false);
+    }
+  }
+
+  Widget getHotlineIcon(String title) {
+    switch (title.toLowerCase()) {
+      case 'online':
+        return Icon(Icons.circle, color: Colors.green, size: 16);
+      case 'offline':
+        return Icon(Icons.circle, color: Colors.blueGrey, size: 16);
+      case 'on_wfh':
+        return Icon(
+          Icons.home_work_outlined,
+          color: Colors.blueAccent,
+          size: 24,
+        );
+      case 'on_break':
+        return Icon(Icons.coffee_outlined, color: Colors.amber, size: 24);
+      case 'on_leave':
+        return Icon(
+          Icons.event_busy_outlined,
+          color: Colors.redAccent,
+          size: 22,
+        );
+      case 'total_emp':
+        return Icon(
+          Icons.people_alt_outlined,
+          color: Colors.deepPurple.shade300,
+          size: 24,
+        );
+      default:
+        return Icon(Icons.help_outline);
+    }
+  }
+
+  String getHotlineDisplayTitle(String title) {
+    switch (title.toLowerCase()) {
+      case 'online':
+        return 'Online Employees';
+      case 'offline':
+        return 'Offline Employees';
+      case 'on_wfh':
+        return 'WFH Employees';
+      case 'on_break':
+        return 'On Break';
+      case 'on_leave':
+        return 'On Leave';
+      case 'total_emp':
+        return 'Total Employee';
+      default:
+        return title.replaceAll('_', ' ').toUpperCase();
     }
   }
 

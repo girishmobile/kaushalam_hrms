@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/models/all_leave_model.dart';
+import 'package:neeknots_admin/models/hotline_count_model.dart';
 import 'package:neeknots_admin/pages/login/forgot_password_page.dart';
 import 'package:neeknots_admin/pages/login/login_page.dart';
 import 'package:neeknots_admin/pages/login/signup_page.dart';
@@ -106,7 +107,7 @@ class RouteGenerate {
         screen = const HotlineListPage();
         break;
       case RouteName.hotlinePage:
-        final args = settings.arguments as String;
+        final args = settings.arguments as HotlineCountModel;
         screen = HotlinePage(status: args);
         break;
       default:

@@ -61,10 +61,7 @@ class _AllEmplyeePageState extends State<AllEmplyeePage> {
   Widget _filterOption({required EmpProvider provider}) {
     if (provider.isLoading && provider.departments.isEmpty) {
       return Center(
-        child: Text(
-          "Loading...",
-          style: TextStyle(fontSize: 14, color: Colors.black54),
-        ),
+        child: Text("", style: TextStyle(fontSize: 14, color: Colors.black54)),
       );
     }
     return SizedBox(
