@@ -43,14 +43,10 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
   void setCustomDateRange(DateTimeRange range) {
     _customDateRange = range;
 
-
-
-
     notifyListeners();
   }
 
   Future<void> initializeTodayAttendance() async {
-
     DateTime now = DateTime.now();
     //  DateTime start = DateTime(now.year, now.month, now.day);
     DateTime end = DateTime(now.year, now.month, now.day, 23, 59, 59);
@@ -217,9 +213,6 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
         body: body,
         headers: null,
       );
-
-      print('======$globalStatusCode');
-      print('======${ json.decode(response)}');
       if (globalStatusCode == 200) {
         _attendanceRecordModel = AttendaceRecordModel.fromJson(
           json.decode(response),
@@ -230,7 +223,6 @@ class AttendanceProvider extends ChangeNotifier /*  */ {
         _setLoading(false);
       }
     } catch (e) {
-
       _setLoading(false);
     }
   }
