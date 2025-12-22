@@ -1,14 +1,10 @@
 import 'dart:io';
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:neeknots_admin/api/api_config.dart';
+
 import 'package:neeknots_admin/common/app_image_picker.dart';
 import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:neeknots_admin/core/constants/string_constant.dart';
@@ -22,8 +18,6 @@ import 'package:neeknots_admin/models/order_model.dart';
 import 'package:neeknots_admin/provider/leave_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
-
-import '../common/image_pick_and_crop_widget.dart';
 import '../models/user_model.dart';
 import '../provider/profile_provider.dart';
 import '../utility/secure_storage.dart';
@@ -233,14 +227,14 @@ Widget loadNetworkImage({
         width: width ?? 100,
         height: height ?? 100,
         fit: fit,
-        placeholder: (_, __) => Center(
+        placeholder: (_, _) => Center(
           child: SizedBox(
             height: 16,
             width: 16,
             child: CircularProgressIndicator(strokeWidth: 2),
           ),
         ),
-        errorWidget: (_, __, ___) =>
+        errorWidget: (_, _, _) =>
             // loadAssetImage(name: errorImage)
             _fallBackContent(icon, iconColor, text, iconSize, fontSize),
       );
@@ -290,14 +284,14 @@ Widget _buildImageOrFallback({
           width: radius * 2,
           height: radius * 2,
           fit: BoxFit.cover,
-          placeholder: (_, __) => Center(
+          placeholder: (_, _) => Center(
             child: SizedBox(
               height: 16,
               width: 16,
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
           ),
-          errorWidget: (_, __, ___) =>
+          errorWidget: (_, _, _) =>
               _fallBackContent(icon, iconColor, text, iconSize, fontSize),
         ),
       );
@@ -1145,7 +1139,7 @@ Widget statusChip(String status) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
     decoration: BoxDecoration(
-      color: config.color.withOpacity(0.12),
+      color: config.color.withValues(alpha: 0.12),
       borderRadius: BorderRadius.circular(16),
       border: Border.all(color: config.color),
     ),
@@ -1682,23 +1676,7 @@ Future<void> appCameraOrLibary(BuildContext context) async {
   );
 }
 
-final ImagePicker _picker = ImagePicker();
 
-Future<void> _pickImage({
-  required ImageSource source,
-  required BuildContext context,
-}) async {
-  try {
-    final XFile? image = await _picker.pickImage(
-      source: source,
-      imageQuality: 80,
-    );
-
-    if (image != null) {}
-  } catch (e) {
-    debugPrint("Image pick error: $e");
-  }
-}
 
 Future<String?> appSimpleBottomSheet(
   BuildContext context, {
@@ -1999,7 +1977,7 @@ void openProfileDialog({
     barrierLabel: "Profile",
     barrierColor: Colors.black,
     transitionDuration: const Duration(milliseconds: 200),
-    pageBuilder: (_, __, ___) {
+    pageBuilder: (_, _, _) {
       return Scaffold(
         backgroundColor: Colors.black,
         body: Stack(
@@ -2062,7 +2040,7 @@ void openProfileDialog({
 
 Future<String> getUserId() async {
   UserModel? user = await SecureStorage.getUser();
-  if (user != null && user.id != null) {
+  if (user != null) {
     return "${user.id}";
   }
   return "0"; // default user id
