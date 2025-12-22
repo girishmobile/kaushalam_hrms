@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/models/birth_holiday_model.dart';
-import 'package:neeknots_admin/provider/app_provider.dart';
 import 'package:neeknots_admin/provider/emp_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
@@ -36,8 +35,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final appProvider = context.read<AppProvider>();
-    final isRole = appProvider.isRole == "employee" ? false : true;
     return Consumer<EmpProvider>(
       builder: (context, provider, child) {
         final birthdays = provider.birthholidayModel?.birthdays ?? <BirthDay>[];

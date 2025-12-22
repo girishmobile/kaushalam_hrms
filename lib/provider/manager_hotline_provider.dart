@@ -64,6 +64,7 @@ class ManagerHotlineProvider extends ChangeNotifier {
       "des_id": desId ?? "",
     };
     _hotlineDataList = [];
+    filteredList = [];
     _setLoading(true);
     try {
       final response = await callApi(

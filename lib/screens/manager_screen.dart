@@ -3,6 +3,7 @@ import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/models/birth_holiday_model.dart';
 import 'package:neeknots_admin/provider/emp_provider.dart';
+import 'package:neeknots_admin/provider/manager_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -14,133 +15,120 @@ class ManagerScreen extends StatelessWidget {
     // final holidays = provider.birthholidayModel?.holidays ?? <Holiday>[];
     final holidays =
         context.read<EmpProvider>().birthholidayModel?.holidays ?? <Holiday>[];
-    return Stack(
-      children: [
-        ListView(
-          padding: EdgeInsets.only(
-            left: 24,
-            right: 24,
-            top: 8,
-            bottom: listBottom(context),
-          ),
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ManagerProvider>().getHotlineCountData();
+    });
+    return Consumer<ManagerProvider>(
+      builder: (context, provider, child) {
+        return Stack(
           children: [
-            appGradientText(
-              text: "Leave Request",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-              gradient: appGradient(),
-            ),
-            const SizedBox(height: 8),
-
-            _buildRowItem(
-              icon: Icons.rocket_launch_outlined,
-              title: "Leave request",
-              onTap: () =>
-                  Navigator.pushNamed(context, RouteName.pendingLeavePage),
-            ),
-            const SizedBox(height: 12),
-            _buildRowItem(
-              icon: Icons.people_outline,
-              title: "Employees leave balance",
-              onTap: () =>
-                  Navigator.pushNamed(context, RouteName.employeeLeaveBalance),
-            ),
-
-            SizedBox(height: 16),
-            appGradientText(
-              text: "HR Department",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-              gradient: appGradient(),
-            ),
-            const SizedBox(height: 8),
-
-            _buildRowItem(
-              icon: Icons.beach_access_outlined,
-              title: "On Leave",
-              onTap: () => Navigator.pushNamed(
-                context,
-                RouteName.hotlinePage,
-                arguments: "on_leave",
+            ListView(
+              padding: EdgeInsets.only(
+                left: 24,
+                right: 24,
+                top: 8,
+                bottom: listBottom(context),
               ),
-            ),
-            const SizedBox(height: 12),
-            _buildRowItem(
-              icon: Icons.free_breakfast_outlined,
-              title: "On Break",
-              onTap: () => Navigator.pushNamed(
-                context,
-                RouteName.hotlinePage,
-                arguments: "on_break",
-              ),
-            ),
-            const SizedBox(height: 12),
-            _buildRowItem(
-              icon: Icons.wifi_tethering_sharp,
-              title: "Online Employees",
-              onTap: () => Navigator.pushNamed(
-                context,
-                RouteName.hotlinePage,
-                arguments: "Online",
-              ),
-            ),
-            const SizedBox(height: 12),
-            _buildRowItem(
-              icon: Icons.wifi_tethering_off_outlined,
-              title: "Offline Employees",
-              onTap: () => Navigator.pushNamed(
-                context,
-                RouteName.hotlinePage,
-                arguments: "Offline",
-              ),
-            ),
-            const SizedBox(height: 12),
-            _buildRowItem(
-              icon: Icons.home_work_outlined,
-              title: "Work from home Employee",
-              onTap: () => Navigator.pushNamed(
-                context,
-                RouteName.hotlinePage,
-                arguments: "on_wfh",
-              ),
-            ),
-            const SizedBox(height: 12),
-            _buildRowItem(
-              icon: Icons.people_alt_outlined,
-              title: "Total Employees",
-              onTap: () =>
-                  Navigator.pushNamed(context, RouteName.allEmplyeePage),
-            ),
-
-            const SizedBox(height: 16),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 appGradientText(
-                  text: "Upcoming Holidays",
+                  text: "Leave Request",
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   gradient: appGradient(),
                 ),
-                TextButton(
-                  onPressed: () =>
-                      Navigator.pushNamed(context, RouteName.holidayPage),
-                  child: loadSubText(title: "See All"),
+                const SizedBox(height: 8),
+
+                _buildRowItem(
+                  icon: Icons.rocket_launch_outlined,
+                  title: "Leave request",
+                  onTap: () =>
+                      Navigator.pushNamed(context, RouteName.pendingLeavePage),
+                ),
+                const SizedBox(height: 12),
+                _buildRowItem(
+                  icon: Icons.people_outline,
+                  title: "Employees leave balance",
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    RouteName.employeeLeaveBalance,
+                  ),
+                ),
+                SizedBox(height: 16),
+                _buildHotlineOptions(context, provider),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    appGradientText(
+                      text: "Upcoming Holidays",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                      gradient: appGradient(),
+                    ),
+                    TextButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, RouteName.holidayPage),
+                      child: loadSubText(title: "See All"),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4),
+                SizedBox(
+                  height: 110,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      final holiday = holidays[index];
+                      return holidayCard(item: holiday);
+                    },
+                    separatorBuilder: (_, _) => SizedBox(width: 12),
+                    itemCount: holidays.length,
+                  ),
                 ),
               ],
             ),
-            SizedBox(height: 4),
-            SizedBox(
-              height: 110,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  final holiday = holidays[index];
-                  return holidayCard(item: holiday);
-                },
-                separatorBuilder: (_, _) => SizedBox(width: 12),
-                itemCount: holidays.length,
-              ),
-            ),
+            provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
           ],
+        );
+      },
+    );
+  }
+
+  Widget _buildHotlineOptions(BuildContext context, ManagerProvider provider) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      spacing: 12,
+      children: [
+        provider.hotlineCount.isNotEmpty
+            ? appGradientText(
+                text: "HR Department",
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                gradient: appGradient(),
+              )
+            : SizedBox.shrink(),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          padding: EdgeInsets.zero,
+          itemBuilder: (ctx, index) {
+            final item = provider.hotlineCount[index];
+            return _buildHotlineItem(
+              onTap: () => Navigator.pushNamed(
+                context,
+                RouteName.hotlinePage,
+                arguments: item,
+              ),
+              title: provider.getHotlineDisplayTitle(item.title),
+              count: "${item.count}",
+              icon: provider.getHotlineIcon(item.title),
+            );
+            //return appViewEffect(child: loadSubText(title: item.title));
+          },
+          separatorBuilder: (_, _) => SizedBox(height: 8),
+          itemCount: provider.hotlineCount.length,
         ),
       ],
     );
@@ -172,5 +160,35 @@ class ManagerScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildHotlineItem({
+    required String title,
+    required String count,
+    required Widget icon,
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: appViewEffect(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          spacing: 4,
 
+          children: [
+            icon,
+            Expanded(
+              child: Row(
+                spacing: 6,
+                children: [
+                  loadSubText(title: title, fontColor: Colors.black54),
+                  loadSubText(title: "($count)", fontColor: Colors.black54),
+                ],
+              ),
+            ),
+
+            appForwardIcon(),
+          ],
+        ),
+      ),
+    );
+  }
 }
