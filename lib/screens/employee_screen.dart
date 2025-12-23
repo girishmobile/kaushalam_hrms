@@ -73,7 +73,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   _buildRowItem(
                     title:
                         "Pending leave (${provider.leaveSummary?.pending ?? "0"})",
-                    icon: Icons.pending_actions_outlined,
+                    icon: Icons.hourglass_top_rounded,
+                    iconColor: Colors.orange,
                     onTap: () => Navigator.pushNamed(
                       context,
                       RouteName.leaveSummaryPage,
@@ -85,7 +86,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   _buildRowItem(
                     title:
                         "Accepted leave (${provider.leaveSummary?.accept ?? "0"})",
-                    icon: Icons.approval_outlined,
+                    icon: Icons.check_circle_outline_rounded,
+                    iconColor: Colors.green,
                     onTap: () => Navigator.pushNamed(
                       context,
                       RouteName.leaveSummaryPage,
@@ -98,7 +100,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   _buildRowItem(
                     title:
                         "Cancel leave (${provider.leaveSummary?.cancel ?? "0"})",
-                    icon: Icons.cancel_presentation_outlined,
+                    icon: Icons.cancel_outlined,
+                    iconColor: Colors.grey,
                     onTap: () => Navigator.pushNamed(
                       context,
                       RouteName.leaveSummaryPage,
@@ -110,7 +113,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   _buildRowItem(
                     title:
                         "Reject leave (${provider.leaveSummary?.reject ?? "0"})",
-                    icon: Icons.close_outlined,
+                    icon: Icons.highlight_off_rounded,
+                    iconColor: Colors.red,
                     onTap: () => Navigator.pushNamed(
                       context,
                       RouteName.leaveSummaryPage,
@@ -120,7 +124,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   const SizedBox(height: 12),
                   _buildRowItem(
                     title: "All leave (${provider.leaveSummary?.all ?? "0"})",
-                    icon: Icons.calendar_month_outlined,
+                    icon: Icons.list_alt_rounded,
+                    iconColor: Colors.blue,
                     onTap: () =>
                         // Navigator.pushNamed(context, RouteName.allLeavePage),
                         Navigator.pushNamed(
@@ -140,7 +145,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
                   _buildRowItem(
                     title: "Casual Leaves (${provider.leaveBalance?.cl ?? 0})",
-                    icon: Icons.pending_actions_outlined,
+                    icon: Icons.beach_access_outlined,
+                    iconColor: Colors.teal,
                     onTap: () {},
                     showArrow: false,
                     //Navigator.pushNamed(context, RouteName.leaveSummaryPage),
@@ -149,7 +155,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
                   _buildRowItem(
                     title: "Sick Leaves (${provider.leaveBalance?.sl ?? 0})",
-                    icon: Icons.sick_outlined,
+                    icon: Icons.medical_services_outlined,
+                    iconColor: Colors.redAccent,
                     onTap: () {},
                     showArrow: false,
                     //Navigator.pushNamed(context, RouteName.leaveSummaryPage),
@@ -158,7 +165,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
                   _buildRowItem(
                     title: "Paid Leaves (${provider.leaveBalance?.pl ?? 0})",
-                    icon: Icons.paid_outlined,
+                    icon: Icons.account_balance_wallet_outlined,
+                    iconColor: Colors.indigo,
                     onTap: () {},
                     showArrow: false,
                     // Navigator.pushNamed(context, RouteName.leaveSummaryPage),
@@ -303,6 +311,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   Widget _buildRowItem({
     required String title,
     required IconData icon,
+    Color? iconColor = Colors.black54,
     VoidCallback? onTap,
     bool showArrow = true,
   }) {
@@ -314,7 +323,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           spacing: 4,
 
           children: [
-            Icon(icon, color: Colors.black54),
+            Icon(icon, color: iconColor),
             loadSubText(title: title, fontColor: Colors.black54),
             Spacer(),
             if (showArrow) appForwardIcon(),
@@ -331,16 +340,16 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         Text(
           title,
           style: const TextStyle(
-            fontSize: 12,
+            fontSize: 14,
             color: Colors.black87,
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 8),
         Text(
           value,
           style: const TextStyle(
-            fontSize: 12,
+            fontSize: 14,
             color: Colors.black54,
             fontWeight: FontWeight.w500,
           ),

@@ -113,9 +113,9 @@ class RouteGenerate {
         break;
       case RouteName.kpiDetailsScreen:
         final args = settings.arguments as Map<String, dynamic>;
-
-        screen = KpiDetailsScreen(year: args["year"],month: args["month"]);
+        screen = KpiDetailsScreen(year: args["year"], month: args["month"]);
         break;
+
       default:
         screen = AppScaffold(
           child: Center(child: Text("No route define for ${settings.name}")),

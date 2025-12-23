@@ -424,15 +424,16 @@ Widget appViewEffect({
   Color? borderColor,
   double borderWidth = 1.0,
   VoidCallback? onTap,
+  Alignment? alignment,
 }) {
   final effectiveBorderColor =
       borderColor ?? const Color(0xFFFFAC55).withValues(alpha: 0.4);
-
   return GestureDetector(
     onTap: onTap,
     child: Container(
       margin: margin,
       padding: padding ?? const EdgeInsets.all(12),
+      alignment: alignment,
       decoration: BoxDecoration(
         gradient: viewBackgroundGradinet(),
         borderRadius: BorderRadius.circular(borderRadius),
@@ -1676,8 +1677,6 @@ Future<void> appCameraOrLibary(BuildContext context) async {
     ),
   );
 }
-
-
 
 Future<String?> appSimpleBottomSheet(
   BuildContext context, {

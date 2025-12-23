@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/components/components.dart';
+import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_scaffold.dart';
@@ -8,11 +9,7 @@ import '../../provider/my_kpi_provider.dart';
 import '../../utility/utils.dart';
 
 class KpiDetailsScreen extends StatefulWidget {
-  const KpiDetailsScreen({
-    super.key,
-    required this.year,
-    required this.month,
-  });
+  const KpiDetailsScreen({super.key, required this.year, required this.month});
 
   final String year;
   final String month;
@@ -41,10 +38,7 @@ class _KpiDetailsScreenState extends State<KpiDetailsScreen> {
         ? DateTime.now().year.toString()
         : provider.selectedYear;
 
-    await provider.getKPIDetailsList(
-      month: widget.month,
-      year: widget.year,
-    );
+    await provider.getKPIDetailsList(month: widget.month, year: widget.year);
   }
 
   @override
@@ -52,13 +46,14 @@ class _KpiDetailsScreenState extends State<KpiDetailsScreen> {
     final date = DateTime(_year, _month, 1);
 
     return AppScaffold(
-      appTitle:
-      "My KPI ${getFormattedDate(date, format: "MMM")}-$_year",
+      appTitle: "${getFormattedDate(date, format: "MMM")}-$_year",
       child: Consumer<MyKpiProvider>(
         builder: (_, provider, __) {
           return Stack(
             children: [
-              _kpiList(provider),
+              CustomScrollView(
+                slivers: [_kpiHeaderSliver(), _kpiListSliver(provider)],
+              ),
               if (provider.isLoading) showProgressIndicator(),
             ],
           );
@@ -67,93 +62,180 @@ class _KpiDetailsScreenState extends State<KpiDetailsScreen> {
     );
   }
 
-  Widget _kpiList(MyKpiProvider provider) {
-    final days = _getDaysInMonth(_year, _month);
-
-    return ListView.separated(
-      padding: EdgeInsets.only(
-        left: 24,
-        right: 24,
-        bottom: appBottomPadding(context),
-      ),
-      itemCount: days.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 8),
-      itemBuilder: (_, index) {
-        final day = days[index];
-        final formattedDay =
-        getFormattedDate(day, format: 'yyyy-MM-dd');
-
-        final item = provider.kpiDetailsList
-            .cast<KpiDetailsModel?>()
-            .firstWhere(
-              (e) =>
-          e?.date?.date?.split(' ').first == formattedDay,
-          orElse: () => null,
-        );
-
-        return appViewEffect(
-          child: Column(
-            spacing: 5,
-            children: [
-              _commonItemView(
+  Widget _buildHeader() {
+    return appViewEffect(
+      margin: EdgeInsets.symmetric(horizontal: 24),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              alignment: Alignment.centerLeft,
+              child: loadTitleText(
                 title: "Date",
-                value:
-                getFormattedDate(day, format: 'dd-MM-yyyy'),
-                fontWight: FontWeight.w500,
+                fontSize: 14,
+                fontColor: Colors.black54,
               ),
-              _commonItemView(
-                title: "Target Points",
-                value: item?.targetValue?.toString() ?? '0',
+            ),
+          ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.center,
+              child: loadTitleText(
+                title: "Target \n Point",
+                fontSize: 14,
+                fontColor: Colors.black54,
               ),
-              _commonItemView(
-                fontWight: FontWeight.w600,
-                title: "Actual Points",
-                colorText: Colors.black.withValues(alpha: 0.80),
-                value: item?.actualValue?.toString() ?? '0',
+            ),
+          ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.centerRight,
+
+              child: loadTitleText(
+                title: "Actual\n Point",
+                fontSize: 14,
+                fontColor: Colors.black54,
               ),
-              _commonItemView(
-                title: "Remarks",
-                value: item?.remarks ?? '-',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRowItem({
+    required String dateValue,
+    String? remarkValue,
+    required String targetValue,
+    required String actualValue,
+  }) {
+    final hasRemark = remarkValue != null && remarkValue.trim().isNotEmpty;
+
+    return appViewEffect(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: loadSubText(
+                  title: dateValue,
+                  fontSize: 14,
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Expanded(
+                child: loadSubText(
+                  title: targetValue,
+                  fontSize: 14,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Expanded(
+                child: loadSubText(
+                  title: actualValue,
+                  fontSize: 14,
+                  textAlign: TextAlign.right,
+                  fontColor: getActualValueColor(
+                    num.tryParse(actualValue) ?? 0,
+                  ),
+                ),
               ),
             ],
           ),
-        );
-      },
+          if (hasRemark) ...[
+            const SizedBox(height: 8),
+            loadSubText(
+              title: remarkValue,
+              fontSize: 12,
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ],
+      ),
     );
   }
 
   List<DateTime> _getDaysInMonth(int year, int month) {
     final lastDay = DateTime(year, month + 1, 0);
-    return List.generate(
-      lastDay.day,
-          (i) => DateTime(year, month, i + 1),
+    return List.generate(lastDay.day, (i) => DateTime(year, month, i + 1));
+  }
+
+  Color getActualValueColor(num actualValue) {
+    if (actualValue < 50) {
+      return Colors.deepOrange; // < 50
+    } else if (actualValue < 60) {
+      return Colors.blueGrey; // 50–59
+    } else if (actualValue < 70) {
+      return Colors.orange; // 60–69
+    } else if (actualValue < 80) {
+      return Colors.green; // 70–79
+    } else if (actualValue < 90) {
+      return Colors.green; // 80–89
+    } else if (actualValue < 100) {
+      return Colors.green; // 90–99
+    } else {
+      return Colors.green.shade900; // 100+
+    }
+  }
+
+  SliverList _kpiListSliver(MyKpiProvider provider) {
+    final days = _getDaysInMonth(_year, _month);
+
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, index) {
+        final day = days[index];
+        final formattedDay = getFormattedDate(day, format: 'yyyy-MM-dd');
+        final item = provider.kpiDetailsList
+            .cast<KpiDetailsModel?>()
+            .firstWhere(
+              (e) => e?.date?.date?.split(' ').first == formattedDay,
+              orElse: () => null,
+            );
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+          child: _buildRowItem(
+            dateValue: getFormattedDate(day, format: 'dd-MM-yyyy'),
+            targetValue: item?.targetValue?.toString() ?? '0',
+            actualValue: item?.actualValue?.toString() ?? '0',
+            remarkValue: item?.remarks ?? '',
+          ),
+        );
+      }, childCount: days.length),
+    );
+  }
+
+  SliverPersistentHeader _kpiHeaderSliver() {
+    return SliverPersistentHeader(
+      pinned: true, // header stays visible
+      delegate: _KpiHeaderDelegate(child: _buildHeader()),
     );
   }
 }
 
-Widget _commonItemView({
+class _KpiHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
 
-  required String title,
-  required String value,
-  FontWeight? fontWight,
-  Color? colorText,
-}) {
-  return Row(
-    children: [
-      Expanded(
-        child: loadSubText(
-          title: title,
-          fontSize: 12,
+  _KpiHeaderDelegate({required this.child});
 
-          fontWight: FontWeight.w400,
-        ),
-      ),
-      loadSubText(
-        title: value,
-        fontSize: 12,
-        fontColor: colorText,
-        fontWight: fontWight ?? FontWeight.w400,
-      ),
-    ],
-  );
+  @override
+  double get minExtent => 48;
+  @override
+  double get maxExtent => 48;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(color: Colors.white, child: child);
+  }
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
 }

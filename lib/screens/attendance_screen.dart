@@ -52,36 +52,46 @@ class AttendanceScreen extends StatelessWidget {
       physics: BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         var data = provider.attendanceRecordModel?.data?.data?[index];
-        return appViewEffect(
-          child: Column(
-            spacing: 5,
-            children: [
-              _commonItemView(
-                value: formatDate(
-                  data?.date?.date.toString() ?? '',
-                  format: "dd-MM-yyyy",
-                ),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 4,
+          children: [
+            _commonItemView(
+              title: formatDate(
+                data?.date?.date.toString() ?? '',
+                format: "dd-MMM-yyyy",
               ),
-              _commonItemView(
-                title: "Entry Time",
-                value: data?.entryTime ?? '',
+              fontWight: FontWeight.w600,
+            ),
+            appViewEffect(
+              child: Column(
+                spacing: 5,
+                children: [
+                  _commonItemView(
+                    title: "Entry Time",
+                    value: data?.entryTime ?? '',
+                  ),
+                  _commonItemView(
+                    title: "Exit time",
+                    value: data?.exitTime ?? '',
+                  ),
+                  _commonItemView(
+                    title: "Break time",
+                    value: data?.breakTime ?? '',
+                  ),
+                  _workItemView(
+                    title: "Working Hours",
+                    value:
+                        '${data?.staffing?.hours ?? 0} hrs  ${data?.staffing?.minutes ?? 0} mins',
+                  ),
+                ],
               ),
-              _commonItemView(title: "Exit time", value: data?.exitTime ?? ''),
-              _commonItemView(
-                title: "Break time",
-                value: data?.breakTime ?? '',
-              ),
-              _workItemView(
-                title: "Working Hours",
-                value:
-                    '${data?.staffing?.hours ?? 0} hrs  ${data?.staffing?.minutes ?? 0} mins',
-              ),
-            ],
-          ),
+            ),
+          ],
         );
       },
 
-      separatorBuilder: (_, _) => SizedBox(height: 8),
+      separatorBuilder: (_, _) => SizedBox(height: 16),
       itemCount: provider.attendanceRecordModel?.data?.data?.length ?? 0,
     );
   }
