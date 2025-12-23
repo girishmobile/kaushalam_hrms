@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/components/components.dart';
-import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_scaffold.dart';

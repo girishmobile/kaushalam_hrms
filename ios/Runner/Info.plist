@@ -26,6 +26,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>We use the camera to let you take and upload your profile photo.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This allows saving photos to your device when required.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library so you can select and upload images.</string>
 	<key>NSUserNotificationUsageDescription</key>
 	<string>Notifications are used to keep you updated.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -44,12 +50,5 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-		<key>NSCameraUsageDescription</key>
-	<string>We use the camera to let you take and upload your profile photo.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need access to your photo library so you can select and upload images.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This allows saving photos to your device when required.</string>
-
 </dict>
 </plist>
