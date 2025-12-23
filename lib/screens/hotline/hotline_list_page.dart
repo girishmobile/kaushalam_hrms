@@ -5,6 +5,7 @@ import 'package:neeknots_admin/core/constants/colors.dart';
 import 'package:neeknots_admin/core/constants/context_extension.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/models/hotline_count_model.dart';
+import 'package:neeknots_admin/provider/app_provider.dart';
 import 'package:neeknots_admin/provider/hotline_list_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class HotlineListPage extends StatefulWidget {
 }
 
 class _HotlineListPageState extends State<HotlineListPage> {
+  String userRole = "employee";
   @override
   void initState() {
     super.initState();
@@ -28,7 +30,7 @@ class _HotlineListPageState extends State<HotlineListPage> {
   Future<void> initilized() async {
     final provider = context.read<HotlineListProvider>();
     provider.nameController.clear();
-
+    userRole = await getUserRole();
     await Future.wait([provider.getHotlineCountData()]);
   }
 
@@ -89,11 +91,13 @@ class _HotlineListPageState extends State<HotlineListPage> {
           item,
           showArrow: false,
           onTaped: () {
-            Navigator.pushNamed(
-              context,
-              RouteName.employeeDetailPage,
-              arguments: "${item.id}",
-            );
+            if (userRole == "hr" || userRole == "super admin") {
+              Navigator.pushNamed(
+                context,
+                RouteName.employeeDetailPage,
+                arguments: "${item.id}",
+              );
+            }
           },
         );
       },

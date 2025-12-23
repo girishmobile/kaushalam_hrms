@@ -11,3 +11,5 @@ const productUrl =
     "https://www.neeknots.com/cdn/shop/files/NEEK340_6985d96e-9197-48d6-a771-9fd380eca4bc.jpg?v=1730815115";
 const productUrl1 =
     "https://www.neeknots.com/cdn/shop/files/NEEK338_97a71273-67b3-4c60-98f8-49b774d381d3.jpg?v=1730815111";
+
+//for validation of holiday leave

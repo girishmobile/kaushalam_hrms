@@ -48,12 +48,10 @@ class MyKpiProvider extends ChangeNotifier {
 
       if (globalStatusCode == 200) {
         final decoded = json.decode(response);
-        // Ensure it's a list
         //_kpiList = decoded.map((e) => MyKpiModel.fromJson(e)).toList();
-
         if (decoded is List) {
           _kpiList = decoded.map((e) => MyKpiModel.fromJson(e)).toList();
-          //_kpiList.sort((a, b) => (b.month ?? 0).compareTo(a.month ?? 0));
+          // _kpiList.sort((a, b) => (b.month ?? 0).compareTo(a.month ?? 0));
         } else {
           _kpiList = [];
         }

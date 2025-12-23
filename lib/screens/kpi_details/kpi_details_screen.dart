@@ -132,6 +132,7 @@ class _KpiDetailsScreenState extends State<KpiDetailsScreen> {
 }
 
 Widget _commonItemView({
+
   required String title,
   required String value,
   FontWeight? fontWight,

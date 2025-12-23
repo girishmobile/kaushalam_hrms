@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
+import 'package:neeknots_admin/core/constants/string_constant.dart';
 import 'package:neeknots_admin/provider/leave_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ class _ApplyLeavePageState extends State<ApplyLeavePage> {
   @override
   void initState() {
     super.initState();
+
     initEmp();
   }
 
@@ -91,11 +93,7 @@ class _ApplyLeavePageState extends State<ApplyLeavePage> {
           return Stack(
             children: [
               ListView(
-                padding: EdgeInsets.only(
-                  left: 24,
-                  right: 24,
-                  top: 0,
-                ),
+                padding: EdgeInsets.only(left: 24, right: 24, top: 0),
                 children: [
                   // FROM DATE
                   loadSubText(title: "From", fontWight: FontWeight.w600),
@@ -107,6 +105,25 @@ class _ApplyLeavePageState extends State<ApplyLeavePage> {
                         minDate: DateTime.now(),
                       );
                       if (picked != null) {
+                        if (isWeekend(picked)) {
+                          if (!context.mounted) return;
+                          showSnackBar(
+                            context,
+                            message: "Weekend is not allowed for leave",
+                            bgColor: Colors.redAccent,
+                          );
+                          return;
+                        }
+                        if (isHoliday(picked)) {
+                          if (!context.mounted) return;
+                          showSnackBar(
+                            context,
+                            message: "Holiday is not allowed for leave",
+                            bgColor: Colors.redAccent,
+                          );
+                          return;
+                        }
+
                         setState(() {
                           fromDate = picked;
                           resetLeave();
@@ -145,6 +162,24 @@ class _ApplyLeavePageState extends State<ApplyLeavePage> {
                         minDate: fromDate ?? DateTime.now(),
                       );
                       if (picked != null) {
+                        if (isWeekend(picked)) {
+                          if (!context.mounted) return;
+                          showSnackBar(
+                            context,
+                            message: "Weekend is not allowed for leave",
+                            bgColor: Colors.redAccent,
+                          );
+                          return;
+                        }
+                        if (isHoliday(picked)) {
+                          if (!context.mounted) return;
+                          showSnackBar(
+                            context,
+                            message: "Holiday is not allowed for leave",
+                            bgColor: Colors.redAccent,
+                          );
+                          return;
+                        }
                         setState(() {
                           toDate = picked;
                           resetLeave();
@@ -220,7 +255,6 @@ class _ApplyLeavePageState extends State<ApplyLeavePage> {
                   ),
                 ],
               ),
-
 
               provider.isLoading ? showProgressIndicator() : SizedBox.shrink(),
             ],

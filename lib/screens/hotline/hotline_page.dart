@@ -3,6 +3,7 @@ import 'package:neeknots_admin/common/app_scaffold.dart';
 import 'package:neeknots_admin/components/components.dart';
 import 'package:neeknots_admin/core/router/route_name.dart';
 import 'package:neeknots_admin/models/hotline_count_model.dart';
+import 'package:neeknots_admin/provider/app_provider.dart';
 import 'package:neeknots_admin/provider/manager_hotline_provider.dart';
 import 'package:neeknots_admin/utility/utils.dart';
 import 'package:provider/provider.dart';
@@ -36,10 +37,13 @@ class HotlinePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    String userRole = "employee";
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Any post frame callback actions can be added here
       final statusCode = getStatus(status)["status"] ?? "";
       context.read<ManagerHotlineProvider>().getAllHotline(status: statusCode);
+      userRole = await getUserRole();
     });
     return AppScaffold(
       appTitle: getStatus(status)["text"] ?? "ALL EMPLOYEES",
@@ -64,7 +68,9 @@ class HotlinePage extends StatelessWidget {
                               child: Text("You don’t have any records yet."),
                             ),
                           )
-                        : Expanded(child: _listOfEmployee(context, provider)),
+                        : Expanded(
+                            child: _listOfEmployee(context, provider, userRole),
+                          ),
                   ],
                 ),
               ),
@@ -89,6 +95,7 @@ class HotlinePage extends StatelessWidget {
   Widget _listOfEmployee(
     BuildContext context,
     ManagerHotlineProvider provider,
+    String userRole,
   ) {
     return ListView.separated(
       padding: EdgeInsets.zero,
@@ -100,11 +107,13 @@ class HotlinePage extends StatelessWidget {
         return RepaintBoundary(
           child: GestureDetector(
             onTap: () {
-              Navigator.pushNamed(
-                context,
-                RouteName.employeeDetailPage,
-                arguments: "${employee.id}",
-              );
+              if (userRole == "hr" || userRole == "super admin") {
+                Navigator.pushNamed(
+                  context,
+                  RouteName.employeeDetailPage,
+                  arguments: "${employee.id}",
+                );
+              }
             },
             child: hotlineCard(employee),
           ),

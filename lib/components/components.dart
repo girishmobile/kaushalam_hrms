@@ -905,8 +905,8 @@ Widget holidayCard({required Holiday item}) {
           appCircleImage(
             iconColor: btnColor2,
             borderColor: btnColor2.shade200,
-            radius: 32,
-            iconSize: 36,
+            radius: 30,
+            iconSize: 32,
             imageUrl: setImagePath(item.holiday_image),
             icon: Icons.festival_outlined,
           ),
@@ -951,7 +951,7 @@ Widget holidayCard({required Holiday item}) {
   );
 }
 
-Widget birthDayCard({required BirthDay item, double radius = 32}) {
+Widget birthDayCard({required BirthDay item, double radius = 30}) {
   return SizedBox(
     width: 300,
     child: appViewEffect(
@@ -1358,7 +1358,7 @@ Widget appProfileImage({
             iconColor: color3,
             iconSize: radius / 1.5,
             radius: (radius - 2),
-            onTap:onTap,
+            onTap: onTap,
             fontSize: 36,
           ),
         ),
@@ -1489,6 +1489,7 @@ Future<DateTime?> appDatePicker(
     initialDate: minDate,
     firstDate: minDate,
     lastDate: endOfYear,
+    initialEntryMode: DatePickerEntryMode.calendarOnly, // default calendar view
     builder: (context, child) {
       return Theme(
         data: Theme.of(context).copyWith(
@@ -1997,18 +1998,20 @@ void openProfileDialog({
                     fit: BoxFit.contain,
 
                     /// 🔄 LOADING
-                    placeholder: (context, url) =>  Center(
-                      child: showProgressIndicator(),
-                    ),
+                    placeholder: (context, url) =>
+                        Center(child: showProgressIndicator()),
 
                     /// ❌ ERROR IMAGE
-                    errorWidget: (context, url, error) =>  Center(
+                    errorWidget: (context, url, error) => Center(
                       child: Container(
                         color: Colors.white,
                         height: 300,
                         width: double.infinity,
                         child: Center(
-                          child: loadTitleText(title: "Profile photo not available.",fontSize: 24),
+                          child: loadTitleText(
+                            title: "Profile photo not available.",
+                            fontSize: 24,
+                          ),
                         ),
                       ),
                     ),
@@ -2022,11 +2025,7 @@ void openProfileDialog({
               child: Align(
                 alignment: Alignment.topRight,
                 child: IconButton(
-                  icon: const Icon(
-                    Icons.close,
-                    color: Colors.white,
-                    size: 30,
-                  ),
+                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),

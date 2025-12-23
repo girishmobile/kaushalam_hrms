@@ -4,10 +4,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:neeknots_admin/api/api_config.dart';
 import 'package:neeknots_admin/api/network_repository.dart';
+import 'package:neeknots_admin/core/constants/string_constant.dart';
 import 'package:neeknots_admin/models/attendance_model.dart';
 import 'package:neeknots_admin/models/birth_holiday_model.dart';
 import 'package:neeknots_admin/models/employees_model.dart';
 import 'package:neeknots_admin/models/leave_summary.dart';
+import 'package:neeknots_admin/utility/utils.dart';
 
 import '../models/my_work_model.dart';
 
@@ -176,10 +178,8 @@ class EmpProvider extends ChangeNotifier {
       );
       if (globalStatusCode == 200) {
         final decoded = jsonDecode(response);
-
         if (decoded is List && decoded.isNotEmpty) {
           _leaveBalance = LeaveBalance.fromApiJson(decoded[0]);
-          print(_leaveBalance?.cl);
         }
       } else {
         errorMessage = "Something went wrong. Try again.";
@@ -229,7 +229,7 @@ class EmpProvider extends ChangeNotifier {
         holidays = (decoded as List<dynamic>)
             .map((e) => Holiday.fromApiJson(e))
             .toList();
-
+        holidayDateList = buildHolidayDateList(holidays);
         _setLoading(false);
       } else {
         errorMessage = "Something went wrong. Try again.";
@@ -290,8 +290,6 @@ class EmpProvider extends ChangeNotifier {
         final decoded = jsonDecode(response);
 
         if (decoded['response'] == "success") {
-          // Parse API list
-
           List<Department> apiDepartments = (decoded['data'] as List<dynamic>)
               .map((dept) => Department.fromJson(dept))
               .toList();
